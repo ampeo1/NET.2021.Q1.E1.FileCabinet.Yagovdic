@@ -10,22 +10,21 @@ namespace FileCabinetApp
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
 
-        public static int CreateRecord(string firstName, string lastName, DateTime dateOfBirth)
+        public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth)
         {
             // TODO: добавьте реализацию метода
             return 0;
         }
 
-        public static FileCabinetRecord[] GetRecords()
+        public FileCabinetRecord[] GetRecords()
         {
             // TODO: добавьте реализацию метода
-            return Array.Empty<FileCabinetRecord>();
+            return this.list.ToArray();
         }
 
-        public static int GetStat()
+        public int GetStat()
         {
-            // TODO: добавьте реализацию метода
-            return 0;
+            return this.list.Count;
         }
     }
 }
