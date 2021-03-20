@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace FileCabinetApp
 {
@@ -18,6 +19,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("help", PrintHelp),
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("create", Create),
+            new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("exit", Exit),
         };
 
@@ -25,7 +27,8 @@ namespace FileCabinetApp
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "stat", "prints the statistics of records", "The 'stat' command prints the statistics of records." },
-            new string[] { "create", "creates new record", "The 'create' command creates tnew record" },
+            new string[] { "create", "creates new record", "The 'create' command creates new record" },
+            new string[] { "list", "lists records", "The 'create' command lists records " },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
         };
 
@@ -118,6 +121,15 @@ namespace FileCabinetApp
 
             int id = fileCabinetService.CreateRecord(firstName, lastName, dateTime);
             Console.WriteLine($"Record #{id} is created.");
+        }
+
+        private static void List(string parameters)
+        {
+            FileCabinetRecord[] records = fileCabinetService.GetRecords();
+            foreach (FileCabinetRecord record in records)
+            {
+                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}");
+            }
         }
 
         private static void Exit(string parameters)
