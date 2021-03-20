@@ -12,8 +12,22 @@ namespace FileCabinetApp
 
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth)
         {
-            // TODO: добавьте реализацию метода
-            return 0;
+            if (firstName is null || lastName is null)
+            {
+                throw new ArgumentNullException($"{nameof(firstName)}, {nameof(lastName)}");
+            }
+
+            var record = new FileCabinetRecord
+            {
+                Id = this.list.Count + 1,
+                FirstName = firstName,
+                LastName = lastName,
+                DateOfBirth = dateOfBirth,
+            };
+
+            this.list.Add(record);
+
+            return record.Id;
         }
 
         public FileCabinetRecord[] GetRecords()

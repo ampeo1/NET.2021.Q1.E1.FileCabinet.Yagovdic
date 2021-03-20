@@ -16,15 +16,17 @@ namespace FileCabinetApp
         private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
         {
             new Tuple<string, Action<string>>("help", PrintHelp),
+            new Tuple<string, Action<string>>("stat", Stat),
+            new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("exit", Exit),
-            new Tuple<string, Action<string>>("exit", Stat),
         };
 
         private static string[][] helpMessages = new string[][]
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
-            new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "stat", "prints the statistics of records", "The 'stat' command prints the statistics of records." },
+            new string[] { "create", "creates new record", "The 'create' command creates tnew record" },
+            new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
         };
 
         public static void Main(string[] args)
@@ -98,6 +100,24 @@ namespace FileCabinetApp
         {
             var recordsCount = fileCabinetService.GetStat();
             Console.WriteLine($"{recordsCount} record(s).");
+        }
+
+        private static void Create(string parameters)
+        {
+            Console.Write("First name: ");
+            string firstName = Console.ReadLine();
+            Console.Write("Last Name: ");
+            string lastName = Console.ReadLine();
+            Console.Write("Date of birth: ");
+            DateTime dateTime;
+            while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out dateTime))
+            {
+                Console.WriteLine("Error. Incorrect format, must be dd/mm/yyyy");
+                Console.Write("Date of birth: ");
+            }
+
+            int id = fileCabinetService.CreateRecord(firstName, lastName, dateTime);
+            Console.WriteLine($"Record #{id} is created.");
         }
 
         private static void Exit(string parameters)
