@@ -109,17 +109,27 @@ namespace FileCabinetApp
         {
             Console.Write("First name: ");
             string firstName = Console.ReadLine();
+
             Console.Write("Last Name: ");
             string lastName = Console.ReadLine();
+
             Console.Write("Date of birth: ");
             DateTime dateTime;
-            while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out dateTime))
+            while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, DateTimeStyles.None, out dateTime))
             {
                 Console.WriteLine("Error. Incorrect format, must be dd/mm/yyyy");
                 Console.Write("Date of birth: ");
             }
 
-            int id = fileCabinetService.CreateRecord(firstName, lastName, dateTime);
+            char access;
+            Console.Write("Access: ");
+            while (!char.TryParse(Console.ReadLine(), out access))
+            {
+                Console.WriteLine("Error. Input one letter.");
+                Console.Write("Access: ");
+            }
+
+            int id = fileCabinetService.CreateRecord(firstName, lastName, dateTime, access);
             Console.WriteLine($"Record #{id} is created.");
         }
 
@@ -128,7 +138,8 @@ namespace FileCabinetApp
             FileCabinetRecord[] records = fileCabinetService.GetRecords();
             foreach (FileCabinetRecord record in records)
             {
-                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}");
+                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}," +
+                    $" age: {record.Age}, amount records {record.AmountRecords}, access {record.Access}");
             }
         }
 

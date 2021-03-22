@@ -27,5 +27,20 @@ namespace FileCabinetApp
         {
             get; set;
         }
+
+        public char Access
+        {
+            get; set;
+        }
+
+        public short Age
+        {
+            get; set;
+        }
+
+        public long AmountRecords
+        {
+            get; set;
+        }
     }
 }
