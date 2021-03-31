@@ -107,29 +107,45 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            Console.Write("First name: ");
-            string firstName = Console.ReadLine();
+            bool key = true;
+            int id = 0;
 
-            Console.Write("Last Name: ");
-            string lastName = Console.ReadLine();
-
-            Console.Write("Date of birth: ");
-            DateTime dateTime;
-            while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, DateTimeStyles.None, out dateTime))
+            while (key)
             {
-                Console.WriteLine("Error. Incorrect format, must be dd/mm/yyyy");
+                Console.Write("First name: ");
+                string firstName = Console.ReadLine();
+
+                Console.Write("Last Name: ");
+                string lastName = Console.ReadLine();
+
                 Console.Write("Date of birth: ");
-            }
+                DateTime dateTime;
+                while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, DateTimeStyles.None, out dateTime))
+                {
+                    Console.WriteLine("Error. Incorrect format, must be dd/mm/yyyy");
+                    Console.Write("Date of birth: ");
+                }
 
-            char access;
-            Console.Write("Access: ");
-            while (!char.TryParse(Console.ReadLine(), out access))
-            {
-                Console.WriteLine("Error. Input one letter.");
+                char access;
                 Console.Write("Access: ");
+                while (!char.TryParse(Console.ReadLine(), out access))
+                {
+                    Console.WriteLine("Error. Input one letter.");
+                    Console.Write("Access: ");
+                }
+
+                try
+                {
+                    id = fileCabinetService.CreateRecord(firstName, lastName, dateTime, access);
+                    key = false;
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    key = true;
+                }
             }
 
-            int id = fileCabinetService.CreateRecord(firstName, lastName, dateTime, access);
             Console.WriteLine($"Record #{id} is created.");
         }
 
