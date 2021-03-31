@@ -37,6 +37,20 @@ namespace FileCabinetApp
             return index;
         }
 
+        public FileCabinetRecord[] FindByFirstName(string firstName)
+        {
+            List<FileCabinetRecord> results = new List<FileCabinetRecord>();
+            foreach (var item in this.list)
+            {
+                if (item.FirstName.Equals(firstName, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    results.Add(item);
+                }
+            }
+
+            return results.ToArray();
+        }
+
         public FileCabinetRecord[] GetRecords()
         {
             return this.list.ToArray();

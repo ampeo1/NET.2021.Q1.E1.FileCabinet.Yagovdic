@@ -20,6 +20,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("edit", Edit),
+            new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("exit", Exit),
         };
@@ -30,7 +31,8 @@ namespace FileCabinetApp
             new string[] { "stat", "prints the statistics of records", "The 'stat' command prints the statistics of records." },
             new string[] { "create", "creates new record", "The 'create' command creates new record" },
             new string[] { "create", "change record", "The 'edit' command changes record" },
-            new string[] { "list", "lists records", "The 'create' command lists records " },
+            new string[] { "list", "lists records", "The 'lists' command lists records " },
+            new string[] { "find", "finds records", "The 'find' command finds records " },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
         };
 
@@ -206,6 +208,20 @@ namespace FileCabinetApp
             }
 
             Console.WriteLine($"Record #{id} is updated.");
+        }
+
+        private static void Find(string parameters)
+        {
+            string[] args = parameters.Split(' ', 2);
+            if (args.Length == 2 && args[0].Equals("firstname", StringComparison.InvariantCultureIgnoreCase))
+            {
+                FileCabinetRecord[] records = fileCabinetService.FindByFirstName(args[1].Trim('\"'));
+                foreach (var record in records)
+                {
+                    Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}," +
+                    $" age: {record.Age}, amount records {record.AmountRecords}, access {record.Access}");
+                }
+            }
         }
 
         private static void List(string parameters)
