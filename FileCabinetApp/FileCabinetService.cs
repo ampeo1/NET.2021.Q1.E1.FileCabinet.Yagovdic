@@ -11,6 +11,7 @@ namespace FileCabinetApp
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
 
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, char access)
         {
@@ -54,18 +55,16 @@ namespace FileCabinetApp
             }
         }
 
-        public FileCabinetRecord[] FindByLastname(string lastname)
+        public FileCabinetRecord[] FindByLastname(string lastName)
         {
-            List<FileCabinetRecord> results = new List<FileCabinetRecord>();
-            foreach (var item in this.list)
+            if (this.lastNameDictionary.ContainsKey(lastName))
             {
-                if (item.LastName.Equals(lastname, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    results.Add(item);
-                }
+                return this.lastNameDictionary[lastName].ToArray();
             }
-
-            return results.ToArray();
+            else
+            {
+                return Array.Empty<FileCabinetRecord>();
+            }
         }
 
         public FileCabinetRecord[] FindByBirthDay(DateTime date)
@@ -100,6 +99,13 @@ namespace FileCabinetApp
             }
 
             this.firstNameDictionary[record.FirstName].Add(record);
+
+            if (!this.lastNameDictionary.ContainsKey(record.LastName))
+            {
+                this.lastNameDictionary[record.LastName] = new List<FileCabinetRecord>();
+            }
+
+            this.lastNameDictionary[record.LastName].Add(record);
         }
 
         private void RemoveRecordFromDictionaries(FileCabinetRecord record)
@@ -107,6 +113,11 @@ namespace FileCabinetApp
             if (this.firstNameDictionary.ContainsKey(record.FirstName))
             {
                 this.firstNameDictionary[record.FirstName].Remove(record);
+            }
+
+            if (this.firstNameDictionary.ContainsKey(record.LastName))
+            {
+                this.firstNameDictionary[record.LastName].Remove(record);
             }
         }
 
