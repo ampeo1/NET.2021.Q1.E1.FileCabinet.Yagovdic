@@ -12,6 +12,43 @@ namespace FileCabinetApp
 
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, char access)
         {
+            int id = this.list.Count + 1;
+            FileCabinetRecord record = Create(id, firstName, lastName, dateOfBirth, access);
+
+            this.list.Add(record);
+
+            return record.Id;
+        }
+
+        public void EditRecord(int index, int id, string firstName, string lastName, DateTime dateOfBirth, char access)
+        {
+            FileCabinetRecord record = Create(id, firstName, lastName, dateOfBirth, access);
+            this.list[index] = record;
+        }
+
+        public int FindIndexById(int id)
+        {
+            int index = this.list.FindIndex(x => x.Id == id);
+            if (index == -1)
+            {
+                throw new ArgumentException($"{nameof(id)} record is not found.");
+            }
+
+            return index;
+        }
+
+        public FileCabinetRecord[] GetRecords()
+        {
+            return this.list.ToArray();
+        }
+
+        public int GetStat()
+        {
+            return this.list.Count;
+        }
+
+        private static FileCabinetRecord Create(int id, string firstName, string lastName, DateTime dateOfBirth, char access)
+        {
             if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
             {
                 throw new ArgumentNullException($"{nameof(firstName)}, {nameof(lastName)}");
@@ -22,7 +59,7 @@ namespace FileCabinetApp
                 throw new ArgumentException($"{nameof(firstName)} or {nameof(lastName)} length is less than 2 or greater than 60", $"{nameof(firstName)}, {nameof(lastName)}");
             }
 
-            if (dateOfBirth < new DateTime(01, 01, 1950) || dateOfBirth > DateTime.Now)
+            if (dateOfBirth < new DateTime(1950, 01, 01) || dateOfBirth > DateTime.Now)
             {
                 throw new ArgumentException($"{nameof(dateOfBirth)} is less than 01-jan-1950 or greater than now");
             }
@@ -40,7 +77,7 @@ namespace FileCabinetApp
 
             var record = new FileCabinetRecord
             {
-                Id = this.list.Count + 1,
+                Id = id,
                 FirstName = firstName,
                 LastName = lastName,
                 DateOfBirth = dateOfBirth,
@@ -49,19 +86,8 @@ namespace FileCabinetApp
                 Age = age,
             };
 
-            this.list.Add(record);
-
-            return record.Id;
+            return record;
         }
 
-        public FileCabinetRecord[] GetRecords()
-        {
-            return this.list.ToArray();
-        }
-
-        public int GetStat()
-        {
-            return this.list.Count;
-        }
     }
 }

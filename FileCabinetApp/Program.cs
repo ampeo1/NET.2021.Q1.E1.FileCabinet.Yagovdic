@@ -19,6 +19,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("help", PrintHelp),
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("create", Create),
+            new Tuple<string, Action<string>>("edit", Edit),
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("exit", Exit),
         };
@@ -28,6 +29,7 @@ namespace FileCabinetApp
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "stat", "prints the statistics of records", "The 'stat' command prints the statistics of records." },
             new string[] { "create", "creates new record", "The 'create' command creates new record" },
+            new string[] { "create", "change record", "The 'edit' command changes record" },
             new string[] { "list", "lists records", "The 'create' command lists records " },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
         };
@@ -147,6 +149,63 @@ namespace FileCabinetApp
             }
 
             Console.WriteLine($"Record #{id} is created.");
+        }
+
+        private static void Edit(string parameters)
+        {
+            bool key = true;
+            int id = 0;
+            int index;
+            try
+            {
+                id = int.Parse(parameters, CultureInfo.InvariantCulture);
+                index = fileCabinetService.FindIndexById(id);
+            }
+            catch (ArgumentException)
+            {
+                Console.WriteLine($"#{id} record is not found.");
+                return;
+            }
+
+            while (key)
+            {
+                Console.Write("First name: ");
+                string firstName = Console.ReadLine();
+
+                Console.Write("Last Name: ");
+                string lastName = Console.ReadLine();
+
+                Console.Write("Date of birth: ");
+                DateTime dateTime;
+                while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, DateTimeStyles.None, out dateTime))
+                {
+                    Console.WriteLine("Error. Incorrect format, must be dd/mm/yyyy");
+                    Console.Write("Date of birth: ");
+                }
+
+                char access;
+                Console.Write("Access: ");
+                while (!char.TryParse(Console.ReadLine(), out access))
+                {
+                    Console.WriteLine("Error. Input one letter.");
+                    Console.Write("Access: ");
+                }
+
+                id = int.Parse(parameters, CultureInfo.InvariantCulture);
+
+                try
+                {
+                    fileCabinetService.EditRecord(index, id, firstName, lastName, dateTime, access);
+                    key = false;
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    key = true;
+                }
+            }
+
+            Console.WriteLine($"Record #{id} is updated.");
         }
 
         private static void List(string parameters)
