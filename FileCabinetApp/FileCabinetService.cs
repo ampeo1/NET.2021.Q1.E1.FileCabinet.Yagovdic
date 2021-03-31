@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,20 +10,24 @@ namespace FileCabinetApp
     public class FileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
 
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, char access)
         {
             int id = this.list.Count + 1;
             FileCabinetRecord record = Create(id, firstName, lastName, dateOfBirth, access);
-
+            this.AddRecordToDictionaries(record);
             this.list.Add(record);
 
             return record.Id;
         }
 
-        public void EditRecord(int index, int id, string firstName, string lastName, DateTime dateOfBirth, char access)
+        public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, char access)
         {
+            int index = this.FindIndexById(id);
             FileCabinetRecord record = Create(id, firstName, lastName, dateOfBirth, access);
+            this.RemoveRecordFromDictionaries(this.list[index]);
+            this.AddRecordToDictionaries(record);
             this.list[index] = record;
         }
 
@@ -39,16 +44,14 @@ namespace FileCabinetApp
 
         public FileCabinetRecord[] FindByFirstName(string firstName)
         {
-            List<FileCabinetRecord> results = new List<FileCabinetRecord>();
-            foreach (var item in this.list)
+            if (this.firstNameDictionary.ContainsKey(firstName))
             {
-                if (item.FirstName.Equals(firstName, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    results.Add(item);
-                }
+                return this.firstNameDictionary[firstName].ToArray();
             }
-
-            return results.ToArray();
+            else
+            {
+                return Array.Empty<FileCabinetRecord>();
+            }
         }
 
         public FileCabinetRecord[] FindByLastname(string lastname)
@@ -87,6 +90,24 @@ namespace FileCabinetApp
         public int GetStat()
         {
             return this.list.Count;
+        }
+
+        private void AddRecordToDictionaries(FileCabinetRecord record)
+        {
+            if (!this.firstNameDictionary.ContainsKey(record.FirstName))
+            {
+                this.firstNameDictionary[record.FirstName] = new List<FileCabinetRecord>();
+            }
+
+            this.firstNameDictionary[record.FirstName].Add(record);
+        }
+
+        private void RemoveRecordFromDictionaries(FileCabinetRecord record)
+        {
+            if (this.firstNameDictionary.ContainsKey(record.FirstName))
+            {
+                this.firstNameDictionary[record.FirstName].Remove(record);
+            }
         }
 
         private static FileCabinetRecord Create(int id, string firstName, string lastName, DateTime dateOfBirth, char access)

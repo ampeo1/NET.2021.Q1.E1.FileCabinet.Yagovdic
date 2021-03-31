@@ -204,7 +204,7 @@ namespace FileCabinetApp
 
                 try
                 {
-                    fileCabinetService.EditRecord(index, id, firstName, lastName, dateTime, access);
+                    fileCabinetService.EditRecord(id, firstName, lastName, dateTime, access);
                     key = false;
                 }
                 catch (ArgumentException ex)
