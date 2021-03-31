@@ -12,6 +12,7 @@ namespace FileCabinetApp
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, char access)
         {
@@ -69,16 +70,14 @@ namespace FileCabinetApp
 
         public FileCabinetRecord[] FindByBirthDay(DateTime date)
         {
-            List<FileCabinetRecord> results = new List<FileCabinetRecord>();
-            foreach (var item in this.list)
+            if (this.dateOfBirthDictionary.ContainsKey(date))
             {
-                if (item.DateOfBirth.Equals(date))
-                {
-                    results.Add(item);
-                }
+                return this.dateOfBirthDictionary[date].ToArray();
             }
-
-            return results.ToArray();
+            else
+            {
+                return Array.Empty<FileCabinetRecord>();
+            }
         }
 
         public FileCabinetRecord[] GetRecords()
@@ -106,6 +105,13 @@ namespace FileCabinetApp
             }
 
             this.lastNameDictionary[record.LastName].Add(record);
+
+            if (!this.dateOfBirthDictionary.ContainsKey(record.DateOfBirth))
+            {
+                this.dateOfBirthDictionary[record.DateOfBirth] = new List<FileCabinetRecord>();
+            }
+
+            this.dateOfBirthDictionary[record.DateOfBirth].Add(record);
         }
 
         private void RemoveRecordFromDictionaries(FileCabinetRecord record)
@@ -118,6 +124,11 @@ namespace FileCabinetApp
             if (this.firstNameDictionary.ContainsKey(record.LastName))
             {
                 this.firstNameDictionary[record.LastName].Remove(record);
+            }
+
+            if (this.dateOfBirthDictionary.ContainsKey(record.DateOfBirth))
+            {
+                this.dateOfBirthDictionary[record.DateOfBirth].Remove(record);
             }
         }
 
