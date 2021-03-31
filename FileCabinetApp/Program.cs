@@ -25,6 +25,13 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("exit", Exit),
         };
 
+        private static Tuple<string, Func<string, FileCabinetRecord[]>>[] findProperty = new Tuple<string, Func<string, FileCabinetRecord[]>>[]
+        {
+            new Tuple<string, Func<string, FileCabinetRecord[]>>("firstname", FindByFirstname),
+            new Tuple<string, Func<string, FileCabinetRecord[]>>("lastname", FindByLastname),
+            new Tuple<string, Func<string, FileCabinetRecord[]>>("firstname", FindByFirstname),
+        };
+
         private static string[][] helpMessages = new string[][]
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
@@ -212,16 +219,52 @@ namespace FileCabinetApp
 
         private static void Find(string parameters)
         {
-            string[] args = parameters.Split(' ', 2);
-            if (args.Length == 2 && args[0].Equals("firstname", StringComparison.InvariantCultureIgnoreCase))
+            string[] inputs = parameters.Split(' ', 2);
+            const int commandIndex = 0;
+            var command = inputs[commandIndex];
+            if (string.IsNullOrEmpty(command))
             {
-                FileCabinetRecord[] records = fileCabinetService.FindByFirstName(args[1].Trim('\"'));
-                foreach (var record in records)
-                {
-                    Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}," +
-                    $" age: {record.Age}, amount records {record.AmountRecords}, access {record.Access}");
-                }
+                Console.WriteLine($"Error. find [property]");
+                return;
             }
+
+            FileCabinetRecord[] records = Array.Empty<FileCabinetRecord>();
+            var index = Array.FindIndex(findProperty, 0, findProperty.Length, i => i.Item1.Equals(command, StringComparison.InvariantCultureIgnoreCase));
+
+            if (index >= 0)
+            {
+                const int parametersIndex = 1;
+                var key = inputs.Length > 1 ? inputs[parametersIndex].Trim('\"') : string.Empty;
+                records = findProperty[index].Item2(key);
+            }
+
+            foreach (var record in records)
+            {
+                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}," +
+                $" age: {record.Age}, amount records {record.AmountRecords}, access {record.Access}");
+            }
+        }
+
+        private static FileCabinetRecord[] FindByFirstname(string firstname)
+        {
+            return fileCabinetService.FindByFirstName(firstname);
+        }
+
+        private static FileCabinetRecord[] FindByLastname(string lastname)
+        {
+            return fileCabinetService.FindByLastname(lastname);
+        }
+
+        private static FileCabinetRecord[] FindByBirthDay(string birthday)
+        {
+            DateTime date;
+            if (!DateTime.TryParseExact(birthday, "dd/MM/yyyy", null, DateTimeStyles.None, out date))
+            {
+                Console.WriteLine("Error. Incorrect format, must be dd/mm/yyyy");
+                return Array.Empty<FileCabinetRecord>();
+            }
+
+            return fileCabinetService.FindByBirthDay(date);
         }
 
         private static void List(string parameters)
