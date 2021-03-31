@@ -29,7 +29,7 @@ namespace FileCabinetApp
         {
             new Tuple<string, Func<string, FileCabinetRecord[]>>("firstname", FindByFirstname),
             new Tuple<string, Func<string, FileCabinetRecord[]>>("lastname", FindByLastname),
-            new Tuple<string, Func<string, FileCabinetRecord[]>>("firstname", FindByFirstname),
+            new Tuple<string, Func<string, FileCabinetRecord[]>>("dateofbirth", FindByBirthDay),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -258,9 +258,9 @@ namespace FileCabinetApp
         private static FileCabinetRecord[] FindByBirthDay(string birthday)
         {
             DateTime date;
-            if (!DateTime.TryParseExact(birthday, "dd/MM/yyyy", null, DateTimeStyles.None, out date))
+            if (!DateTime.TryParseExact(birthday, "yyyy-MMM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
             {
-                Console.WriteLine("Error. Incorrect format, must be dd/mm/yyyy");
+                Console.WriteLine("Error. Incorrect format, must be yyyy-mmm-dd");
                 return Array.Empty<FileCabinetRecord>();
             }
 
