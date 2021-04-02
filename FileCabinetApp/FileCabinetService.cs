@@ -60,11 +60,11 @@ namespace FileCabinetApp
             return index;
         }
 
-        public FileCabinetRecord[] FindByFirstName(string firstName)
+        public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
             if (this.firstNameDictionary.ContainsKey(firstName))
             {
-                return this.firstNameDictionary[firstName].ToArray();
+                return this.firstNameDictionary[firstName];
             }
             else
             {
@@ -72,11 +72,11 @@ namespace FileCabinetApp
             }
         }
 
-        public FileCabinetRecord[] FindByLastname(string lastName)
+        public IReadOnlyCollection<FileCabinetRecord> FindByLastname(string lastName)
         {
             if (this.lastNameDictionary.ContainsKey(lastName))
             {
-                return this.lastNameDictionary[lastName].ToArray();
+                return this.lastNameDictionary[lastName];
             }
             else
             {
@@ -84,11 +84,11 @@ namespace FileCabinetApp
             }
         }
 
-        public FileCabinetRecord[] FindByBirthDay(DateTime date)
+        public IReadOnlyCollection<FileCabinetRecord> FindByBirthDay(DateTime date)
         {
             if (this.dateOfBirthDictionary.ContainsKey(date))
             {
-                return this.dateOfBirthDictionary[date].ToArray();
+                return this.dateOfBirthDictionary[date];
             }
             else
             {
@@ -96,9 +96,9 @@ namespace FileCabinetApp
             }
         }
 
-        public FileCabinetRecord[] GetRecords()
+        public IReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            return this.list.ToArray();
+            return this.list;
         }
 
         public int GetStat()
