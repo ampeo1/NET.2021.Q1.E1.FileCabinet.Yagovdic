@@ -32,6 +32,17 @@ namespace FileCabinetApp
             new Tuple<string, Func<string, FileCabinetRecord[]>>("dateofbirth", FindByBirthDay),
         };
 
+        private static Tuple<string, string, Action<string>>[] programSetting = new Tuple<string, string, Action<string>>[]
+        {
+            new Tuple<string, string, Action<string>>("--validation-rules", "-v", SetFileCabinetService),
+        };
+
+        private static Tuple<string, FileCabinetService>[] fileCabinets = new Tuple<string, FileCabinetService>[]
+        {
+            new Tuple<string, FileCabinetService>("default", new FileCabinetDefaultService()),
+            new Tuple<string, FileCabinetService>("custom", new FileCabinetCustomService()),
+        };
+
         private static string[][] helpMessages = new string[][]
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
@@ -45,6 +56,7 @@ namespace FileCabinetApp
 
         public static void Main(string[] args)
         {
+            SetSettings(args);
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
             Console.WriteLine(Program.HintMessage);
             Console.WriteLine();
@@ -75,6 +87,56 @@ namespace FileCabinetApp
                 }
             }
             while (isRunning);
+        }
+
+        private static void SetSettings(string[] args)
+        {
+            if (args.Length == 0)
+            {
+                return;
+            }
+
+            string command = args[0];
+            int index = -1;
+            if (command[0].Equals('-') && command[1].Equals('-'))
+            {
+                string[] splittingCommand = command.Split('=');
+                if (splittingCommand.Length == 2)
+                {
+                    index = Array.FindIndex(programSetting, 0, programSetting.Length, i => i.Item1.Equals(splittingCommand[0], StringComparison.InvariantCultureIgnoreCase));
+                    if (index >= 0)
+                    {
+                        programSetting[index].Item3(splittingCommand[1]);
+                    }
+                }
+
+                return;
+            }
+
+            if (command[0].Equals('-'))
+            {
+                if (args.Length == 2)
+                {
+                    index = Array.FindIndex(programSetting, 0, programSetting.Length, i => i.Item2.Equals(args[0], StringComparison.InvariantCultureIgnoreCase));
+                    if (index >= 0)
+                    {
+                        programSetting[index].Item3(args[1]);
+                    }
+                }
+            }
+        }
+
+        private static void SetFileCabinetService(string parameter)
+        {
+            var index = Array.FindIndex(fileCabinets, 0, fileCabinets.Length, i => i.Item1.Equals(parameter, StringComparison.InvariantCultureIgnoreCase));
+            if (index >= 0)
+            {
+                fileCabinetService = fileCabinets[index].Item2;
+            }
+            else
+            {
+                fileCabinetService = new FileCabinetDefaultService();
+            }
         }
 
         private static void PrintMissedCommandInfo(string command)
