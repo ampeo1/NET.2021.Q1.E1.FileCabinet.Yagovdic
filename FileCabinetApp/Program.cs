@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace FileCabinetApp
@@ -12,7 +13,7 @@ namespace FileCabinetApp
         private const int ExplanationHelpIndex = 2;
 
         private static bool isRunning = true;
-        private static FileCabinetService fileCabinetService = new FileCabinetService(new DefaultValidator());
+        private static IFileCabinetService fileCabinetService = new FileCabinetService(new DefaultValidator());
 
         private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
         {
@@ -25,11 +26,11 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("exit", Exit),
         };
 
-        private static Tuple<string, Func<string, FileCabinetRecord[]>>[] findProperty = new Tuple<string, Func<string, FileCabinetRecord[]>>[]
+        private static Tuple<string, Func<string, IReadOnlyCollection<FileCabinetRecord>>>[] findProperty = new Tuple<string, Func<string, IReadOnlyCollection<FileCabinetRecord>>>[]
         {
-            new Tuple<string, Func<string, FileCabinetRecord[]>>("firstname", FindByFirstname),
-            new Tuple<string, Func<string, FileCabinetRecord[]>>("lastname", FindByLastname),
-            new Tuple<string, Func<string, FileCabinetRecord[]>>("dateofbirth", FindByBirthDay),
+            new Tuple<string, Func<string, IReadOnlyCollection<FileCabinetRecord>>>("firstname", FindByFirstname),
+            new Tuple<string, Func<string, IReadOnlyCollection<FileCabinetRecord>>>("lastname", FindByLastname),
+            new Tuple<string, Func<string, IReadOnlyCollection<FileCabinetRecord>>>("dateofbirth", FindByBirthDay),
         };
 
         private static Tuple<string, string, Action<string>>[] programSetting = new Tuple<string, string, Action<string>>[]
@@ -267,7 +268,7 @@ namespace FileCabinetApp
                 return;
             }
 
-            FileCabinetRecord[] records = Array.Empty<FileCabinetRecord>();
+            IReadOnlyCollection<FileCabinetRecord> records = Array.Empty<FileCabinetRecord>();
             var index = Array.FindIndex(findProperty, 0, findProperty.Length, i => i.Item1.Equals(command, StringComparison.InvariantCultureIgnoreCase));
 
             if (index >= 0)
@@ -280,17 +281,17 @@ namespace FileCabinetApp
             Print(records);
         }
 
-        private static FileCabinetRecord[] FindByFirstname(string firstname)
+        private static IReadOnlyCollection<FileCabinetRecord> FindByFirstname(string firstname)
         {
             return fileCabinetService.FindByFirstName(firstname);
         }
 
-        private static FileCabinetRecord[] FindByLastname(string lastname)
+        private static IReadOnlyCollection<FileCabinetRecord> FindByLastname(string lastname)
         {
             return fileCabinetService.FindByLastname(lastname);
         }
 
-        private static FileCabinetRecord[] FindByBirthDay(string birthday)
+        private static IReadOnlyCollection<FileCabinetRecord> FindByBirthDay(string birthday)
         {
             if (!DateTime.TryParseExact(birthday, "yyyy-MMM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))
             {
@@ -303,11 +304,11 @@ namespace FileCabinetApp
 
         private static void List(string parameters)
         {
-            FileCabinetRecord[] records = fileCabinetService.GetRecords();
+            IReadOnlyCollection<FileCabinetRecord> records = fileCabinetService.GetRecords();
             Print(records);
         }
 
-        private static void Print(FileCabinetRecord[] records)
+        private static void Print(IReadOnlyCollection<FileCabinetRecord> records)
         {
             foreach (FileCabinetRecord record in records)
             {

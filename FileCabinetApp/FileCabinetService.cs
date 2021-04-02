@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FileCabinetApp
 {
-    public class FileCabinetService
+    public class FileCabinetService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
@@ -84,11 +84,11 @@ namespace FileCabinetApp
             }
         }
 
-        public IReadOnlyCollection<FileCabinetRecord> FindByBirthDay(DateTime date)
+        public IReadOnlyCollection<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth)
         {
-            if (this.dateOfBirthDictionary.ContainsKey(date))
+            if (this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
             {
-                return this.dateOfBirthDictionary[date];
+                return this.dateOfBirthDictionary[dateOfBirth];
             }
             else
             {
