@@ -100,11 +100,12 @@ namespace FileCabinetApp
             return this.list.Count;
         }
 
-        protected abstract void ValidateParameters(DataRecord dataRecord);
+        protected abstract IRecordValidator CreateValidator();
 
         private FileCabinetRecord Create(DataRecord dataRecord)
         {
-            this.ValidateParameters(dataRecord);
+            IRecordValidator validator = this.CreateValidator();
+            validator.ValidateParameters(dataRecord);
 
             short age = (short)(DateTime.Now.Year - dataRecord.DateOfBirth.Year);
             if (dataRecord.DateOfBirth > DateTime.Now.AddYears(-age))
