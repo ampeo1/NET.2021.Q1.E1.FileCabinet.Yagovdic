@@ -7,12 +7,18 @@ using System.Threading.Tasks;
 
 namespace FileCabinetApp
 {
-    public abstract class FileCabinetService
+    public class FileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
+        private readonly IRecordValidator validator;
+
+        public FileCabinetService(IRecordValidator validator)
+        {
+            this.validator = validator;
+        }
 
         public int CreateRecord(DataRecord dataRecord)
         {
@@ -100,12 +106,9 @@ namespace FileCabinetApp
             return this.list.Count;
         }
 
-        protected abstract IRecordValidator CreateValidator();
-
         private FileCabinetRecord Create(DataRecord dataRecord)
         {
-            IRecordValidator validator = this.CreateValidator();
-            validator.ValidateParameters(dataRecord);
+            this.validator.ValidateParameters(dataRecord);
 
             short age = (short)(DateTime.Now.Year - dataRecord.DateOfBirth.Year);
             if (dataRecord.DateOfBirth > DateTime.Now.AddYears(-age))
