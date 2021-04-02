@@ -12,7 +12,7 @@ namespace FileCabinetApp
         private const int ExplanationHelpIndex = 2;
 
         private static bool isRunning = true;
-        private static FileCabinetService fileCabinetService = new FileCabinetService();
+        private static FileCabinetService fileCabinetService = new FileCabinetDefaultService();
 
         private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
         {
@@ -118,7 +118,7 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            int id = 0;
+            int id;
 
             DataRecord dataRecord = CollectRecordData();
             try
@@ -229,8 +229,7 @@ namespace FileCabinetApp
 
         private static FileCabinetRecord[] FindByBirthDay(string birthday)
         {
-            DateTime date;
-            if (!DateTime.TryParseExact(birthday, "yyyy-MMM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+            if (!DateTime.TryParseExact(birthday, "yyyy-MMM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))
             {
                 Console.WriteLine("Error. Incorrect format, must be yyyy-mmm-dd");
                 return Array.Empty<FileCabinetRecord>();

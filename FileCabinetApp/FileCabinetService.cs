@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FileCabinetApp
 {
-    public class FileCabinetService
+    public abstract class FileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
@@ -22,7 +22,7 @@ namespace FileCabinetApp
             }
 
             dataRecord.Id = this.list.Count + 1;
-            FileCabinetRecord record = Create(dataRecord);
+            FileCabinetRecord record = this.Create(dataRecord);
             this.AddRecordToDictionaries(record);
             this.list.Add(record);
 
@@ -37,7 +37,7 @@ namespace FileCabinetApp
             }
 
             int index = this.FindIndexById(dataRecord.Id);
-            FileCabinetRecord record = Create(dataRecord);
+            FileCabinetRecord record = this.Create(dataRecord);
             this.RemoveRecordFromDictionaries(this.list[index]);
             this.AddRecordToDictionaries(record);
             this.list[index] = record;
@@ -100,6 +100,32 @@ namespace FileCabinetApp
             return this.list.Count;
         }
 
+        protected abstract void ValidateParameters(DataRecord dataRecord);
+
+        private FileCabinetRecord Create(DataRecord dataRecord)
+        {
+            this.ValidateParameters(dataRecord);
+
+            short age = (short)(DateTime.Now.Year - dataRecord.DateOfBirth.Year);
+            if (dataRecord.DateOfBirth > DateTime.Now.AddYears(-age))
+            {
+                age--;
+            }
+
+            var record = new FileCabinetRecord
+            {
+                Id = dataRecord.Id,
+                FirstName = dataRecord.FirstName,
+                LastName = dataRecord.LastName,
+                DateOfBirth = dataRecord.DateOfBirth,
+                Access = dataRecord.Access,
+                AmountRecords = 0,
+                Age = age,
+            };
+
+            return record;
+        }
+
         private void AddRecordToDictionaries(FileCabinetRecord record)
         {
             if (!this.firstNameDictionary.ContainsKey(record.FirstName))
@@ -141,48 +167,5 @@ namespace FileCabinetApp
                 this.dateOfBirthDictionary[record.DateOfBirth].Remove(record);
             }
         }
-
-        private static FileCabinetRecord Create(DataRecord dataRecord)
-        {
-            if (string.IsNullOrWhiteSpace(dataRecord.FirstName) || string.IsNullOrWhiteSpace(dataRecord.LastName))
-            {
-                throw new ArgumentNullException($"{nameof(dataRecord.FirstName)}, {nameof(dataRecord.LastName)}");
-            }
-
-            if (dataRecord.FirstName.Length < 2 || dataRecord.FirstName.Length > 60 || dataRecord.LastName.Length < 2 || dataRecord.LastName.Length > 60)
-            {
-                throw new ArgumentException($"{nameof(dataRecord.FirstName)} or {nameof(dataRecord.LastName)} length is less than 2 or greater than 60", $"{nameof(dataRecord.FirstName)}, {nameof(dataRecord.LastName)}");
-            }
-
-            if (dataRecord.DateOfBirth < new DateTime(1950, 01, 01) || dataRecord.DateOfBirth > DateTime.Now)
-            {
-                throw new ArgumentException($"{nameof(dataRecord.DateOfBirth)} is less than 01-jan-1950 or greater than now");
-            }
-
-            if (dataRecord.Access < 'A' || dataRecord.Access > 'G')
-            {
-                throw new ArgumentException($"{nameof(dataRecord.Access)} doesn't contains [A, B, C, D, E, F, G]");
-            }
-
-            short age = (short)(DateTime.Now.Year - dataRecord.DateOfBirth.Year);
-            if (dataRecord.DateOfBirth > DateTime.Now.AddYears(-age))
-            {
-                age--;
-            }
-
-            var record = new FileCabinetRecord
-            {
-                Id = dataRecord.Id,
-                FirstName = dataRecord.FirstName,
-                LastName = dataRecord.LastName,
-                DateOfBirth = dataRecord.DateOfBirth,
-                Access = dataRecord.Access,
-                AmountRecords = 0,
-                Age = age,
-            };
-
-            return record;
-        }
-
     }
 }
