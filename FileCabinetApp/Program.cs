@@ -120,32 +120,7 @@ namespace FileCabinetApp
         {
             int id = 0;
 
-            DataRecord dataRecord = new DataRecord();
-            Console.Write("First name: ");
-            dataRecord.FirstName = Console.ReadLine();
-
-            Console.Write("Last Name: ");
-            dataRecord.LastName = Console.ReadLine();
-
-            Console.Write("Date of birth: ");
-            DateTime date;
-            while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, DateTimeStyles.None, out date))
-            {
-                Console.WriteLine("Error. Incorrect format, must be dd/mm/yyyy");
-                Console.Write("Date of birth: ");
-            }
-
-            dataRecord.DateOfBirth = date;
-
-            char access;
-            Console.Write("Access: ");
-            while (!char.TryParse(Console.ReadLine(), out access))
-            {
-                Console.WriteLine("Error. Input one letter.");
-                Console.Write("Access: ");
-            }
-
-            dataRecord.Access = access;
+            DataRecord dataRecord = CollectRecordData();
             try
             {
                 id = fileCabinetService.CreateRecord(dataRecord);
@@ -172,6 +147,22 @@ namespace FileCabinetApp
                 return;
             }
 
+            DataRecord dataRecord = CollectRecordData();
+            dataRecord.Id = int.Parse(parameters, CultureInfo.InvariantCulture);
+
+            try
+            {
+                fileCabinetService.EditRecord(dataRecord);
+                Console.WriteLine($"Record #{id} is updated.");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private static DataRecord CollectRecordData()
+        {
             DataRecord dataRecord = new DataRecord();
             Console.Write("First name: ");
             dataRecord.FirstName = Console.ReadLine();
@@ -198,17 +189,8 @@ namespace FileCabinetApp
             }
 
             dataRecord.Access = access;
-            dataRecord.Id = int.Parse(parameters, CultureInfo.InvariantCulture);
 
-            try
-            {
-                fileCabinetService.EditRecord(dataRecord);
-                Console.WriteLine($"Record #{id} is updated.");
-            }
-            catch (ArgumentException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            return dataRecord;
         }
 
         private static void Find(string parameters)
