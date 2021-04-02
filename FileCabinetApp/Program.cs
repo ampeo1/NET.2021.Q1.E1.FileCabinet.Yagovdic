@@ -118,51 +118,47 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            bool key = true;
             int id = 0;
 
-            while (key)
+            DataRecord dataRecord = new DataRecord();
+            Console.Write("First name: ");
+            dataRecord.FirstName = Console.ReadLine();
+
+            Console.Write("Last Name: ");
+            dataRecord.LastName = Console.ReadLine();
+
+            Console.Write("Date of birth: ");
+            DateTime date;
+            while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, DateTimeStyles.None, out date))
             {
-                Console.Write("First name: ");
-                string firstName = Console.ReadLine();
-
-                Console.Write("Last Name: ");
-                string lastName = Console.ReadLine();
-
+                Console.WriteLine("Error. Incorrect format, must be dd/mm/yyyy");
                 Console.Write("Date of birth: ");
-                DateTime dateTime;
-                while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, DateTimeStyles.None, out dateTime))
-                {
-                    Console.WriteLine("Error. Incorrect format, must be dd/mm/yyyy");
-                    Console.Write("Date of birth: ");
-                }
-
-                char access;
-                Console.Write("Access: ");
-                while (!char.TryParse(Console.ReadLine(), out access))
-                {
-                    Console.WriteLine("Error. Input one letter.");
-                    Console.Write("Access: ");
-                }
-
-                try
-                {
-                    id = fileCabinetService.CreateRecord(firstName, lastName, dateTime, access);
-                    key = false;
-                }
-                catch (ArgumentException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    key = true;
-                }
             }
 
-            Console.WriteLine($"Record #{id} is created.");
+            dataRecord.DateOfBirth = date;
+
+            char access;
+            Console.Write("Access: ");
+            while (!char.TryParse(Console.ReadLine(), out access))
+            {
+                Console.WriteLine("Error. Input one letter.");
+                Console.Write("Access: ");
+            }
+
+            dataRecord.Access = access;
+            try
+            {
+                id = fileCabinetService.CreateRecord(dataRecord);
+                Console.WriteLine($"Record #{id} is created.");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private static void Edit(string parameters)
         {
-            bool key = true;
             int id = 0;
             int index;
             try
@@ -176,45 +172,43 @@ namespace FileCabinetApp
                 return;
             }
 
-            while (key)
+            DataRecord dataRecord = new DataRecord();
+            Console.Write("First name: ");
+            dataRecord.FirstName = Console.ReadLine();
+
+            Console.Write("Last Name: ");
+            dataRecord.LastName = Console.ReadLine();
+
+            Console.Write("Date of birth: ");
+            DateTime date;
+            while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, DateTimeStyles.None, out date))
             {
-                Console.Write("First name: ");
-                string firstName = Console.ReadLine();
-
-                Console.Write("Last Name: ");
-                string lastName = Console.ReadLine();
-
+                Console.WriteLine("Error. Incorrect format, must be dd/mm/yyyy");
                 Console.Write("Date of birth: ");
-                DateTime dateTime;
-                while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, DateTimeStyles.None, out dateTime))
-                {
-                    Console.WriteLine("Error. Incorrect format, must be dd/mm/yyyy");
-                    Console.Write("Date of birth: ");
-                }
-
-                char access;
-                Console.Write("Access: ");
-                while (!char.TryParse(Console.ReadLine(), out access))
-                {
-                    Console.WriteLine("Error. Input one letter.");
-                    Console.Write("Access: ");
-                }
-
-                id = int.Parse(parameters, CultureInfo.InvariantCulture);
-
-                try
-                {
-                    fileCabinetService.EditRecord(id, firstName, lastName, dateTime, access);
-                    key = false;
-                }
-                catch (ArgumentException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    key = true;
-                }
             }
 
-            Console.WriteLine($"Record #{id} is updated.");
+            dataRecord.DateOfBirth = date;
+
+            char access;
+            Console.Write("Access: ");
+            while (!char.TryParse(Console.ReadLine(), out access))
+            {
+                Console.WriteLine("Error. Input one letter.");
+                Console.Write("Access: ");
+            }
+
+            dataRecord.Access = access;
+            dataRecord.Id = int.Parse(parameters, CultureInfo.InvariantCulture);
+
+            try
+            {
+                fileCabinetService.EditRecord(dataRecord);
+                Console.WriteLine($"Record #{id} is updated.");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private static void Find(string parameters)
@@ -238,11 +232,7 @@ namespace FileCabinetApp
                 records = findProperty[index].Item2(key);
             }
 
-            foreach (var record in records)
-            {
-                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}," +
-                $" age: {record.Age}, amount records {record.AmountRecords}, access {record.Access}");
-            }
+            Print(records);
         }
 
         private static FileCabinetRecord[] FindByFirstname(string firstname)
@@ -270,6 +260,11 @@ namespace FileCabinetApp
         private static void List(string parameters)
         {
             FileCabinetRecord[] records = fileCabinetService.GetRecords();
+            Print(records);
+        }
+
+        private static void Print(FileCabinetRecord[] records)
+        {
             foreach (FileCabinetRecord record in records)
             {
                 Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}," +

@@ -14,20 +14,30 @@ namespace FileCabinetApp
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
-        public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, char access)
+        public int CreateRecord(DataRecord dataRecord)
         {
-            int id = this.list.Count + 1;
-            FileCabinetRecord record = Create(id, firstName, lastName, dateOfBirth, access);
+            if (dataRecord is null)
+            {
+                throw new ArgumentNullException($"{nameof(dataRecord)}");
+            }
+
+            dataRecord.Id = this.list.Count + 1;
+            FileCabinetRecord record = Create(dataRecord);
             this.AddRecordToDictionaries(record);
             this.list.Add(record);
 
             return record.Id;
         }
 
-        public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, char access)
+        public void EditRecord(DataRecord dataRecord)
         {
-            int index = this.FindIndexById(id);
-            FileCabinetRecord record = Create(id, firstName, lastName, dateOfBirth, access);
+            if (dataRecord is null)
+            {
+                throw new ArgumentNullException($"{nameof(dataRecord)}");
+            }
+
+            int index = this.FindIndexById(dataRecord.Id);
+            FileCabinetRecord record = Create(dataRecord);
             this.RemoveRecordFromDictionaries(this.list[index]);
             this.AddRecordToDictionaries(record);
             this.list[index] = record;
@@ -132,41 +142,41 @@ namespace FileCabinetApp
             }
         }
 
-        private static FileCabinetRecord Create(int id, string firstName, string lastName, DateTime dateOfBirth, char access)
+        private static FileCabinetRecord Create(DataRecord dataRecord)
         {
-            if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
+            if (string.IsNullOrWhiteSpace(dataRecord.FirstName) || string.IsNullOrWhiteSpace(dataRecord.LastName))
             {
-                throw new ArgumentNullException($"{nameof(firstName)}, {nameof(lastName)}");
+                throw new ArgumentNullException($"{nameof(dataRecord.FirstName)}, {nameof(dataRecord.LastName)}");
             }
 
-            if (firstName.Length < 2 || firstName.Length > 60 || lastName.Length < 2 || lastName.Length > 60)
+            if (dataRecord.FirstName.Length < 2 || dataRecord.FirstName.Length > 60 || dataRecord.LastName.Length < 2 || dataRecord.LastName.Length > 60)
             {
-                throw new ArgumentException($"{nameof(firstName)} or {nameof(lastName)} length is less than 2 or greater than 60", $"{nameof(firstName)}, {nameof(lastName)}");
+                throw new ArgumentException($"{nameof(dataRecord.FirstName)} or {nameof(dataRecord.LastName)} length is less than 2 or greater than 60", $"{nameof(dataRecord.FirstName)}, {nameof(dataRecord.LastName)}");
             }
 
-            if (dateOfBirth < new DateTime(1950, 01, 01) || dateOfBirth > DateTime.Now)
+            if (dataRecord.DateOfBirth < new DateTime(1950, 01, 01) || dataRecord.DateOfBirth > DateTime.Now)
             {
-                throw new ArgumentException($"{nameof(dateOfBirth)} is less than 01-jan-1950 or greater than now");
+                throw new ArgumentException($"{nameof(dataRecord.DateOfBirth)} is less than 01-jan-1950 or greater than now");
             }
 
-            if (access < 'A' || access > 'G')
+            if (dataRecord.Access < 'A' || dataRecord.Access > 'G')
             {
-                throw new ArgumentException($"{nameof(access)} does not contains [A, B, C, D, E, F, G]");
+                throw new ArgumentException($"{nameof(dataRecord.Access)} doesn't contains [A, B, C, D, E, F, G]");
             }
 
-            short age = (short)(DateTime.Now.Year - dateOfBirth.Year);
-            if (dateOfBirth > DateTime.Now.AddYears(-age))
+            short age = (short)(DateTime.Now.Year - dataRecord.DateOfBirth.Year);
+            if (dataRecord.DateOfBirth > DateTime.Now.AddYears(-age))
             {
                 age--;
             }
 
             var record = new FileCabinetRecord
             {
-                Id = id,
-                FirstName = firstName,
-                LastName = lastName,
-                DateOfBirth = dateOfBirth,
-                Access = access,
+                Id = dataRecord.Id,
+                FirstName = dataRecord.FirstName,
+                LastName = dataRecord.LastName,
+                DateOfBirth = dataRecord.DateOfBirth,
+                Access = dataRecord.Access,
                 AmountRecords = 0,
                 Age = age,
             };
