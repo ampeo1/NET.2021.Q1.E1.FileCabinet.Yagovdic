@@ -12,7 +12,7 @@ namespace FileCabinetApp
         private const int ExplanationHelpIndex = 2;
 
         private static bool isRunning = true;
-        private static FileCabinetService fileCabinetService = new FileCabinetDefaultService();
+        private static FileCabinetService fileCabinetService = new FileCabinetService(new DefaultValidator());
 
         private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
         {
@@ -37,10 +37,10 @@ namespace FileCabinetApp
             new Tuple<string, string, Action<string>>("--validation-rules", "-v", SetFileCabinetService),
         };
 
-        private static Tuple<string, FileCabinetService>[] fileCabinets = new Tuple<string, FileCabinetService>[]
+        private static Tuple<string, IRecordValidator>[] fileCabinets = new Tuple<string, IRecordValidator>[]
         {
-            new Tuple<string, FileCabinetService>("default", new FileCabinetDefaultService()),
-            new Tuple<string, FileCabinetService>("custom", new FileCabinetCustomService()),
+            new Tuple<string, IRecordValidator>("default", new DefaultValidator()),
+            new Tuple<string, IRecordValidator>("custom", new CustomValidator()),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -131,11 +131,12 @@ namespace FileCabinetApp
             var index = Array.FindIndex(fileCabinets, 0, fileCabinets.Length, i => i.Item1.Equals(parameter, StringComparison.InvariantCultureIgnoreCase));
             if (index >= 0)
             {
-                fileCabinetService = fileCabinets[index].Item2;
+                IRecordValidator validator = fileCabinets[index].Item2;
+                fileCabinetService = new FileCabinetService(validator);
             }
             else
             {
-                fileCabinetService = new FileCabinetDefaultService();
+                fileCabinetService = new FileCabinetService(new DefaultValidator());
             }
         }
 
