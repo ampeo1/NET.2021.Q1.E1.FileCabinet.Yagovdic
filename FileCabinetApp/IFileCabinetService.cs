@@ -23,5 +23,7 @@ namespace FileCabinetApp
         public IReadOnlyCollection<FileCabinetRecord> GetRecords();
 
         public int GetStat();
+
+        public IRecordValidator GetValidator();
     }
 }

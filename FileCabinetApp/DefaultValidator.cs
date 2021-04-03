@@ -8,6 +8,66 @@ namespace FileCabinetApp
 {
     public class DefaultValidator : IRecordValidator
     {
+        public Tuple<bool, string> ValidateAccess(char access)
+        {
+            string errorMessage = string.Empty;
+            if (access < 'A' || access > 'G')
+            {
+                errorMessage = "Access doesn't contains [A, B, C, D, E, F, G]";
+                return new Tuple<bool, string>(false, errorMessage);
+            }
+
+            return new Tuple<bool, string>(true, errorMessage);
+        }
+
+        public Tuple<bool, string> ValidateDateOfBirth(DateTime dateOfBirth)
+        {
+            string errorMessage = string.Empty;
+            if (dateOfBirth < new DateTime(1950, 01, 01) || dateOfBirth > DateTime.Now)
+            {
+                errorMessage = "Date of birth is less than 01-jan-1920 or greater than now";
+                return new Tuple<bool, string>(false, errorMessage);
+            }
+
+            return new Tuple<bool, string>(true, errorMessage);
+        }
+
+        public Tuple<bool, string> ValidateFirstName(string firstName)
+        {
+            string errorMessage = string.Empty;
+            if (string.IsNullOrWhiteSpace(firstName))
+            {
+                errorMessage = "Argument is null or with whiteSpace";
+                return new Tuple<bool, string>(false, errorMessage);
+            }
+
+            if (firstName.Length < 2 || firstName.Length > 60)
+            {
+                errorMessage = "Length is less than 1 or greater than 100";
+                return new Tuple<bool, string>(false, errorMessage);
+            }
+
+            return new Tuple<bool, string>(true, errorMessage);
+        }
+
+        public Tuple<bool, string> ValidateLastName(string lastName)
+        {
+            string errorMessage = string.Empty;
+            if (string.IsNullOrWhiteSpace(lastName))
+            {
+                errorMessage = "Argument is null or with whiteSpace";
+                return new Tuple<bool, string>(false, errorMessage);
+            }
+
+            if (lastName.Length < 2 || lastName.Length > 60)
+            {
+                errorMessage = "Length is less than 1 or greater than 100";
+                return new Tuple<bool, string>(false, errorMessage);
+            }
+
+            return new Tuple<bool, string>(true, errorMessage);
+        }
+
         public void ValidateParameters(DataRecord dataRecord)
         {
             if (dataRecord is null)
@@ -15,24 +75,17 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(dataRecord)}");
             }
 
-            if (string.IsNullOrWhiteSpace(dataRecord.FirstName) || string.IsNullOrWhiteSpace(dataRecord.LastName))
-            {
-                throw new ArgumentNullException($"{nameof(dataRecord.FirstName)}, {nameof(dataRecord.LastName)}");
-            }
+            CheckResult(this.ValidateFirstName(dataRecord.FirstName));
+            CheckResult(this.ValidateLastName(dataRecord.LastName));
+            CheckResult(this.ValidateDateOfBirth(dataRecord.DateOfBirth));
+            CheckResult(this.ValidateAccess(dataRecord.Access));
+        }
 
-            if (dataRecord.FirstName.Length < 2 || dataRecord.FirstName.Length > 60 || dataRecord.LastName.Length < 2 || dataRecord.LastName.Length > 60)
+        private static void CheckResult(Tuple<bool, string> resultValidation)
+        {
+            if (!resultValidation.Item1)
             {
-                throw new ArgumentException($"{nameof(dataRecord.FirstName)} or {nameof(dataRecord.LastName)} length is less than 2 or greater than 60", $"{nameof(dataRecord.FirstName)}, {nameof(dataRecord.LastName)}");
-            }
-
-            if (dataRecord.DateOfBirth < new DateTime(1950, 01, 01) || dataRecord.DateOfBirth > DateTime.Now)
-            {
-                throw new ArgumentException($"{nameof(dataRecord.DateOfBirth)} is less than 01-jan-1950 or greater than now");
-            }
-
-            if (dataRecord.Access < 'A' || dataRecord.Access > 'G')
-            {
-                throw new ArgumentException($"{nameof(dataRecord.Access)} doesn't contains [A, B, C, D, E, F, G]");
+                throw new ArgumentException($"{resultValidation.Item2}");
             }
         }
     }

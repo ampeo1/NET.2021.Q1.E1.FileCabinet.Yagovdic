@@ -228,33 +228,49 @@ namespace FileCabinetApp
         private static DataRecord CollectRecordData()
         {
             DataRecord dataRecord = new DataRecord();
+            IRecordValidator validator = fileCabinetService.GetValidator();
             Console.Write("First name: ");
-            dataRecord.FirstName = Console.ReadLine();
+            dataRecord.FirstName = ReadInput(Converter.StringConverter, validator.ValidateFirstName);
 
             Console.Write("Last Name: ");
-            dataRecord.LastName = Console.ReadLine();
+            dataRecord.LastName = ReadInput(Converter.StringConverter, validator.ValidateLastName);
 
             Console.Write("Date of birth: ");
-            DateTime date;
-            while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, DateTimeStyles.None, out date))
-            {
-                Console.WriteLine("Error. Incorrect format, must be dd/mm/yyyy");
-                Console.Write("Date of birth: ");
-            }
+            dataRecord.DateOfBirth = ReadInput(Converter.DateConverter, validator.ValidateDateOfBirth);
 
-            dataRecord.DateOfBirth = date;
-
-            char access;
             Console.Write("Access: ");
-            while (!char.TryParse(Console.ReadLine(), out access))
-            {
-                Console.WriteLine("Error. Input one letter.");
-                Console.Write("Access: ");
-            }
-
-            dataRecord.Access = access;
+            dataRecord.Access = ReadInput(Converter.CharConverted, validator.ValidateAccess);
 
             return dataRecord;
+        }
+
+        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
+        {
+            do
+            {
+                T value;
+
+                var input = Console.ReadLine();
+                var conversionResult = converter(input);
+
+                if (!conversionResult.Item1)
+                {
+                    Console.WriteLine($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
+                    continue;
+                }
+
+                value = conversionResult.Item3;
+
+                var validationResult = validator(value);
+                if (!validationResult.Item1)
+                {
+                    Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
+                    continue;
+                }
+
+                return value;
+            }
+            while (true);
         }
 
         private static void Find(string parameters)

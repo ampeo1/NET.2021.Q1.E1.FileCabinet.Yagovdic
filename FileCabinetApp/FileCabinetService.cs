@@ -106,6 +106,11 @@ namespace FileCabinetApp
             return this.list.Count;
         }
 
+        public IRecordValidator GetValidator()
+        {
+            return this.validator;
+        }
+
         private FileCabinetRecord Create(DataRecord dataRecord)
         {
             this.validator.ValidateParameters(dataRecord);
