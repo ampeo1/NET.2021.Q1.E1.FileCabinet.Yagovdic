@@ -4,6 +4,9 @@ using System.Globalization;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// Interacts with API. 
+    /// </summary>
     public static class Program
     {
         private const string DeveloperName = "Oleg Yagovdic";
@@ -55,6 +58,10 @@ namespace FileCabinetApp
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
         };
 
+        /// <summary>
+        /// Point of entry.
+        /// </summary>
+        /// <param name="args">Property.</param>
         public static void Main(string[] args)
         {
             SetSettings(args);
@@ -90,6 +97,10 @@ namespace FileCabinetApp
             while (isRunning);
         }
 
+        /// <summary>
+        /// Set settings.
+        /// </summary>
+        /// <param name="args">property of settings.</param>
         private static void SetSettings(string[] args)
         {
             if (args.Length == 0)
@@ -127,6 +138,10 @@ namespace FileCabinetApp
             }
         }
 
+        /// <summary>
+        /// Set file cabinet service.
+        /// </summary>
+        /// <param name="parameter">Validation parameter.</param>
         private static void SetFileCabinetService(string parameter)
         {
             var index = Array.FindIndex(fileCabinets, 0, fileCabinets.Length, i => i.Item1.Equals(parameter, StringComparison.InvariantCultureIgnoreCase));
@@ -141,12 +156,20 @@ namespace FileCabinetApp
             }
         }
 
+        /// <summary>
+        /// Print that command missed.
+        /// </summary>
+        /// <param name="command">Missed command.</param>
         private static void PrintMissedCommandInfo(string command)
         {
             Console.WriteLine($"There is no '{command}' command.");
             Console.WriteLine();
         }
 
+        /// <summary>
+        /// Print help information.
+        /// </summary>
+        /// <param name="parameters">Parameter wich need print help information.</param>
         private static void PrintHelp(string parameters)
         {
             if (!string.IsNullOrEmpty(parameters))
@@ -174,12 +197,20 @@ namespace FileCabinetApp
             Console.WriteLine();
         }
 
+        /// <summary>
+        /// Prints statistics.
+        /// </summary>
+        /// <param name="parameters">Parameter.</param>
         private static void Stat(string parameters)
         {
             var recordsCount = fileCabinetService.GetStat();
             Console.WriteLine($"{recordsCount} record(s).");
         }
 
+        /// <summary>
+        /// Create new record.
+        /// </summary>
+        /// <param name="parameters">Parameter.</param>
         private static void Create(string parameters)
         {
             int id;
@@ -196,6 +227,10 @@ namespace FileCabinetApp
             }
         }
 
+        /// <summary>
+        /// Change record.
+        /// </summary>
+        /// <param name="parameters">Id record.</param>
         private static void Edit(string parameters)
         {
             int id = 0;
@@ -225,6 +260,10 @@ namespace FileCabinetApp
             }
         }
 
+        /// <summary>
+        /// Gathers information about a record.
+        /// </summary>
+        /// <returns>Record data.</returns>
         private static DataRecord CollectRecordData()
         {
             DataRecord dataRecord = new DataRecord();
@@ -244,6 +283,13 @@ namespace FileCabinetApp
             return dataRecord;
         }
 
+        /// <summary>
+        /// Reads data from the console.
+        /// </summary>
+        /// <typeparam name="T">Type of object being read.</typeparam>
+        /// <param name="converter">Function that performs convertation.</param>
+        /// <param name="validator">Function that performs validation.</param>
+        /// <returns>Processed data.</returns>
         private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
         {
             do
@@ -273,6 +319,10 @@ namespace FileCabinetApp
             while (true);
         }
 
+        /// <summary>
+        /// Finds record.
+        /// </summary>
+        /// <param name="parameters">search property and search data.</param>
         private static void Find(string parameters)
         {
             string[] inputs = parameters.Split(' ', 2);
@@ -297,16 +347,31 @@ namespace FileCabinetApp
             Print(records);
         }
 
+        /// <summary>
+        /// Find record by first name.
+        /// </summary>
+        /// <param name="firstname">First name.</param>
+        /// <returns>Found records.</returns>
         private static IReadOnlyCollection<FileCabinetRecord> FindByFirstname(string firstname)
         {
             return fileCabinetService.FindByFirstName(firstname);
         }
 
+        /// <summary>
+        /// Find record by last name.
+        /// </summary>
+        /// <param name="lastname">last name.</param>
+        /// <returns>Found records.</returns>
         private static IReadOnlyCollection<FileCabinetRecord> FindByLastname(string lastname)
         {
             return fileCabinetService.FindByLastname(lastname);
         }
 
+        /// <summary>
+        /// Find record by date of birth.
+        /// </summary>
+        /// <param name="birthday">Date of birth.</param>
+        /// <returns>Found records.</returns>
         private static IReadOnlyCollection<FileCabinetRecord> FindByBirthDay(string birthday)
         {
             if (!DateTime.TryParseExact(birthday, "yyyy-MMM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))
@@ -318,12 +383,20 @@ namespace FileCabinetApp
             return fileCabinetService.FindByBirthDay(date);
         }
 
+        /// <summary>
+        /// Print all records.
+        /// </summary>
+        /// <param name="parameters">Parameter.</param>
         private static void List(string parameters)
         {
             IReadOnlyCollection<FileCabinetRecord> records = fileCabinetService.GetRecords();
             Print(records);
         }
 
+        /// <summary>
+        /// Print records.
+        /// </summary>
+        /// <param name="records">Records which need print.</param>
         private static void Print(IReadOnlyCollection<FileCabinetRecord> records)
         {
             foreach (FileCabinetRecord record in records)
@@ -333,6 +406,10 @@ namespace FileCabinetApp
             }
         }
 
+        /// <summary>
+        /// Exit from programm.
+        /// </summary>
+        /// <param name="parameters">Parameters.</param>
         private static void Exit(string parameters)
         {
             Console.WriteLine("Exiting an application...");

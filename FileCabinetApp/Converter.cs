@@ -7,13 +7,34 @@ using System.Threading.Tasks;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// This class converts data.
+    /// </summary>
     public static class Converter
     {
+        /// <summary>
+        /// Converts from string to string.
+        /// </summary>
+        /// <param name="str">String representation.</param>
+        /// <returns>
+        /// First argument: True if successfully transformed; otherwise false.
+        /// Second argument: Error message if there is an error.
+        /// Third argument: Converted value.
+        /// </returns>
         public static Tuple<bool, string, string> StringConverter(string str)
         {
             return new Tuple<bool, string, string>(true, string.Empty, str);
         }
 
+        /// <summary>
+        /// Converts from string to DateTime.
+        /// </summary>
+        /// <param name="str">String representation.</param>
+        /// <returns>
+        /// First argument: True if successfully transformed; otherwise false.
+        /// Second argument: Error message if there is an error.
+        /// Third argument: Converted value.
+        /// </returns>
         public static Tuple<bool, string, DateTime> DateConverter(string str)
         {
             DateTime date = new DateTime(0);
@@ -40,6 +61,15 @@ namespace FileCabinetApp
             return new Tuple<bool, string, DateTime>(converted, errorMessage, date);
         }
 
+        /// <summary>
+        /// Converts from string to char.
+        /// </summary>
+        /// <param name="str">String representation.</param>
+        /// <returns>
+        /// First argument: True if successfully transformed; otherwise false.
+        /// Second argument: Error message if there is an error.
+        /// Third argument: Converted value.
+        /// </returns>
         public static Tuple<bool, string, char> CharConverted(string str)
         {
             char convertedValue = char.MinValue;

@@ -6,8 +6,19 @@ using System.Threading.Tasks;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// This class does validate data.
+    /// </summary>
     public class CustomValidator : IRecordValidator
     {
+        /// <summary>
+        /// Validate access property.
+        /// </summary>
+        /// <param name="access">Checked argument.</param>
+        /// <returns>
+        /// First argument: True if successfully validated; otherwise false.
+        /// Second argument: Error message if there is an error.
+        /// </returns>
         public Tuple<bool, string> ValidateAccess(char access)
         {
             string errorMessage = string.Empty;
@@ -20,6 +31,14 @@ namespace FileCabinetApp
             return new Tuple<bool, string>(true, errorMessage);
         }
 
+        /// <summary>
+        /// Validate date of birth property.
+        /// </summary>
+        /// <param name="dateOfBirth">Checked argument.</param>
+        /// <returns>
+        /// First argument: True if successfully validated; otherwise false.
+        /// Second argument: Error message if there is an error.
+        /// </returns>
         public Tuple<bool, string> ValidateDateOfBirth(DateTime dateOfBirth)
         {
             string errorMessage = string.Empty;
@@ -32,6 +51,14 @@ namespace FileCabinetApp
             return new Tuple<bool, string>(true, errorMessage);
         }
 
+        /// <summary>
+        /// Validate first name property.
+        /// </summary>
+        /// <param name="firstName">Checked argument.</param>
+        /// <returns>
+        /// First argument: True if successfully validated; otherwise false.
+        /// Second argument: Error message if there is an error.
+        /// </returns>
         public Tuple<bool, string> ValidateFirstName(string firstName)
         {
             string errorMessage = string.Empty;
@@ -50,6 +77,14 @@ namespace FileCabinetApp
             return new Tuple<bool, string>(true, errorMessage);
         }
 
+        /// <summary>
+        /// Validate last name property.
+        /// </summary>
+        /// <param name="lastName">Checked argument.</param>
+        /// <returns>
+        /// First argument: True if successfully validated; otherwise false.
+        /// Second argument: Error message if there is an error.
+        /// </returns>
         public Tuple<bool, string> ValidateLastName(string lastName)
         {
             string errorMessage = string.Empty;
@@ -68,6 +103,11 @@ namespace FileCabinetApp
             return new Tuple<bool, string>(true, errorMessage);
         }
 
+        /// <summary>
+        /// Validate all arguments.
+        /// </summary>
+        /// <param name="dataRecord">Checked arguments.</param>
+        /// <exception cref="ArgumentNullException">Throws when <paramref name="dataRecord"/> is null.</exception>
         public void ValidateParameters(DataRecord dataRecord)
         {
             if (dataRecord is null)
@@ -81,6 +121,11 @@ namespace FileCabinetApp
             CheckResult(this.ValidateAccess(dataRecord.Access));
         }
 
+        /// <summary>
+        /// Checks if validation was successful.
+        /// </summary>
+        /// <param name="resultValidation">Result of validation.</param>
+        /// <exception cref="ArgumentException">Throws when validation failed.</exception>
         private static void CheckResult(Tuple<bool, string> resultValidation)
         {
             if (!resultValidation.Item1)
