@@ -111,6 +111,24 @@ namespace FileCabinetApp
             return this.validator;
         }
 
+        private static void RemoveRecordFromDictiornary<T>(Dictionary<T, List<FileCabinetRecord>> dictionary, T key, FileCabinetRecord record)
+        {
+            if (dictionary.ContainsKey(key))
+            {
+                dictionary[key].Remove(record);
+            }
+        }
+
+        private static void AddRecordToDictionary<T>(Dictionary<T, List<FileCabinetRecord>> dictionary, T key, FileCabinetRecord record)
+        {
+            if (!dictionary.ContainsKey(key))
+            {
+                dictionary[key] = new List<FileCabinetRecord>();
+            }
+
+            dictionary[key].Add(record);
+        }
+
         private FileCabinetRecord Create(DataRecord dataRecord)
         {
             this.validator.ValidateParameters(dataRecord);
@@ -137,44 +155,16 @@ namespace FileCabinetApp
 
         private void AddRecordToDictionaries(FileCabinetRecord record)
         {
-            if (!this.firstNameDictionary.ContainsKey(record.FirstName))
-            {
-                this.firstNameDictionary[record.FirstName] = new List<FileCabinetRecord>();
-            }
-
-            this.firstNameDictionary[record.FirstName].Add(record);
-
-            if (!this.lastNameDictionary.ContainsKey(record.LastName))
-            {
-                this.lastNameDictionary[record.LastName] = new List<FileCabinetRecord>();
-            }
-
-            this.lastNameDictionary[record.LastName].Add(record);
-
-            if (!this.dateOfBirthDictionary.ContainsKey(record.DateOfBirth))
-            {
-                this.dateOfBirthDictionary[record.DateOfBirth] = new List<FileCabinetRecord>();
-            }
-
-            this.dateOfBirthDictionary[record.DateOfBirth].Add(record);
+            AddRecordToDictionary(this.firstNameDictionary, record.FirstName, record);
+            AddRecordToDictionary(this.lastNameDictionary, record.LastName, record);
+            AddRecordToDictionary(this.dateOfBirthDictionary, record.DateOfBirth, record);
         }
 
         private void RemoveRecordFromDictionaries(FileCabinetRecord record)
         {
-            if (this.firstNameDictionary.ContainsKey(record.FirstName))
-            {
-                this.firstNameDictionary[record.FirstName].Remove(record);
-            }
-
-            if (this.firstNameDictionary.ContainsKey(record.LastName))
-            {
-                this.firstNameDictionary[record.LastName].Remove(record);
-            }
-
-            if (this.dateOfBirthDictionary.ContainsKey(record.DateOfBirth))
-            {
-                this.dateOfBirthDictionary[record.DateOfBirth].Remove(record);
-            }
+            RemoveRecordFromDictiornary(this.firstNameDictionary, record.FirstName, record);
+            RemoveRecordFromDictiornary(this.lastNameDictionary, record.LastName, record);
+            RemoveRecordFromDictiornary(this.dateOfBirthDictionary, record.DateOfBirth, record);
         }
     }
 }
