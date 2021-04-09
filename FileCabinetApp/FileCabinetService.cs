@@ -12,7 +12,7 @@ namespace FileCabinetApp
     /// </summary>
     public class FileCabinetService : IFileCabinetService
     {
-        private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
+        private readonly List<FileCabinetRecord> records = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
@@ -41,10 +41,10 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(dataRecord)}");
             }
 
-            dataRecord.Id = this.list.Count + 1;
+            dataRecord.Id = this.records.Count + 1;
             FileCabinetRecord record = this.Create(dataRecord);
             this.AddRecordToDictionaries(record);
-            this.list.Add(record);
+            this.records.Add(record);
 
             return record.Id;
         }
@@ -64,9 +64,9 @@ namespace FileCabinetApp
 
             int index = this.FindIndexById(dataRecord.Id);
             FileCabinetRecord record = this.Create(dataRecord);
-            this.RemoveRecordFromDictionaries(this.list[index]);
+            this.RemoveRecordFromDictionaries(this.records[index]);
             this.AddRecordToDictionaries(record);
-            this.list[index] = record;
+            this.records[index] = record;
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace FileCabinetApp
         /// <returns>Index record.</returns>
         public int FindIndexById(int id)
         {
-            int index = this.list.FindIndex(x => x.Id == id);
+            int index = this.records.FindIndex(x => x.Id == id);
             if (index == -1)
             {
                 throw new ArgumentException($"{nameof(id)} record is not found.");
@@ -143,7 +143,7 @@ namespace FileCabinetApp
         /// <returns>Records.</returns>
         public IReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            return this.list;
+            return this.records;
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace FileCabinetApp
         /// <returns>Count of records.</returns>
         public int GetStat()
         {
-            return this.list.Count;
+            return this.records.Count;
         }
 
         /// <summary>
@@ -162,6 +162,15 @@ namespace FileCabinetApp
         public IRecordValidator GetValidator()
         {
             return this.validator;
+        }
+
+        /// <summary>
+        /// Takes a snapshot state.
+        /// </summary>
+        /// <returns>Snapshot state.</returns>
+        public FileCabinetServiceSnapshot MakeSnapshot()
+        {
+            return new FileCabinetServiceSnapshot(this.records.ToArray());
         }
 
         /// <summary>
