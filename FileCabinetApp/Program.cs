@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 
 namespace FileCabinetApp
 {
     /// <summary>
-    /// Interacts with API. 
+    /// Interacts with API.
     /// </summary>
     public static class Program
     {
@@ -25,6 +26,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("edit", Edit),
             new Tuple<string, Action<string>>("find", Find),
+            new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("exit", Exit),
         };
@@ -36,9 +38,10 @@ namespace FileCabinetApp
             new Tuple<string, Func<string, IReadOnlyCollection<FileCabinetRecord>>>("dateofbirth", FindByBirthDay),
         };
 
-        private static Tuple<string, string, Action<string>>[] programSetting = new Tuple<string, string, Action<string>>[]
+        private static Tuple<string, Action<string>>[] programSetting = new Tuple<string, Action<string>>[]
         {
-            new Tuple<string, string, Action<string>>("--validation-rules", "-v", SetFileCabinetService),
+            new Tuple<string, Action<string>>("--validation-rules", SetFileCabinetService),
+            new Tuple<string, Action<string>>("-v", SetFileCabinetService),
         };
 
         private static Tuple<string, IRecordValidator>[] fileCabinets = new Tuple<string, IRecordValidator>[]
@@ -47,14 +50,20 @@ namespace FileCabinetApp
             new Tuple<string, IRecordValidator>("custom", new CustomValidator()),
         };
 
+        private static Tuple<string, Action<string>>[] exportProperty = new Tuple<string, Action<string>>[]
+        {
+            new Tuple<string, Action<string>>("csv", ExportToCsv),
+        };
+
         private static string[][] helpMessages = new string[][]
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "stat", "prints the statistics of records", "The 'stat' command prints the statistics of records." },
             new string[] { "create", "creates new record", "The 'create' command creates new record" },
             new string[] { "create", "change record", "The 'edit' command changes record" },
-            new string[] { "list", "lists records", "The 'lists' command lists records " },
-            new string[] { "find", "finds records", "The 'find' command finds records " },
+            new string[] { "list", "lists records", "The 'lists' command lists records" },
+            new string[] { "find", "finds records", "The 'find' command finds records" },
+            new string[] { "export", "exports records", "The 'export' command saves records" },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
         };
 
@@ -75,23 +84,15 @@ namespace FileCabinetApp
                 var inputs = Console.ReadLine().Split(' ', 2);
                 const int commandIndex = 0;
                 var command = inputs[commandIndex];
-
-                if (string.IsNullOrEmpty(command))
+                const int parametersIndex = 1;
+                var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
+                try
                 {
-                    Console.WriteLine(Program.HintMessage);
+                    ExcuteCommand(command, commands)(parameters);
+                }
+                catch (ArgumentException)
+                {
                     continue;
-                }
-
-                var index = Array.FindIndex(commands, 0, commands.Length, i => i.Item1.Equals(command, StringComparison.InvariantCultureIgnoreCase));
-                if (index >= 0)
-                {
-                    const int parametersIndex = 1;
-                    var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
-                    commands[index].Item2(parameters);
-                }
-                else
-                {
-                    PrintMissedCommandInfo(command);
                 }
             }
             while (isRunning);
@@ -109,32 +110,32 @@ namespace FileCabinetApp
             }
 
             string command = args[0];
-            int index = -1;
+            string parameter = string.Empty;
             if (command[0].Equals('-') && command[1].Equals('-'))
             {
                 string[] splittingCommand = command.Split('=');
                 if (splittingCommand.Length == 2)
                 {
-                    index = Array.FindIndex(programSetting, 0, programSetting.Length, i => i.Item1.Equals(splittingCommand[0], StringComparison.InvariantCultureIgnoreCase));
-                    if (index >= 0)
-                    {
-                        programSetting[index].Item3(splittingCommand[1]);
-                    }
+                    command = splittingCommand[0];
+                    parameter = splittingCommand[1];
                 }
-
+            }
+            else if (command[0].Equals('-') && args.Length == 2)
+            {
+                parameter = args[1];
+            }
+            else
+            {
                 return;
             }
 
-            if (command[0].Equals('-'))
+            try
             {
-                if (args.Length == 2)
-                {
-                    index = Array.FindIndex(programSetting, 0, programSetting.Length, i => i.Item2.Equals(args[0], StringComparison.InvariantCultureIgnoreCase));
-                    if (index >= 0)
-                    {
-                        programSetting[index].Item3(args[1]);
-                    }
-                }
+                ExcuteCommand(command, programSetting)(parameter);
+            }
+            catch (ArgumentException)
+            {
+                return;
             }
         }
 
@@ -153,6 +154,32 @@ namespace FileCabinetApp
             else
             {
                 fileCabinetService = new FileCabinetService(new DefaultValidator());
+            }
+        }
+
+        /// <summary>
+        /// Find and return command.
+        /// </summary>
+        /// <typeparam name="T">Type command.</typeparam>
+        /// <param name="commandName">Command name.</param>
+        /// <param name="commands">Array of command.</param>
+        /// <returns>Command.</returns>
+        private static T ExcuteCommand<T>(string commandName, Tuple<string, T>[] commands)
+        {
+            if (string.IsNullOrEmpty(commandName))
+            {
+                throw new ArgumentNullException($"{commandName}");
+            }
+
+            var index = Array.FindIndex(commands, 0, commands.Length, i => i.Item1.Equals(commandName, StringComparison.InvariantCultureIgnoreCase));
+            if (index >= 0)
+            {
+                return commands[index].Item2;
+            }
+            else
+            {
+                PrintMissedCommandInfo(commandName);
+                throw new ArgumentException("Command not found", $"{commandName}");
             }
         }
 
@@ -335,13 +362,15 @@ namespace FileCabinetApp
             }
 
             IReadOnlyCollection<FileCabinetRecord> records = Array.Empty<FileCabinetRecord>();
-            var index = Array.FindIndex(findProperty, 0, findProperty.Length, i => i.Item1.Equals(command, StringComparison.InvariantCultureIgnoreCase));
-
-            if (index >= 0)
+            const int parametersIndex = 1;
+            var key = inputs.Length > 1 ? inputs[parametersIndex].Trim('\"') : string.Empty;
+            try
             {
-                const int parametersIndex = 1;
-                var key = inputs.Length > 1 ? inputs[parametersIndex].Trim('\"') : string.Empty;
-                records = findProperty[index].Item2(key);
+                records = ExcuteCommand(command, findProperty)(key);
+            }
+            catch (ArgumentException)
+            {
+                return;
             }
 
             Print(records);
@@ -404,6 +433,62 @@ namespace FileCabinetApp
                 Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}," +
                     $" age: {record.Age}, amount records {record.AmountRecords}, access {record.Access}");
             }
+        }
+
+        private static void Export(string parameters)
+        {
+            string[] splitParameters = parameters.Split(' ');
+            if (splitParameters.Length != 2)
+            {
+                return;
+            }
+
+            try
+            {
+                ExcuteCommand(splitParameters[0], exportProperty)(splitParameters[1]);
+            }
+            catch (ArgumentException)
+            {
+                return;
+            }
+        }
+
+        private static void ExportToCsv(string path)
+        {
+            try
+            {
+                using (FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write))
+                {
+                    if (fileStream.Length != 0)
+                    {
+                        Console.WriteLine($"File is exist - rewrite {path}? [Y/n]");
+                        ConsoleKeyInfo key;
+                        do
+                        {
+                            key = Console.ReadKey();
+                        }
+                        while (!key.KeyChar.Equals('y') && !key.KeyChar.Equals('n'));
+                        Console.WriteLine();
+
+                        if (key.KeyChar.Equals('n'))
+                        {
+                            return;
+                        }
+                    }
+                }
+
+                FileCabinetServiceSnapshot snapshot = fileCabinetService.MakeSnapshot();
+                using (StreamWriter writer = new StreamWriter(path, false))
+                {
+                    snapshot.SaveToCsv(writer);
+                    Console.WriteLine($"All records are exported to file {path}.");
+                }
+            }
+            catch
+            {
+                Console.WriteLine($"Export failed: can't open file {path}");
+            }
+
         }
 
         /// <summary>
