@@ -164,6 +164,10 @@ namespace FileCabinetApp
             return this.validator;
         }
 
+        /// <summary>
+        /// Takes a snapshot state.
+        /// </summary>
+        /// <returns>Snapshot state.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot()
         {
             return new FileCabinetServiceSnapshot(this.records.ToArray());

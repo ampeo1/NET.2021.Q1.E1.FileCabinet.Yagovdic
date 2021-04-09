@@ -50,9 +50,10 @@ namespace FileCabinetApp
             new Tuple<string, IRecordValidator>("custom", new CustomValidator()),
         };
 
-        private static Tuple<string, Action<string>>[] exportProperty = new Tuple<string, Action<string>>[]
+        private static Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>[] exportProperty = new Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>[]
         {
-            new Tuple<string, Action<string>>("csv", ExportToCsv),
+            new Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>("csv", ExportToCsv),
+            new Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>("xml", ExportToXml),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -435,6 +436,10 @@ namespace FileCabinetApp
             }
         }
 
+        /// <summary>
+        /// Command that saves data.
+        /// </summary>
+        /// <param name="parameters">Command parameters.</param>
         private static void Export(string parameters)
         {
             string[] splitParameters = parameters.Split(' ');
@@ -443,25 +448,23 @@ namespace FileCabinetApp
                 return;
             }
 
+            Action<StreamWriter, FileCabinetServiceSnapshot> command;
             try
             {
-                ExcuteCommand(splitParameters[0], exportProperty)(splitParameters[1]);
+                command = ExcuteCommand(splitParameters[0], exportProperty);
             }
             catch (ArgumentException)
             {
                 return;
             }
-        }
 
-        private static void ExportToCsv(string path)
-        {
             try
             {
-                using (FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write))
+                using (FileStream fileStream = new FileStream(splitParameters[1], FileMode.OpenOrCreate, FileAccess.Write))
                 {
                     if (fileStream.Length != 0)
                     {
-                        Console.WriteLine($"File is exist - rewrite {path}? [Y/n]");
+                        Console.WriteLine($"File is exist - rewrite {splitParameters[1]}? [Y/n]");
                         ConsoleKeyInfo key;
                         do
                         {
@@ -478,17 +481,36 @@ namespace FileCabinetApp
                 }
 
                 FileCabinetServiceSnapshot snapshot = fileCabinetService.MakeSnapshot();
-                using (StreamWriter writer = new StreamWriter(path, false))
+                using (StreamWriter writer = new StreamWriter(splitParameters[1], false))
                 {
-                    snapshot.SaveToCsv(writer);
-                    Console.WriteLine($"All records are exported to file {path}.");
+                    command(writer, snapshot);
+                    Console.WriteLine($"All records are exported to file {splitParameters[1]}.");
                 }
             }
             catch
             {
-                Console.WriteLine($"Export failed: can't open file {path}");
+                Console.WriteLine($"Export failed: can't open file {splitParameters[1]}.");
             }
+        }
 
+        /// <summary>
+        /// Saves data to csv file.
+        /// </summary>
+        /// <param name="writer">Provider for writing.</param>
+        /// <param name="snapshot">The state to be saved.</param>
+        private static void ExportToCsv(StreamWriter writer, FileCabinetServiceSnapshot snapshot)
+        {
+            snapshot.SaveToCsv(writer);
+        }
+
+        /// <summary>
+        /// Saves data to xml file.
+        /// </summary>
+        /// <param name="writer">Provider for writing.</param>
+        /// <param name="snapshot">The state to be saved.</param>
+        private static void ExportToXml(StreamWriter writer, FileCabinetServiceSnapshot snapshot)
+        {
+            snapshot.SaveToXml(writer);
         }
 
         /// <summary>

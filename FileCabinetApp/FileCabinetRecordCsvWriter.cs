@@ -7,10 +7,17 @@ using System.Text;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// A class that writes data to a csv file.
+    /// </summary>
     public class FileCabinetRecordCsvWriter
     {
         private readonly TextWriter writer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetRecordCsvWriter"/> class.
+        /// </summary>
+        /// <param name="writer">Provider for writing.</param>
         public FileCabinetRecordCsvWriter(TextWriter writer)
         {
             if (writer is null)
@@ -21,6 +28,11 @@ namespace FileCabinetApp
             this.writer = writer;
         }
 
+        /// <summary>
+        /// Writes data in csv file.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Throws when <paramref name="record"/> is null.</exception>
+        /// <param name="record">The record to be saved.</param>
         public void Write(FileCabinetRecord record)
         {
             if (record is null)
