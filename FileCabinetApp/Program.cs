@@ -17,7 +17,7 @@ namespace FileCabinetApp
         private const int ExplanationHelpIndex = 2;
 
         private static bool isRunning = true;
-        private static IFileCabinetService fileCabinetService = new FileCabinetService(new DefaultValidator());
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
 
         private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
         {
@@ -150,11 +150,11 @@ namespace FileCabinetApp
             if (index >= 0)
             {
                 IRecordValidator validator = fileCabinets[index].Item2;
-                fileCabinetService = new FileCabinetService(validator);
+                fileCabinetService = new FileCabinetMemoryService(validator);
             }
             else
             {
-                fileCabinetService = new FileCabinetService(new DefaultValidator());
+                fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
             }
         }
 
