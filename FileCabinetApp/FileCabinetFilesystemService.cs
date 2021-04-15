@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,20 @@ namespace FileCabinetApp
     /// </summary>
     public class FileCabinetFilesystemService : IFileCabinetService
     {
+        private const string FileName = "cabinet-records.db";
+        private readonly FileStream file;
+        private readonly IRecordValidator validator;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
+        /// </summary>
+        /// <param name="validator">Validation-rules.</param>
+        public FileCabinetFilesystemService(IRecordValidator validator)
+        {
+            this.file = new FileStream(FileName, FileMode.CreateNew, FileAccess.ReadWrite);
+            this.validator = validator;
+        }
+
         /// <inheritdoc/>
         public int CreateRecord(DataRecord dataRecord)
         {

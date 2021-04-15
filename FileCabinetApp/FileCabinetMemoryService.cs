@@ -21,7 +21,7 @@ namespace FileCabinetApp
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
         /// </summary>
-        /// <param name="validator">validation-rules.</param>
+        /// <param name="validator">Validation-rules.</param>
         public FileCabinetMemoryService(IRecordValidator validator)
         {
             this.validator = validator;

@@ -15,6 +15,8 @@ namespace FileCabinetApp
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
+        private static Type validator = typeof(DefaultValidator);
+        private static Type service = typeof(FileCabinetMemoryService);
 
         private static bool isRunning = true;
         private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
@@ -39,15 +41,23 @@ namespace FileCabinetApp
         };
 
         private static Tuple<string, Action<string>>[] programSetting = new Tuple<string, Action<string>>[]
+       {
+            new Tuple<string, Action<string>>("--validation-rules", SetTypeValidationRules),
+            new Tuple<string, Action<string>>("-v", SetTypeValidationRules),
+            new Tuple<string, Action<string>>("--storage", SetTypeFileCabinetService),
+            new Tuple<string, Action<string>>("-s", SetTypeFileCabinetService),
+       };
+
+        private static Tuple<string, Type>[] validators = new Tuple<string, Type>[]
         {
-            new Tuple<string, Action<string>>("--validation-rules", SetFileCabinetService),
-            new Tuple<string, Action<string>>("-v", SetFileCabinetService),
+            new Tuple<string, Type>("default", typeof(DefaultValidator)),
+            new Tuple<string, Type>("custom", typeof(CustomValidator)),
         };
 
-        private static Tuple<string, IRecordValidator>[] fileCabinets = new Tuple<string, IRecordValidator>[]
+        private static Tuple<string, Type>[] fileCabinetServices = new Tuple<string, Type>[]
         {
-            new Tuple<string, IRecordValidator>("default", new DefaultValidator()),
-            new Tuple<string, IRecordValidator>("custom", new CustomValidator()),
+            new Tuple<string, Type>("memory", typeof(FileCabinetMemoryService)),
+            new Tuple<string, Type>("file", typeof(FileCabinetFilesystemService)),
         };
 
         private static Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>[] exportProperty = new Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>[]
@@ -105,57 +115,71 @@ namespace FileCabinetApp
         /// <param name="args">property of settings.</param>
         private static void SetSettings(string[] args)
         {
-            if (args.Length == 0)
+            for (int i = 0; i < args.Length; i++)
             {
-                return;
-            }
-
-            string command = args[0];
-            string parameter = string.Empty;
-            if (command[0].Equals('-') && command[1].Equals('-'))
-            {
-                string[] splittingCommand = command.Split('=');
-                if (splittingCommand.Length == 2)
+                string command = string.Empty;
+                string parameter = string.Empty;
+                if (args[i].StartsWith("--", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    command = splittingCommand[0];
-                    parameter = splittingCommand[1];
+                    string[] split = args[i].Split('=', 2);
+                    if (split.Length == 2)
+                    {
+                        command = split[0];
+                        parameter = split[1];
+                    }
+                }
+                else if (args[i].StartsWith('-'))
+                {
+                    command = args[i];
+                    if (i + 1 < args.Length)
+                    {
+                        i++;
+                        parameter = args[i];
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+
+                try
+                {
+                    ExcuteCommand(command, programSetting)(parameter);
+                }
+                catch (ArgumentException)
+                {
+                    continue;
                 }
             }
-            else if (command[0].Equals('-') && args.Length == 2)
-            {
-                parameter = args[1];
-            }
-            else
-            {
-                return;
-            }
 
-            try
-            {
-                ExcuteCommand(command, programSetting)(parameter);
-            }
-            catch (ArgumentException)
-            {
-                return;
-            }
+            CreateFileCabinetService();
         }
 
         /// <summary>
-        /// Set file cabinet service.
+        /// Set type validation-rules.
         /// </summary>
         /// <param name="parameter">Validation parameter.</param>
-        private static void SetFileCabinetService(string parameter)
+        private static void SetTypeValidationRules(string parameter)
         {
-            var index = Array.FindIndex(fileCabinets, 0, fileCabinets.Length, i => i.Item1.Equals(parameter, StringComparison.InvariantCultureIgnoreCase));
-            if (index >= 0)
-            {
-                IRecordValidator validator = fileCabinets[index].Item2;
-                fileCabinetService = new FileCabinetMemoryService(validator);
-            }
-            else
-            {
-                fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-            }
+            validator = ExcuteCommand(parameter, validators);
+        }
+
+        /// <summary>
+        /// Set type file cabinet service.
+        /// </summary>
+        /// <param name="parameter">Validation parameter.</param>
+        private static void SetTypeFileCabinetService(string parameter)
+        {
+            service = ExcuteCommand(parameter, fileCabinetServices);
+        }
+
+        /// <summary>
+        /// Creates file cabinet service.
+        /// </summary>
+        private static void CreateFileCabinetService()
+        {
+            object recordValidator = validator.GetConstructor(Array.Empty<Type>()).Invoke(Array.Empty<object>());
+            fileCabinetService = (IFileCabinetService)service.GetConstructor(new Type[] { typeof(IRecordValidator) }).Invoke(new object[] { recordValidator });
         }
 
         /// <summary>
