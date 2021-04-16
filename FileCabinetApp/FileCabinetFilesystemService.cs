@@ -13,17 +13,18 @@ namespace FileCabinetApp
     public class FileCabinetFilesystemService : IFileCabinetService
     {
         private const string FileName = "cabinet-records.db";
-        private readonly FileStream file;
+        private readonly FileStream fileStream;
         private readonly IRecordValidator validator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
         /// </summary>
         /// <param name="validator">Validation-rules.</param>
-        public FileCabinetFilesystemService(IRecordValidator validator)
+        /// <param name="fileStream">File stream.</param>
+        public FileCabinetFilesystemService(IRecordValidator validator, FileStream fileStream)
         {
-            this.file = new FileStream(FileName, FileMode.CreateNew, FileAccess.ReadWrite);
-            this.validator = validator;
+            this.fileStream = fileStream ?? throw new ArgumentNullException(nameof(fileStream));
+            this.validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
 
         /// <inheritdoc/>

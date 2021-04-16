@@ -11,6 +11,8 @@ namespace FileCabinetApp
     /// </summary>
     public class CustomValidator : IRecordValidator
     {
+        private static readonly DateTime MinDate = new DateTime(1920, 01, 01);
+
         /// <summary>
         /// Validate access property.
         /// </summary>
@@ -42,7 +44,7 @@ namespace FileCabinetApp
         public Tuple<bool, string> ValidateDateOfBirth(DateTime dateOfBirth)
         {
             string errorMessage = string.Empty;
-            if (dateOfBirth < new DateTime(1920, 01, 01) || dateOfBirth > DateTime.Now)
+            if (DateTime.Compare(DateTime.Now, dateOfBirth) < 0 || DateTime.Compare(MinDate, dateOfBirth) > 0)
             {
                 errorMessage = "Date of birth is less than 01-jan-1920 or greater than now";
                 return new Tuple<bool, string>(false, errorMessage);
