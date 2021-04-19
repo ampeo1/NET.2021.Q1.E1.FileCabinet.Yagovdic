@@ -12,7 +12,6 @@ namespace FileCabinetApp
     /// </summary>
     public class FileCabinetFilesystemService : IFileCabinetService
     {
-        private const string FileName = "cabinet-records.db";
         private readonly FileStream fileStream;
         private readonly IRecordValidator validator;
 

@@ -11,6 +11,7 @@ namespace FileCabinetApp
     public static class Program
     {
         private const string DeveloperName = "Oleg Yagovdic";
+        private const string NameFileStorage = "cabinet-records.db";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
@@ -84,7 +85,11 @@ namespace FileCabinetApp
         /// <param name="args">Property.</param>
         public static void Main(string[] args)
         {
-            SetSettings(args);
+            if (args != null)
+            {
+                SetSettings(args);
+            }
+
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
             Console.WriteLine(Program.HintMessage);
             Console.WriteLine();
@@ -178,8 +183,16 @@ namespace FileCabinetApp
         /// </summary>
         private static void CreateFileCabinetService()
         {
-            object recordValidator = validator.GetConstructor(Array.Empty<Type>()).Invoke(Array.Empty<object>());
-            fileCabinetService = (IFileCabinetService)service.GetConstructor(new Type[] { typeof(IRecordValidator) }).Invoke(new object[] { recordValidator });
+            IRecordValidator recordValidator = (IRecordValidator)validator.GetConstructor(Array.Empty<Type>()).Invoke(Array.Empty<object>());
+            if (service.Equals(typeof(FileCabinetMemoryService)))
+            {
+                fileCabinetService = new FileCabinetMemoryService(recordValidator);
+            }
+            else if (service.Equals(typeof(FileCabinetFilesystemService)))
+            {
+                FileStream fileStream = new FileStream(NameFileStorage, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                fileCabinetService = new FileCabinetFilesystemService(recordValidator, fileStream);
+            }
         }
 
         /// <summary>
