@@ -54,7 +54,7 @@ namespace FileCabinetApp
             builder.Append(separator);
             builder.Append(record.Access);
             builder.Append(separator);
-            builder.Append(record.AmountRecords);
+            builder.Append(record.Salary);
             this.writer.WriteLine(builder.ToString());
         }
     }

@@ -50,5 +50,13 @@ namespace FileCabinetApp
         /// Access.
         /// </value>
         public char Access { get; set; }
+
+        /// <summary>
+        /// Gets or sets salary.
+        /// </summary>
+        /// <value>
+        /// Salary.
+        /// </value>
+        public decimal Salary { get; set; }
     }
 }

@@ -227,7 +227,7 @@ namespace FileCabinetApp
                 LastName = dataRecord.LastName,
                 DateOfBirth = dataRecord.DateOfBirth,
                 Access = dataRecord.Access,
-                AmountRecords = 0,
+                Salary = dataRecord.Salary,
                 Age = age,
             };
 

@@ -105,6 +105,19 @@ namespace FileCabinetApp
             return new Tuple<bool, string>(true, errorMessage);
         }
 
+        /// <inheritdoc/>
+        public Tuple<bool, string> ValidateSalary(decimal salary)
+        {
+            string errorMessage = string.Empty;
+            if (salary < 0 || salary > 10000)
+            {
+                errorMessage = "Length is less than 0 or greater than 10000";
+                return new Tuple<bool, string>(false, errorMessage);
+            }
+
+            return new Tuple<bool, string>(true, errorMessage);
+        }
+
         /// <summary>
         /// Validate all arguments.
         /// </summary>

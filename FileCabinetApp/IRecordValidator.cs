@@ -56,5 +56,15 @@ namespace FileCabinetApp
         /// Second argument: Error message if there is an error.
         /// </returns>
         public Tuple<bool, string> ValidateDateOfBirth(DateTime dateOfBirth);
+
+        /// <summary>
+        /// Validate salary property.
+        /// </summary>
+        /// <param name="salary">Checked argument.</param>
+        /// <returns>
+        /// First argument: True if successfully validated; otherwise false.
+        /// Second argument: Error message if there is an error.
+        /// </returns>
+        public Tuple<bool, string> ValidateSalary(decimal salary);
     }
 }

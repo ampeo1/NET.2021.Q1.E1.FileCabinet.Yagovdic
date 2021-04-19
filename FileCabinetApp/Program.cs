@@ -345,6 +345,9 @@ namespace FileCabinetApp
             Console.Write("Access: ");
             dataRecord.Access = ReadInput(Converter.CharConverted, validator.ValidateAccess);
 
+            Console.Write("Salary: ");
+            dataRecord.Salary = ReadInput(Converter.DecimalConverted, validator.ValidateSalary);
+
             return dataRecord;
         }
 
@@ -469,7 +472,7 @@ namespace FileCabinetApp
             foreach (FileCabinetRecord record in records)
             {
                 Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}," +
-                    $" age: {record.Age}, amount records {record.AmountRecords}, access {record.Access}");
+                    $" age: {record.Age}, salary {record.Salary}, access {record.Access}");
             }
         }
 

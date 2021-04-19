@@ -42,6 +42,17 @@
             Third argument: Converted value.
             </returns>
         </member>
+        <member name="M:FileCabinetApp.Converter.DecimalConverted(System.String)">
+            <summary>
+            Converts from string to decimal.
+            </summary>
+            <param name="str">String representation.</param>
+            <returns>
+            First argument: True if successfully transformed; otherwise false.
+            Second argument: Error message if there is an error.
+            Third argument: Converted value.
+            </returns>
+        </member>
         <member name="T:FileCabinetApp.CustomValidator">
             <summary>
             This class does validate data.
@@ -86,6 +97,9 @@
             First argument: True if successfully validated; otherwise false.
             Second argument: Error message if there is an error.
             </returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateSalary(System.Decimal)">
+            <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.CustomValidator.ValidateParameters(FileCabinetApp.DataRecord)">
             <summary>
@@ -146,6 +160,14 @@
             Access.
             </value>
         </member>
+        <member name="P:FileCabinetApp.DataRecord.Salary">
+            <summary>
+            Gets or sets salary.
+            </summary>
+            <value>
+            Salary.
+            </value>
+        </member>
         <member name="T:FileCabinetApp.DefaultValidator">
             <summary>
             This class does validate data.
@@ -190,6 +212,9 @@
             First argument: True if successfully validated; otherwise false.
             Second argument: Error message if there is an error.
             </returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateSalary(System.Decimal)">
+            <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.DefaultValidator.ValidateParameters(FileCabinetApp.DataRecord)">
             <summary>
@@ -418,12 +443,12 @@
             Age.
             </value>
         </member>
-        <member name="P:FileCabinetApp.FileCabinetRecord.AmountRecords">
+        <member name="P:FileCabinetApp.FileCabinetRecord.Salary">
             <summary>
-            Gets or sets amount records.
+            Gets or sets salary.
             </summary>
             <value>
-            Amount records.
+            Salary.
             </value>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
@@ -606,6 +631,16 @@
             Validate date of birth property.
             </summary>
             <param name="dateOfBirth">Checked argument.</param>
+            <returns>
+            First argument: True if successfully validated; otherwise false.
+            Second argument: Error message if there is an error.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateSalary(System.Decimal)">
+            <summary>
+            Validate salary property.
+            </summary>
+            <param name="salary">Checked argument.</param>
             <returns>
             First argument: True if successfully validated; otherwise false.
             Second argument: Error message if there is an error.

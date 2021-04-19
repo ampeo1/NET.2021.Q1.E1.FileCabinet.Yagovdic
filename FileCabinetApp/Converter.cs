@@ -91,5 +91,40 @@ namespace FileCabinetApp
 
             return new Tuple<bool, string, char>(converted, errorMessage, convertedValue);
         }
+
+        /// <summary>
+        /// Converts from string to decimal.
+        /// </summary>
+        /// <param name="str">String representation.</param>
+        /// <returns>
+        /// First argument: True if successfully transformed; otherwise false.
+        /// Second argument: Error message if there is an error.
+        /// Third argument: Converted value.
+        /// </returns>
+        public static Tuple<bool, string, decimal> DecimalConverted(string str)
+        {
+            decimal convertedValue = 0;
+            string errorMessage = string.Empty;
+            bool converted = false;
+            try
+            {
+                convertedValue = decimal.Parse(str, CultureInfo.InvariantCulture);
+                converted = true;
+            }
+            catch (ArgumentNullException)
+            {
+                errorMessage = "Argument is null or empty";
+            }
+            catch (FormatException)
+            {
+                errorMessage = "Must be one character";
+            }
+            catch (OverflowException)
+            {
+                errorMessage = "Overflow has occurred";
+            }
+
+            return new Tuple<bool, string, decimal>(converted, errorMessage, convertedValue);
+        }
     }
 }
