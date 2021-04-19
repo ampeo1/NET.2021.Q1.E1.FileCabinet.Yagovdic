@@ -272,6 +272,13 @@
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.MakeSnapshot">
             <inheritdoc/>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Create(FileCabinetApp.DataRecord)">
+            <summary>
+            Creates record.
+            </summary>
+            <param name="dataRecord">Record data.</param>
+            <returns>Record.</returns>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetMemoryService">
             <summary>
             Representation file cabinet service in memory.
