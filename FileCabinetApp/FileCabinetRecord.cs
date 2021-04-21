@@ -60,11 +60,11 @@ namespace FileCabinetApp
         public short Age { get; set; }
 
         /// <summary>
-        /// Gets or sets amount records.
+        /// Gets or sets salary.
         /// </summary>
         /// <value>
-        /// Amount records.
+        /// Salary.
         /// </value>
-        public long AmountRecords { get; set; }
+        public decimal Salary { get; set; }
     }
 }

@@ -11,13 +11,16 @@ namespace FileCabinetApp
     public static class Program
     {
         private const string DeveloperName = "Oleg Yagovdic";
+        private const string NameFileStorage = "cabinet-records.db";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
+        private static Type validator = typeof(DefaultValidator);
+        private static Type service = typeof(FileCabinetMemoryService);
 
         private static bool isRunning = true;
-        private static IFileCabinetService fileCabinetService = new FileCabinetService(new DefaultValidator());
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
 
         private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
         {
@@ -39,15 +42,23 @@ namespace FileCabinetApp
         };
 
         private static Tuple<string, Action<string>>[] programSetting = new Tuple<string, Action<string>>[]
+       {
+            new Tuple<string, Action<string>>("--validation-rules", SetTypeValidationRules),
+            new Tuple<string, Action<string>>("-v", SetTypeValidationRules),
+            new Tuple<string, Action<string>>("--storage", SetTypeFileCabinetService),
+            new Tuple<string, Action<string>>("-s", SetTypeFileCabinetService),
+       };
+
+        private static Tuple<string, Type>[] validators = new Tuple<string, Type>[]
         {
-            new Tuple<string, Action<string>>("--validation-rules", SetFileCabinetService),
-            new Tuple<string, Action<string>>("-v", SetFileCabinetService),
+            new Tuple<string, Type>("default", typeof(DefaultValidator)),
+            new Tuple<string, Type>("custom", typeof(CustomValidator)),
         };
 
-        private static Tuple<string, IRecordValidator>[] fileCabinets = new Tuple<string, IRecordValidator>[]
+        private static Tuple<string, Type>[] fileCabinetServices = new Tuple<string, Type>[]
         {
-            new Tuple<string, IRecordValidator>("default", new DefaultValidator()),
-            new Tuple<string, IRecordValidator>("custom", new CustomValidator()),
+            new Tuple<string, Type>("memory", typeof(FileCabinetMemoryService)),
+            new Tuple<string, Type>("file", typeof(FileCabinetFilesystemService)),
         };
 
         private static Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>[] exportProperty = new Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>[]
@@ -74,7 +85,11 @@ namespace FileCabinetApp
         /// <param name="args">Property.</param>
         public static void Main(string[] args)
         {
-            SetSettings(args);
+            if (args != null)
+            {
+                SetSettings(args);
+            }
+
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
             Console.WriteLine(Program.HintMessage);
             Console.WriteLine();
@@ -105,56 +120,78 @@ namespace FileCabinetApp
         /// <param name="args">property of settings.</param>
         private static void SetSettings(string[] args)
         {
-            if (args.Length == 0)
+            for (int i = 0; i < args.Length; i++)
             {
-                return;
-            }
-
-            string command = args[0];
-            string parameter = string.Empty;
-            if (command[0].Equals('-') && command[1].Equals('-'))
-            {
-                string[] splittingCommand = command.Split('=');
-                if (splittingCommand.Length == 2)
+                string command = string.Empty;
+                string parameter = string.Empty;
+                if (args[i].StartsWith("--", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    command = splittingCommand[0];
-                    parameter = splittingCommand[1];
+                    string[] split = args[i].Split('=', 2);
+                    if (split.Length == 2)
+                    {
+                        command = split[0];
+                        parameter = split[1];
+                    }
+                }
+                else if (args[i].StartsWith('-'))
+                {
+                    command = args[i];
+                    if (i + 1 < args.Length)
+                    {
+                        i++;
+                        parameter = args[i];
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+
+                try
+                {
+                    ExcuteCommand(command, programSetting)(parameter);
+                }
+                catch (ArgumentException)
+                {
+                    continue;
                 }
             }
-            else if (command[0].Equals('-') && args.Length == 2)
-            {
-                parameter = args[1];
-            }
-            else
-            {
-                return;
-            }
 
-            try
-            {
-                ExcuteCommand(command, programSetting)(parameter);
-            }
-            catch (ArgumentException)
-            {
-                return;
-            }
+            CreateFileCabinetService();
         }
 
         /// <summary>
-        /// Set file cabinet service.
+        /// Set type validation-rules.
         /// </summary>
         /// <param name="parameter">Validation parameter.</param>
-        private static void SetFileCabinetService(string parameter)
+        private static void SetTypeValidationRules(string parameter)
         {
-            var index = Array.FindIndex(fileCabinets, 0, fileCabinets.Length, i => i.Item1.Equals(parameter, StringComparison.InvariantCultureIgnoreCase));
-            if (index >= 0)
+            validator = ExcuteCommand(parameter, validators);
+        }
+
+        /// <summary>
+        /// Set type file cabinet service.
+        /// </summary>
+        /// <param name="parameter">Validation parameter.</param>
+        private static void SetTypeFileCabinetService(string parameter)
+        {
+            service = ExcuteCommand(parameter, fileCabinetServices);
+        }
+
+        /// <summary>
+        /// Creates file cabinet service.
+        /// </summary>
+        private static void CreateFileCabinetService()
+        {
+            IRecordValidator recordValidator = (IRecordValidator)validator.GetConstructor(Array.Empty<Type>()).Invoke(Array.Empty<object>());
+            if (service.Equals(typeof(FileCabinetMemoryService)))
             {
-                IRecordValidator validator = fileCabinets[index].Item2;
-                fileCabinetService = new FileCabinetService(validator);
+                fileCabinetService = new FileCabinetMemoryService(recordValidator);
             }
-            else
+            else if (service.Equals(typeof(FileCabinetFilesystemService)))
             {
-                fileCabinetService = new FileCabinetService(new DefaultValidator());
+                FileStream fileStream = new FileStream(NameFileStorage, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                fileCabinetService = new FileCabinetFilesystemService(recordValidator, fileStream);
             }
         }
 
@@ -262,11 +299,10 @@ namespace FileCabinetApp
         private static void Edit(string parameters)
         {
             int id = 0;
-            int index;
             try
             {
                 id = int.Parse(parameters, CultureInfo.InvariantCulture);
-                index = fileCabinetService.FindIndexById(id);
+                fileCabinetService.FindIndexById(id);
             }
             catch (ArgumentException)
             {
@@ -307,6 +343,9 @@ namespace FileCabinetApp
 
             Console.Write("Access: ");
             dataRecord.Access = ReadInput(Converter.CharConverted, validator.ValidateAccess);
+
+            Console.Write("Salary: ");
+            dataRecord.Salary = ReadInput(Converter.DecimalConverted, validator.ValidateSalary);
 
             return dataRecord;
         }
@@ -432,7 +471,7 @@ namespace FileCabinetApp
             foreach (FileCabinetRecord record in records)
             {
                 Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}," +
-                    $" age: {record.Age}, amount records {record.AmountRecords}, access {record.Access}");
+                    $" age: {record.Age}, salary {record.Salary}, access {record.Access}");
             }
         }
 

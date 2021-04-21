@@ -11,6 +11,8 @@ namespace FileCabinetApp
     /// </summary>
     public class DefaultValidator : IRecordValidator
     {
+        private static readonly DateTime MinDate = new DateTime(1920, 01, 01);
+
         /// <summary>
         /// Validate access property.
         /// </summary>
@@ -42,7 +44,7 @@ namespace FileCabinetApp
         public Tuple<bool, string> ValidateDateOfBirth(DateTime dateOfBirth)
         {
             string errorMessage = string.Empty;
-            if (dateOfBirth < new DateTime(1950, 01, 01) || dateOfBirth > DateTime.Now)
+            if (DateTime.Compare(DateTime.Now, dateOfBirth) < 0 || DateTime.Compare(MinDate, dateOfBirth) > 0)
             {
                 errorMessage = "Date of birth is less than 01-jan-1920 or greater than now";
                 return new Tuple<bool, string>(false, errorMessage);
@@ -97,6 +99,20 @@ namespace FileCabinetApp
             if (lastName.Length < 2 || lastName.Length > 60)
             {
                 errorMessage = "Length is less than 1 or greater than 100";
+                return new Tuple<bool, string>(false, errorMessage);
+            }
+
+            return new Tuple<bool, string>(true, errorMessage);
+        }
+
+        /// <inheritdoc/>
+        public Tuple<bool, string> ValidateSalary(decimal salary)
+        {
+            string errorMessage = string.Empty;
+            decimal maxValue = 100000m;
+            if (salary.CompareTo(decimal.Zero) == -1 || salary.CompareTo(maxValue) == 1)
+            {
+                errorMessage = "Length is less than 0 or greater than 100000";
                 return new Tuple<bool, string>(false, errorMessage);
             }
 

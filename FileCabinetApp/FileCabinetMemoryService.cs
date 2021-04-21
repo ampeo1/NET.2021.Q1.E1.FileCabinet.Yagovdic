@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace FileCabinetApp
 {
     /// <summary>
-    /// Representation file cabinet service.
+    /// Representation file cabinet service in memory.
     /// </summary>
-    public class FileCabinetService : IFileCabinetService
+    public class FileCabinetMemoryService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> records = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
@@ -19,10 +19,10 @@ namespace FileCabinetApp
         private readonly IRecordValidator validator;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetService"/> class.
+        /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
         /// </summary>
-        /// <param name="validator">validation-rules.</param>
-        public FileCabinetService(IRecordValidator validator)
+        /// <param name="validator">Validation-rules.</param>
+        public FileCabinetMemoryService(IRecordValidator validator)
         {
             this.validator = validator;
         }
@@ -227,7 +227,7 @@ namespace FileCabinetApp
                 LastName = dataRecord.LastName,
                 DateOfBirth = dataRecord.DateOfBirth,
                 Access = dataRecord.Access,
-                AmountRecords = 0,
+                Salary = dataRecord.Salary,
                 Age = age,
             };
 

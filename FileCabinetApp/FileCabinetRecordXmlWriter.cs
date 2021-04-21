@@ -20,7 +20,7 @@ namespace FileCabinetApp
         private const string LastNameAttribute = "last";
         private const string DateOfBirthElement = "dateOfBirth";
         private const string AgeAttribute = "age";
-        private const string AmountRecordsElement = "amountRecords";
+        private const string AmountRecordsElement = "salary";
         private const string AccessElement = "access";
         private XmlWriter writer;
 
@@ -56,7 +56,7 @@ namespace FileCabinetApp
             this.writer.WriteString(record.DateOfBirth.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
             this.writer.WriteEndElement();
             this.writer.WriteStartElement(AmountRecordsElement);
-            this.writer.WriteString(record.AmountRecords.ToString(CultureInfo.InvariantCulture));
+            this.writer.WriteString(record.Salary.ToString(CultureInfo.InvariantCulture));
             this.writer.WriteEndElement();
             this.writer.WriteStartElement(AccessElement);
             this.writer.WriteString(record.Access.ToString());
