@@ -77,7 +77,34 @@ namespace FileCabinetApp
         /// <inheritdoc/>
         public IReadOnlyCollection<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth)
         {
-            throw new NotImplementedException();
+            int shift = sizeof(int) + SizeStringProperty + SizeStringProperty;
+            this.fileStream.Position = shift;
+            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
+            while (this.fileStream.Position < this.fileStream.Length)
+            {
+                int count = 3;
+                int[] birth = new int[count];
+                byte[] data = new byte[count * sizeof(int)];
+                this.fileStream.Read(data, 0, data.Length);
+                for (int i = 0, position = 0; i < count; i++, position += sizeof(int))
+                {
+                    birth[i] = BitConverter.ToInt32(data, position);
+                }
+
+                DateTime date = new DateTime(birth[0], birth[1], birth[2]);
+                if (dateOfBirth.Equals(date))
+                {
+                    this.fileStream.Position -= shift + (count * sizeof(int));
+                    records.Add(this.ReadRecord());
+                    this.fileStream.Position += shift;
+                }
+                else
+                {
+                    this.fileStream.Position += SizeRecord - (count * sizeof(int));
+                }
+            }
+
+            return records;
         }
 
         /// <inheritdoc/>
@@ -88,32 +115,20 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(firstName));
             }
 
-            this.fileStream.Position = sizeof(int);
-            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
-            while (this.fileStream.Position < this.fileStream.Length)
-            {
-                byte[] data = new byte[SizeStringProperty];
-                this.fileStream.Read(data, 0, data.Length);
-                string name = Encoding.Default.GetString(data, 0, SizeStringProperty).Trim('\0');
-                if (firstName.Equals(name, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    this.fileStream.Position -= sizeof(int) + SizeStringProperty;
-                    records.Add(this.ReadRecord());
-                    this.fileStream.Position += sizeof(int);
-                }
-                else
-                {
-                    this.fileStream.Position += SizeRecord - SizeStringProperty;
-                }
-            }
-
-            return records;
+            int shift = sizeof(int);
+            return this.FindString(firstName, shift);
         }
 
         /// <inheritdoc/>
         public IReadOnlyCollection<FileCabinetRecord> FindByLastname(string lastName)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(lastName))
+            {
+                throw new ArgumentNullException(nameof(lastName));
+            }
+
+            int shift = sizeof(int) + SizeStringProperty;
+            return this.FindString(lastName, shift);
         }
 
         /// <inheritdoc/>
@@ -201,6 +216,35 @@ namespace FileCabinetApp
             }
 
             return data.ToArray();
+        }
+
+        private IReadOnlyCollection<FileCabinetRecord> FindString(string key, int shift)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            this.fileStream.Position = shift;
+            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
+            while (this.fileStream.Position < this.fileStream.Length)
+            {
+                byte[] data = new byte[SizeStringProperty];
+                this.fileStream.Read(data, 0, data.Length);
+                string name = Encoding.Default.GetString(data, 0, SizeStringProperty).Trim('\0');
+                if (key.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    this.fileStream.Position -= shift + SizeStringProperty;
+                    records.Add(this.ReadRecord());
+                    this.fileStream.Position += shift;
+                }
+                else
+                {
+                    this.fileStream.Position += SizeRecord - SizeStringProperty;
+                }
+            }
+
+            return records;
         }
 
         private FileCabinetRecord ReadRecord()
