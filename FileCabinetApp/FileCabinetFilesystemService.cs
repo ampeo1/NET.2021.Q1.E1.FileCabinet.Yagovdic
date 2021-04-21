@@ -30,17 +30,19 @@ namespace FileCabinetApp
             this.id = (int)fileStream.Length / SizeRecord;
         }
 
-        /// <inheritdoc/>
-        public int CreateRecord(DataRecord dataRecord)
+        /// <summary>
+        /// Converts record to array of bytes.
+        /// </summary>
+        /// <param name="record">Record wich needs to convert.</param>
+        /// <returns>Array of bytes.</returns>
+        public static byte[] ConvertRecordToBytes(FileCabinetRecord record)
         {
-            if (dataRecord is null)
+            if (record is null)
             {
-                throw new ArgumentNullException(nameof(dataRecord));
+                throw new ArgumentNullException(nameof(record));
             }
 
             List<byte> data = new List<byte>();
-            dataRecord.Id = ++this.id;
-            FileCabinetRecord record = this.Create(dataRecord);
 
             data.AddRange(BitConverter.GetBytes(record.Id));
 
@@ -65,15 +67,51 @@ namespace FileCabinetApp
                 data.AddRange(BitConverter.GetBytes(bit));
             }
 
+            return data.ToArray();
+        }
+
+        /// <inheritdoc/>
+        public int CreateRecord(DataRecord dataRecord)
+        {
+            if (dataRecord is null)
+            {
+                throw new ArgumentNullException(nameof(dataRecord));
+            }
+
+            dataRecord.Id = ++this.id;
+            FileCabinetRecord record = this.Create(dataRecord);
+
+            byte[] data = ConvertRecordToBytes(record);
+
             this.fileStream.Position = this.fileStream.Length;
-            this.fileStream.Write(data.ToArray(), 0, data.Count);
+            this.fileStream.Write(data, 0, data.Length);
             return record.Id;
         }
 
         /// <inheritdoc/>
         public void EditRecord(DataRecord dataRecord)
         {
-            throw new NotImplementedException();
+            if (dataRecord is null)
+            {
+                throw new ArgumentNullException(nameof(dataRecord));
+            }
+
+            FileCabinetRecord record = this.Create(dataRecord);
+            this.fileStream.Position = 0;
+            while (this.fileStream.Position < this.fileStream.Length)
+            {
+                byte[] data = new byte[sizeof(int)];
+                this.fileStream.Read(data, 0, data.Length);
+                int id = BitConverter.ToInt32(data, 0);
+                if (dataRecord.Id == id)
+                {
+                    data = ConvertRecordToBytes(record);
+                    this.fileStream.Position -= sizeof(int);
+                    this.fileStream.Write(data, 0, data.Length);
+
+                    return;
+                }
+            }
         }
 
         /// <inheritdoc/>
@@ -97,7 +135,17 @@ namespace FileCabinetApp
         /// <inheritdoc/>
         public int FindIndexById(int id)
         {
-            throw new NotImplementedException();
+            while (this.fileStream.Position < this.fileStream.Length)
+            {
+                byte[] data = new byte[sizeof(int)];
+                this.fileStream.Read(data, 0, data.Length);
+                if (id == BitConverter.ToInt32(data, 0))
+                {
+                    return id;
+                }
+            }
+
+            throw new ArgumentException("Id not found", nameof(id));
         }
 
         /// <inheritdoc/>

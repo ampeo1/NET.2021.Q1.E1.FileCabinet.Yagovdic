@@ -299,11 +299,10 @@ namespace FileCabinetApp
         private static void Edit(string parameters)
         {
             int id = 0;
-            int index;
             try
             {
                 id = int.Parse(parameters, CultureInfo.InvariantCulture);
-                index = fileCabinetService.FindIndexById(id);
+                fileCabinetService.FindIndexById(id);
             }
             catch (ArgumentException)
             {
