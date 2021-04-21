@@ -109,7 +109,8 @@ namespace FileCabinetApp
         public Tuple<bool, string> ValidateSalary(decimal salary)
         {
             string errorMessage = string.Empty;
-            if (salary < 0 || salary > 10000)
+            decimal maxValue = 10000m;
+            if (salary.CompareTo(decimal.Zero) == -1 || salary.CompareTo(maxValue) == 1)
             {
                 errorMessage = "Length is less than 0 or greater than 10000";
                 return new Tuple<bool, string>(false, errorMessage);

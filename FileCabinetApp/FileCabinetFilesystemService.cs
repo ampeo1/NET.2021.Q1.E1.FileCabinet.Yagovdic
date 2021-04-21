@@ -49,7 +49,7 @@ namespace FileCabinetApp
             data.AddRange(dataForString);
 
             dataForString = new byte[SizeStringProperty];
-            Encoding.Default.GetBytes(record.LastName, 0, record.FirstName.Length, dataForString, 0);
+            Encoding.Default.GetBytes(record.LastName, 0, record.LastName.Length, dataForString, 0);
             data.AddRange(dataForString);
 
             data.AddRange(BitConverter.GetBytes(record.DateOfBirth.Year));
@@ -67,7 +67,7 @@ namespace FileCabinetApp
 
             this.fileStream.Position = this.fileStream.Length;
             this.fileStream.Write(data.ToArray(), 0, data.Count);
-            return 0;
+            return record.Id;
         }
 
         /// <inheritdoc/>
@@ -103,7 +103,50 @@ namespace FileCabinetApp
         /// <inheritdoc/>
         public IReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            throw new NotImplementedException();
+            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
+            this.fileStream.Position = 0;
+            while (this.fileStream.Position < this.fileStream.Length)
+            {
+                byte[] data = new byte[SizeRecord];
+                this.fileStream.Read(data, 0, SizeRecord);
+
+                FileCabinetRecord record = new FileCabinetRecord();
+                int position = 0;
+                record.Id = BitConverter.ToInt32(data, position);
+                position += sizeof(int);
+
+                record.FirstName = Encoding.Default.GetString(data, position, SizeStringProperty).Trim('\0');
+                position += SizeStringProperty;
+
+                record.LastName = Encoding.Default.GetString(data, position, SizeStringProperty).Trim('\0');
+                position += SizeStringProperty;
+
+                int year = BitConverter.ToInt32(data, position);
+                position += sizeof(int);
+                int month = BitConverter.ToInt32(data, position);
+                position += sizeof(int);
+                int day = BitConverter.ToInt32(data, position);
+                position += sizeof(int);
+                record.DateOfBirth = new DateTime(year, month, day);
+
+                record.Access = BitConverter.ToChar(data, position);
+                position += sizeof(char);
+
+                record.Age = BitConverter.ToInt16(data, position);
+                position += sizeof(short);
+
+                int[] bits = new int[4];
+                for (int i = 0; i < bits.Length; i++)
+                {
+                    bits[i] = BitConverter.ToInt32(data, position);
+                    position += sizeof(int);
+                }
+
+                record.Salary = new decimal(bits);
+                records.Add(record);
+            }
+
+            return records;
         }
 
         /// <inheritdoc/>
