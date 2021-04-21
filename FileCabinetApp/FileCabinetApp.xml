@@ -242,13 +242,6 @@
             <param name="validator">Validation-rules.</param>
             <param name="fileStream">File stream.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.ConvertRecordToBytes(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Converts record to array of bytes.
-            </summary>
-            <param name="record">Record wich needs to convert.</param>
-            <returns>Array of bytes.</returns>
-        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.CreateRecord(FileCabinetApp.DataRecord)">
             <inheritdoc/>
         </member>
@@ -278,6 +271,13 @@
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.MakeSnapshot">
             <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.ConvertRecordToBytes(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Converts record to array of bytes.
+            </summary>
+            <param name="record">Record wich needs to convert.</param>
+            <returns>Array of bytes.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.Create(FileCabinetApp.DataRecord)">
             <summary>

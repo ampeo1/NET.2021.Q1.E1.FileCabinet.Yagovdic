@@ -30,46 +30,6 @@ namespace FileCabinetApp
             this.id = (int)fileStream.Length / SizeRecord;
         }
 
-        /// <summary>
-        /// Converts record to array of bytes.
-        /// </summary>
-        /// <param name="record">Record wich needs to convert.</param>
-        /// <returns>Array of bytes.</returns>
-        public static byte[] ConvertRecordToBytes(FileCabinetRecord record)
-        {
-            if (record is null)
-            {
-                throw new ArgumentNullException(nameof(record));
-            }
-
-            List<byte> data = new List<byte>();
-
-            data.AddRange(BitConverter.GetBytes(record.Id));
-
-            byte[] dataForString = new byte[SizeStringProperty];
-            Encoding.Default.GetBytes(record.FirstName, 0, record.FirstName.Length, dataForString, 0);
-            data.AddRange(dataForString);
-
-            dataForString = new byte[SizeStringProperty];
-            Encoding.Default.GetBytes(record.LastName, 0, record.LastName.Length, dataForString, 0);
-            data.AddRange(dataForString);
-
-            data.AddRange(BitConverter.GetBytes(record.DateOfBirth.Year));
-            data.AddRange(BitConverter.GetBytes(record.DateOfBirth.Month));
-            data.AddRange(BitConverter.GetBytes(record.DateOfBirth.Day));
-
-            data.AddRange(BitConverter.GetBytes(record.Access));
-
-            data.AddRange(BitConverter.GetBytes(record.Age));
-            int[] bits = decimal.GetBits(record.Salary);
-            foreach (int bit in bits)
-            {
-                data.AddRange(BitConverter.GetBytes(bit));
-            }
-
-            return data.ToArray();
-        }
-
         /// <inheritdoc/>
         public int CreateRecord(DataRecord dataRecord)
         {
@@ -123,7 +83,31 @@ namespace FileCabinetApp
         /// <inheritdoc/>
         public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(firstName))
+            {
+                throw new ArgumentNullException(nameof(firstName));
+            }
+
+            this.fileStream.Position = sizeof(int);
+            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
+            while (this.fileStream.Position < this.fileStream.Length)
+            {
+                byte[] data = new byte[SizeStringProperty];
+                this.fileStream.Read(data, 0, data.Length);
+                string name = Encoding.Default.GetString(data, 0, SizeStringProperty).Trim('\0');
+                if (firstName.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    this.fileStream.Position -= sizeof(int) + SizeStringProperty;
+                    records.Add(this.ReadRecord());
+                    this.fileStream.Position += sizeof(int);
+                }
+                else
+                {
+                    this.fileStream.Position += SizeRecord - SizeStringProperty;
+                }
+            }
+
+            return records;
         }
 
         /// <inheritdoc/>
@@ -155,43 +139,7 @@ namespace FileCabinetApp
             this.fileStream.Position = 0;
             while (this.fileStream.Position < this.fileStream.Length)
             {
-                byte[] data = new byte[SizeRecord];
-                this.fileStream.Read(data, 0, SizeRecord);
-
-                FileCabinetRecord record = new FileCabinetRecord();
-                int position = 0;
-                record.Id = BitConverter.ToInt32(data, position);
-                position += sizeof(int);
-
-                record.FirstName = Encoding.Default.GetString(data, position, SizeStringProperty).Trim('\0');
-                position += SizeStringProperty;
-
-                record.LastName = Encoding.Default.GetString(data, position, SizeStringProperty).Trim('\0');
-                position += SizeStringProperty;
-
-                int year = BitConverter.ToInt32(data, position);
-                position += sizeof(int);
-                int month = BitConverter.ToInt32(data, position);
-                position += sizeof(int);
-                int day = BitConverter.ToInt32(data, position);
-                position += sizeof(int);
-                record.DateOfBirth = new DateTime(year, month, day);
-
-                record.Access = BitConverter.ToChar(data, position);
-                position += sizeof(char);
-
-                record.Age = BitConverter.ToInt16(data, position);
-                position += sizeof(short);
-
-                int[] bits = new int[4];
-                for (int i = 0; i < bits.Length; i++)
-                {
-                    bits[i] = BitConverter.ToInt32(data, position);
-                    position += sizeof(int);
-                }
-
-                record.Salary = new decimal(bits);
-                records.Add(record);
+                records.Add(this.ReadRecord());
             }
 
             return records;
@@ -213,6 +161,88 @@ namespace FileCabinetApp
         public FileCabinetServiceSnapshot MakeSnapshot()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Converts record to array of bytes.
+        /// </summary>
+        /// <param name="record">Record wich needs to convert.</param>
+        /// <returns>Array of bytes.</returns>
+        private static byte[] ConvertRecordToBytes(FileCabinetRecord record)
+        {
+            if (record is null)
+            {
+                throw new ArgumentNullException(nameof(record));
+            }
+
+            List<byte> data = new List<byte>();
+
+            data.AddRange(BitConverter.GetBytes(record.Id));
+
+            byte[] dataForString = new byte[SizeStringProperty];
+            Encoding.Default.GetBytes(record.FirstName, 0, record.FirstName.Length, dataForString, 0);
+            data.AddRange(dataForString);
+
+            dataForString = new byte[SizeStringProperty];
+            Encoding.Default.GetBytes(record.LastName, 0, record.LastName.Length, dataForString, 0);
+            data.AddRange(dataForString);
+
+            data.AddRange(BitConverter.GetBytes(record.DateOfBirth.Year));
+            data.AddRange(BitConverter.GetBytes(record.DateOfBirth.Month));
+            data.AddRange(BitConverter.GetBytes(record.DateOfBirth.Day));
+
+            data.AddRange(BitConverter.GetBytes(record.Access));
+
+            data.AddRange(BitConverter.GetBytes(record.Age));
+            int[] bits = decimal.GetBits(record.Salary);
+            foreach (int bit in bits)
+            {
+                data.AddRange(BitConverter.GetBytes(bit));
+            }
+
+            return data.ToArray();
+        }
+
+        private FileCabinetRecord ReadRecord()
+        {
+            byte[] data = new byte[SizeRecord];
+            this.fileStream.Read(data, 0, SizeRecord);
+
+            FileCabinetRecord record = new FileCabinetRecord();
+            int position = 0;
+            record.Id = BitConverter.ToInt32(data, position);
+            position += sizeof(int);
+
+            record.FirstName = Encoding.Default.GetString(data, position, SizeStringProperty).Trim('\0');
+            position += SizeStringProperty;
+
+            record.LastName = Encoding.Default.GetString(data, position, SizeStringProperty).Trim('\0');
+            position += SizeStringProperty;
+
+            int year = BitConverter.ToInt32(data, position);
+            position += sizeof(int);
+            int month = BitConverter.ToInt32(data, position);
+            position += sizeof(int);
+            int day = BitConverter.ToInt32(data, position);
+            position += sizeof(int);
+            record.DateOfBirth = new DateTime(year, month, day);
+
+            record.Access = BitConverter.ToChar(data, position);
+            position += sizeof(char);
+
+            record.Age = BitConverter.ToInt16(data, position);
+            position += sizeof(short);
+
+            int[] bits = new int[4];
+            for (int i = 0; i < bits.Length; i++)
+            {
+                bits[i] = BitConverter.ToInt32(data, position);
+                position += sizeof(int);
+            }
+
+            record.Salary = new decimal(bits);
+
+            return record;
         }
 
         /// <summary>
