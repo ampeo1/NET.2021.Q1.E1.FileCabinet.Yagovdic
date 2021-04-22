@@ -18,7 +18,7 @@ namespace FileCabinetApp
         private const short MaxLength = 60;
         private const decimal MaxSalary = 100000m;
         private const decimal MinSalary = decimal.Zero;
-        private static readonly DateTime MinDate = new DateTime(1920, 01, 01);
+        private static readonly DateTime MinDate = new DateTime(1950, 01, 01);
 
         /// <summary>
         /// Gets min value for char.
