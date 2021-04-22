@@ -173,6 +173,70 @@
             This class does validate data.
             </summary>
         </member>
+        <member name="P:FileCabinetApp.DefaultValidator.MinValueForChar">
+            <summary>
+            Gets min value for char.
+            </summary>
+            <value>
+            Min value for char.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.DefaultValidator.MaxValueForChar">
+            <summary>
+            Gets max value for char.
+            </summary>
+            <value>
+            Max value for char.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.DefaultValidator.MinLengthForString">
+            <summary>
+            Gets min length for string.
+            </summary>
+            <value>
+            Min length for string.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.DefaultValidator.MaxLengthForString">
+            <summary>
+            Gets max length for string.
+            </summary>
+            <value>
+            Max length for string.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.DefaultValidator.MinValueForSalary">
+            <summary>
+            Gets min value for salary.
+            </summary>
+            <value>
+            Min value for salary.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.DefaultValidator.MaxValueForSalary">
+            <summary>
+            Gets max value for salary.
+            </summary>
+            <value>
+            Max value for salary.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.DefaultValidator.MinDateOfBirth">
+            <summary>
+            Gets min value for date of birth.
+            </summary>
+            <value>
+            Min value for date of birth.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.DefaultValidator.MaxDateOfBirth">
+            <summary>
+            Gets min value for date of birth.
+            </summary>
+            <value>
+            Min value for date of birth.
+            </value>
+        </member>
         <member name="M:FileCabinetApp.DefaultValidator.ValidateAccess(System.Char)">
             <summary>
             Validate access property.
