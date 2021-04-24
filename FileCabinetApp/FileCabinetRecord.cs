@@ -9,8 +9,16 @@ namespace FileCabinetApp
     /// <summary>
     /// Representation record in file cabinet.
     /// </summary>
+    [Serializable]
     public class FileCabinetRecord
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetRecord"/> class.
+        /// </summary>
+        public FileCabinetRecord()
+        {
+        }
+
         /// <summary>
         /// Gets or sets identifier.
         /// </summary>

@@ -26,13 +26,7 @@ namespace FileCabinetApp
         /// <value>
         /// Min value for char.
         /// </value>
-        public static char MinValueForChar
-        {
-            get
-            {
-                return MinChar;
-            }
-        }
+        public char MinValueForChar => MinChar;
 
         /// <summary>
         /// Gets max value for char.
@@ -40,13 +34,7 @@ namespace FileCabinetApp
         /// <value>
         /// Max value for char.
         /// </value>
-        public static char MaxValueForChar
-        {
-            get
-            {
-                return MaxChar;
-            }
-        }
+        public char MaxValueForChar => MaxChar;
 
         /// <summary>
         /// Gets min length for string.
@@ -54,13 +42,7 @@ namespace FileCabinetApp
         /// <value>
         /// Min length for string.
         /// </value>
-        public static short MinLengthForString
-        {
-            get
-            {
-                return MinLength;
-            }
-        }
+        public short MinLengthForString => MinLength;
 
         /// <summary>
         /// Gets max length for string.
@@ -68,13 +50,7 @@ namespace FileCabinetApp
         /// <value>
         /// Max length for string.
         /// </value>
-        public static short MaxLengthForString
-        {
-            get
-            {
-                return MaxLength;
-            }
-        }
+        public short MaxLengthForString => MaxLength;
 
         /// <summary>
         /// Gets min value for salary.
@@ -82,13 +58,7 @@ namespace FileCabinetApp
         /// <value>
         /// Min value for salary.
         /// </value>
-        public static decimal MinValueForSalary
-        {
-            get
-            {
-                return MinSalary;
-            }
-        }
+        public decimal MinValueForSalary => MinSalary;
 
         /// <summary>
         /// Gets max value for salary.
@@ -96,13 +66,7 @@ namespace FileCabinetApp
         /// <value>
         /// Max value for salary.
         /// </value>
-        public static decimal MaxValueForSalary
-        {
-            get
-            {
-                return MaxSalary;
-            }
-        }
+        public decimal MaxValueForSalary => MaxSalary;
 
         /// <summary>
         /// Gets min value for date of birth.
@@ -110,13 +74,7 @@ namespace FileCabinetApp
         /// <value>
         /// Min value for date of birth.
         /// </value>
-        public static DateTime MinDateOfBirth
-        {
-            get
-            {
-                return MinDate;
-            }
-        }
+        public DateTime MinDateOfBirth => MinDate;
 
         /// <summary>
         /// Gets min value for date of birth.
@@ -124,13 +82,7 @@ namespace FileCabinetApp
         /// <value>
         /// Min value for date of birth.
         /// </value>
-        public static DateTime MaxDateOfBirth
-        {
-            get
-            {
-                return DateTime.Now;
-            }
-        }
+        public DateTime MaxDateOfBirth => DateTime.Now;
 
         /// <summary>
         /// Validate access property.
@@ -165,7 +117,7 @@ namespace FileCabinetApp
             string errorMessage = string.Empty;
             if (DateTime.Compare(DateTime.Now, dateOfBirth) < 0 || DateTime.Compare(MinDate, dateOfBirth) > 0)
             {
-                errorMessage = $"Date of birth is less than {MinDateOfBirth.ToString("yyyy - MMM - dd", CultureInfo.InvariantCulture)} or greater than now";
+                errorMessage = $"Date of birth is less than {this.MinDateOfBirth.ToString("yyyy - MMM - dd", CultureInfo.InvariantCulture)} or greater than now";
                 return new Tuple<bool, string>(false, errorMessage);
             }
 

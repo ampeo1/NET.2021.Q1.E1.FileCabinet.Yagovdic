@@ -17,14 +17,17 @@ namespace FileCabinetApp
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
         private readonly IRecordValidator validator;
+        private int id;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
         /// </summary>
         /// <param name="validator">Validation-rules.</param>
-        public FileCabinetMemoryService(IRecordValidator validator)
+        /// <param name="startId">The id to start with.</param>
+        public FileCabinetMemoryService(IRecordValidator validator, int startId = 0)
         {
             this.validator = validator;
+            this.id = startId;
         }
 
         /// <summary>
@@ -41,7 +44,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(dataRecord)}");
             }
 
-            dataRecord.Id = this.records.Count + 1;
+            dataRecord.Id = this.id + 1;
             FileCabinetRecord record = this.Create(dataRecord);
             this.AddRecordToDictionaries(record);
             this.records.Add(record);

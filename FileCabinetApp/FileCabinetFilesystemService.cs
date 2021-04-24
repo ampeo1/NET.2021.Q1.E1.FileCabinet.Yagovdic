@@ -10,7 +10,7 @@ namespace FileCabinetApp
     /// <summary>
     /// Representation file cabinet service in file.
     /// </summary>
-    public class FileCabinetFilesystemService : IFileCabinetService
+    public sealed class FileCabinetFilesystemService : IFileCabinetService, IDisposable
     {
         private const short SizeRecord = 276;
         private const byte SizeStringProperty = 120;
@@ -23,11 +23,19 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="validator">Validation-rules.</param>
         /// <param name="fileStream">File stream.</param>
-        public FileCabinetFilesystemService(IRecordValidator validator, FileStream fileStream)
+        /// <param name="startId">The id to start with.</param>
+        public FileCabinetFilesystemService(IRecordValidator validator, FileStream fileStream, int? startId = null)
         {
-            this.fileStream = fileStream ?? throw new ArgumentNullException(nameof(fileStream));
+            this.fileStream = fileStream ?? throw new ArgumentNullException(nameof(validator));
             this.validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            this.id = (int)fileStream.Length / SizeRecord;
+            if (startId is null)
+            {
+                this.id = (int)fileStream.Length / SizeRecord;
+            }
+            else
+            {
+                this.id = (int)startId;
+            }
         }
 
         /// <inheritdoc/>
@@ -175,7 +183,15 @@ namespace FileCabinetApp
         /// <inheritdoc/>
         public FileCabinetServiceSnapshot MakeSnapshot()
         {
-            throw new NotImplementedException();
+            return new FileCabinetServiceSnapshot(this.GetRecords().ToArray());
+        }
+
+        /// <summary>
+        /// Close current stream.
+        /// </summary>
+        public void Dispose()
+        {
+            this.fileStream.Close();
         }
 
         /// <summary>

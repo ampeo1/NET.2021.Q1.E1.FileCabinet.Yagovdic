@@ -526,7 +526,10 @@ namespace FileCabinetApp
                     Console.WriteLine($"All records are exported to file {splitParameters[1]}.");
                 }
             }
-            catch
+            catch (Exception ex) when (
+                ex is ArgumentException || ex is NotSupportedException || ex is FileNotFoundException || ex is IOException ||
+                ex is System.Security.SecurityException || ex is DirectoryNotFoundException || ex is UnauthorizedAccessException ||
+                ex is PathTooLongException)
             {
                 Console.WriteLine($"Export failed: can't open file {splitParameters[1]}.");
             }

@@ -58,6 +58,70 @@
             This class does validate data.
             </summary>
         </member>
+        <member name="P:FileCabinetApp.CustomValidator.MinValueForChar">
+            <summary>
+            Gets min value for char.
+            </summary>
+            <value>
+            Min value for char.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.CustomValidator.MaxValueForChar">
+            <summary>
+            Gets max value for char.
+            </summary>
+            <value>
+            Max value for char.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.CustomValidator.MinLengthForString">
+            <summary>
+            Gets min length for string.
+            </summary>
+            <value>
+            Min length for string.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.CustomValidator.MaxLengthForString">
+            <summary>
+            Gets max length for string.
+            </summary>
+            <value>
+            Max length for string.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.CustomValidator.MinValueForSalary">
+            <summary>
+            Gets min value for salary.
+            </summary>
+            <value>
+            Min value for salary.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.CustomValidator.MaxValueForSalary">
+            <summary>
+            Gets max value for salary.
+            </summary>
+            <value>
+            Max value for salary.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.CustomValidator.MinDateOfBirth">
+            <summary>
+            Gets min value for date of birth.
+            </summary>
+            <value>
+            Min value for date of birth.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.CustomValidator.MaxDateOfBirth">
+            <summary>
+            Gets min value for date of birth.
+            </summary>
+            <value>
+            Min value for date of birth.
+            </value>
+        </member>
         <member name="M:FileCabinetApp.CustomValidator.ValidateAccess(System.Char)">
             <summary>
             Validate access property.
@@ -299,12 +363,13 @@
             Representation file cabinet service in file.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(FileCabinetApp.IRecordValidator,System.IO.FileStream)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(FileCabinetApp.IRecordValidator,System.IO.FileStream,System.Nullable{System.Int32})">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetFilesystemService"/> class.
             </summary>
             <param name="validator">Validation-rules.</param>
             <param name="fileStream">File stream.</param>
+            <param name="startId">The id to start with.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.CreateRecord(FileCabinetApp.DataRecord)">
             <inheritdoc/>
@@ -336,6 +401,11 @@
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.MakeSnapshot">
             <inheritdoc/>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Dispose">
+            <summary>
+            Close current stream.
+            </summary>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.ConvertRecordToBytes(FileCabinetApp.FileCabinetRecord)">
             <summary>
             Converts record to array of bytes.
@@ -355,11 +425,12 @@
             Representation file cabinet service in memory.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.#ctor(FileCabinetApp.IRecordValidator)">
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.#ctor(FileCabinetApp.IRecordValidator,System.Int32)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetMemoryService"/> class.
             </summary>
             <param name="validator">Validation-rules.</param>
+            <param name="startId">The id to start with.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetApp.DataRecord)">
             <summary>
@@ -667,6 +738,70 @@
             <summary>
             Validate record.
             </summary>
+        </member>
+        <member name="P:FileCabinetApp.IRecordValidator.MinValueForChar">
+            <summary>
+            Gets min value for char.
+            </summary>
+            <value>
+            Min value for char.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.IRecordValidator.MaxValueForChar">
+            <summary>
+            Gets max value for char.
+            </summary>
+            <value>
+            Max value for char.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.IRecordValidator.MinLengthForString">
+            <summary>
+            Gets min length for string.
+            </summary>
+            <value>
+            Min length for string.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.IRecordValidator.MaxLengthForString">
+            <summary>
+            Gets max length for string.
+            </summary>
+            <value>
+            Max length for string.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.IRecordValidator.MinValueForSalary">
+            <summary>
+            Gets min value for salary.
+            </summary>
+            <value>
+            Min value for salary.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.IRecordValidator.MaxValueForSalary">
+            <summary>
+            Gets max value for salary.
+            </summary>
+            <value>
+            Max value for salary.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.IRecordValidator.MinDateOfBirth">
+            <summary>
+            Gets min value for date of birth.
+            </summary>
+            <value>
+            Min value for date of birth.
+            </value>
+        </member>
+        <member name="P:FileCabinetApp.IRecordValidator.MaxDateOfBirth">
+            <summary>
+            Gets min value for date of birth.
+            </summary>
+            <value>
+            Min value for date of birth.
+            </value>
         </member>
         <member name="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.DataRecord)">
             <summary>
