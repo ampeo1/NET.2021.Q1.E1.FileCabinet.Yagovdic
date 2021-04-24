@@ -15,8 +15,8 @@ namespace FileCabinetApp
     /// </summary>
     public class FileCabinetRecordXmlWriter
     {
-        private StreamWriter writer;
-        private XmlSerializer serializer;
+        private readonly StreamWriter writer;
+        private readonly XmlSerializer serializer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetRecordXmlWriter"/> class.

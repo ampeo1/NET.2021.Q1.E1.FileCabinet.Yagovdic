@@ -23,12 +23,14 @@ namespace FileCabinetGenerator
                 throw new ArgumentNullException(nameof(validator));
             }
 
-            DataRecord record = new DataRecord();
-            record.FirstName = GenerateString(validator.MinLengthForString, validator.MaxLengthForString);
-            record.LastName = GenerateString(validator.MinLengthForString, validator.MaxLengthForString);
-            record.Access = GenerateChar(validator.MinValueForChar, validator.MaxValueForChar);
-            record.DateOfBirth = GenerateDateTime(validator.MinDateOfBirth, validator.MaxDateOfBirth);
-            record.Salary = GenerateDecimal(validator.MinValueForSalary, validator.MaxValueForSalary);
+            DataRecord record = new DataRecord
+            {
+                FirstName = GenerateString(validator.MinLengthForString, validator.MaxLengthForString),
+                LastName = GenerateString(validator.MinLengthForString, validator.MaxLengthForString),
+                Access = GenerateChar(validator.MinValueForChar, validator.MaxValueForChar),
+                DateOfBirth = GenerateDateTime(validator.MinDateOfBirth, validator.MaxDateOfBirth),
+                Salary = GenerateDecimal(validator.MinValueForSalary, validator.MaxValueForSalary),
+            };
             return record;
         }
 
@@ -61,17 +63,6 @@ namespace FileCabinetGenerator
             int month = Randomization.Next(minDate.Month, maxDate.Month + 1);
             int day = Randomization.Next(minDate.Day, maxDate.Day + 1);
             return new DateTime(year, month, day);
-        }
-
-        private static short SetAge(DateTime dateOfBirth)
-        {
-            short age = (short)(DateTime.Now.Year - dateOfBirth.Year);
-            if (dateOfBirth > DateTime.Now.AddYears(-age))
-            {
-                age--;
-            }
-
-            return age;
         }
 
         private static decimal GenerateDecimal(decimal min, decimal max)

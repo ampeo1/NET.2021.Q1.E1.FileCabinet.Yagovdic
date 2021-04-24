@@ -223,8 +223,7 @@ namespace FileCabinetGenerator
         /// <param name="parameter">Parameter.</param>
         private static void SetRecordAmount(string parameter)
         {
-            int amount;
-            _ = int.TryParse(parameter, out amount);
+            _ = int.TryParse(parameter, out int amount);
             settings.RecordsAmount = amount;
         }
 
@@ -234,8 +233,7 @@ namespace FileCabinetGenerator
         /// <param name="parameter">Parameter.</param>
         private static void SetStartId(string parameter)
         {
-            int id;
-            _ = int.TryParse(parameter, out id);
+            _ = int.TryParse(parameter, out int id);
             settings.StartId = id;
         }
 

@@ -9,7 +9,7 @@ namespace FileCabinetApp
 {
     public class FileCabinetRecordXmlReader
     {
-        private XmlReader reader;
+        private readonly XmlReader reader;
 
         public FileCabinetRecordXmlReader(StreamReader reader)
         {

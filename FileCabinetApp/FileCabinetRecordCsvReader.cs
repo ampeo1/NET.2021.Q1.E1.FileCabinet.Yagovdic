@@ -8,7 +8,7 @@ namespace FileCabinetApp
 {
     public class FileCabinetRecordCsvReader
     {
-        private StreamReader reader;
+        private readonly StreamReader reader;
 
         public FileCabinetRecordCsvReader(StreamReader reader)
         {
