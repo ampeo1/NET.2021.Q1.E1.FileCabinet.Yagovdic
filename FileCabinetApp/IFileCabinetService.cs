@@ -80,5 +80,11 @@ namespace FileCabinetApp
         /// </summary>
         /// <returns>State.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot();
+
+        /// <summary>
+        /// Updates records.
+        /// </summary>
+        /// <param name="snapshot">The state to be updated.</param>
+        public void Restore(FileCabinetServiceSnapshot snapshot);
     }
 }

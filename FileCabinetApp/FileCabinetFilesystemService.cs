@@ -186,6 +186,46 @@ namespace FileCabinetApp
             return new FileCabinetServiceSnapshot(this.GetRecords().ToArray());
         }
 
+        /// <inheritdoc/>
+        public void Restore(FileCabinetServiceSnapshot snapshot)
+        {
+            if (snapshot is null)
+            {
+                throw new ArgumentNullException(nameof(snapshot));
+            }
+
+            if (snapshot.Records is null)
+            {
+                throw new ArgumentException("Snapshot hasn't FileCabinetRecords.", nameof(snapshot));
+            }
+
+            foreach (var item in snapshot.Records)
+            {
+                this.fileStream.Position = this.FindId(item.Id);
+                byte[] data = ConvertRecordToBytes(item);
+                this.fileStream.Write(data, 0, data.Length);
+            }
+        }
+
+        private long FindId(int id)
+        {
+            this.fileStream.Position = 0;
+            int shift = sizeof(int);
+            while (this.fileStream.Position < this.fileStream.Length)
+            {
+                byte[] data = new byte[shift];
+                this.fileStream.Read(data, 0, shift);
+                if (id == BitConverter.ToInt32(data, 0))
+                {
+                    return this.fileStream.Position - shift;
+                }
+
+                this.fileStream.Position += SizeRecord - shift;
+            }
+
+            return this.fileStream.Length;
+        }
+
         /// <summary>
         /// Close current stream.
         /// </summary>

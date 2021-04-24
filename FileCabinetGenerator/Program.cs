@@ -11,6 +11,12 @@ namespace FileCabinetGenerator
     /// </summary>
     public static class Program
     {
+        private const string DeveloperName = "Oleg Yagovdic";
+        private const string HintMessage = "Enter your command, or enter 'help' to get help.";
+        private const int CommandHelpIndex = 0;
+        private const int DescriptionHelpIndex = 1;
+        private const int ExplanationHelpIndex = 2;
+
         private static readonly Tuple<string, Action<string>>[] ProgramSettings = new Tuple<string, Action<string>>[]
         {
             new Tuple<string, Action<string>>("--output-type", SetOutputType),
@@ -25,18 +31,41 @@ namespace FileCabinetGenerator
             new Tuple<string, Action<string>>("-s", SetTypeFileCabinetService),
         };
 
+        private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
+        {
+            new Tuple<string, Action<string>>("help", PrintHelp),
+            new Tuple<string, Action<string>>("import", Import),
+            new Tuple<string, Action<string>>("list", List),
+            new Tuple<string, Action<string>>("exit", Exit),
+        };
+
+        private static string[][] helpMessages = new string[][]
+        {
+            new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
+            new string[] { "import", "import records", "The 'import' command imports data from file." },
+            new string[] { "list", "lists records", "The 'lists' command lists records" },
+            new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
+        };
+
         private static Tuple<string, Type>[] fileCabinetServices = new Tuple<string, Type>[]
         {
             new Tuple<string, Type>("memory", typeof(FileCabinetMemoryService)),
             new Tuple<string, Type>("file", typeof(FileCabinetFilesystemService)),
         };
 
-        private static Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>[] imports = new Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>[]
+        private static Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>[] exports = new Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>[]
         {
             new Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>("csv", ExportToCsv),
             new Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>("xml", ExportToXml),
         };
 
+        private static Tuple<string, Action<string>>[] imports = new Tuple<string, Action<string>>[]
+        {
+            new Tuple<string, Action<string>>("csv", ImportFromCsv),
+            //new Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>("xml", ExportToXml),
+        };
+
+        private static bool isRunning = true;
         private static Settings settings = new Settings();
         private static IFileCabinetService fileCabinetService;
         private static Action<StreamWriter, FileCabinetServiceSnapshot> exportMethod = ExportToCsv;
@@ -51,6 +80,29 @@ namespace FileCabinetGenerator
             {
                 SetSettings(args);
             }
+
+            Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
+            Console.WriteLine(Program.HintMessage);
+            Console.WriteLine();
+
+            do
+            {
+                Console.Write("> ");
+                var inputs = Console.ReadLine().Split(' ', 2);
+                const int commandIndex = 0;
+                var command = inputs[commandIndex];
+                const int parametersIndex = 1;
+                var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
+                try
+                {
+                    ExcuteCommand(command, commands)(parameters);
+                }
+                catch (ArgumentException)
+                {
+                    continue;
+                }
+            }
+            while (isRunning);
         }
 
         /// <summary>
@@ -97,8 +149,18 @@ namespace FileCabinetGenerator
             }
 
             CreateFileCabinet();
-            GenerateRecords(settings.RecordsAmount);
-            Export(exportMethod);
+            try
+            {
+                GenerateRecords(settings.RecordsAmount);
+                Export(exportMethod);
+            }
+            catch (Exception ex) when (
+                ex is ArgumentException || ex is NotSupportedException || ex is FileNotFoundException || ex is IOException ||
+                ex is System.Security.SecurityException || ex is DirectoryNotFoundException || ex is UnauthorizedAccessException ||
+                ex is PathTooLongException)
+            {
+                Console.WriteLine($"Export failed.");
+            }
         }
 
         /// <summary>
@@ -143,7 +205,7 @@ namespace FileCabinetGenerator
         /// <param name="parameter">Parameter.</param>
         private static void SetOutputType(string parameter)
         {
-            exportMethod = ExcuteCommand(parameter, imports);
+            exportMethod = ExcuteCommand(parameter, exports);
         }
 
         /// <summary>
@@ -216,6 +278,16 @@ namespace FileCabinetGenerator
         }
 
         /// <summary>
+        /// Print all records.
+        /// </summary>
+        /// <param name="parameters">Parameter.</param>
+        private static void List(string parameters)
+        {
+            IReadOnlyCollection<FileCabinetRecord> records = fileCabinetService.GetRecords();
+            Print(records);
+        }
+
+        /// <summary>
         /// Print records.
         /// </summary>
         /// <param name="records">Records which need print.</param>
@@ -239,6 +311,42 @@ namespace FileCabinetGenerator
             Console.WriteLine($"{settings.RecordsAmount} records were written to {settings.FilePath}");
         }
 
+        private static void Import(string parameters)
+        {
+            string[] inputs = parameters.Split(' ', 2);
+            const int commandIndex = 0;
+            const int pathIndex = 1;
+            var command = inputs[commandIndex];
+            var path = inputs[pathIndex];
+            if (string.IsNullOrEmpty(command) || string.IsNullOrEmpty(path))
+            {
+                Console.WriteLine($"Error. Import [type import] [path]");
+                return;
+            }
+
+            ExcuteCommand(command, imports)(path);
+        }
+
+        private static void ImportFromCsv(string path)
+        {
+            try
+            {
+                using (StreamReader reader = new StreamReader(path))
+                {
+                    FileCabinetServiceSnapshot snapshot = new FileCabinetServiceSnapshot();
+                    snapshot.LoadFromCsv(reader);
+                    fileCabinetService.Restore(snapshot);
+                }
+            }
+            catch (Exception ex) when (
+                ex is ArgumentException || ex is NotSupportedException || ex is FileNotFoundException || ex is IOException ||
+                ex is System.Security.SecurityException || ex is DirectoryNotFoundException || ex is UnauthorizedAccessException ||
+                ex is PathTooLongException)
+            {
+                Console.WriteLine($"Import failed: can't open file {path}.");
+            }
+        }
+
         /// <summary>
         /// Saves data to csv file.
         /// </summary>
@@ -257,6 +365,47 @@ namespace FileCabinetGenerator
         private static void ExportToXml(StreamWriter writer, FileCabinetServiceSnapshot snapshot)
         {
             snapshot.SaveToXml(writer);
+        }
+
+        /// <summary>
+        /// Print help information.
+        /// </summary>
+        /// <param name="parameters">Parameter wich need print help information.</param>
+        private static void PrintHelp(string parameters)
+        {
+            if (!string.IsNullOrEmpty(parameters))
+            {
+                var index = Array.FindIndex(helpMessages, 0, helpMessages.Length, i => string.Equals(i[Program.CommandHelpIndex], parameters, StringComparison.InvariantCultureIgnoreCase));
+                if (index >= 0)
+                {
+                    Console.WriteLine(helpMessages[index][Program.ExplanationHelpIndex]);
+                }
+                else
+                {
+                    Console.WriteLine($"There is no explanation for '{parameters}' command.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Available commands:");
+
+                foreach (var helpMessage in helpMessages)
+                {
+                    Console.WriteLine("\t{0}\t- {1}", helpMessage[Program.CommandHelpIndex], helpMessage[Program.DescriptionHelpIndex]);
+                }
+            }
+
+            Console.WriteLine();
+        }
+
+        /// <summary>
+        /// Exit from programm.
+        /// </summary>
+        /// <param name="parameters">Parameters.</param>
+        private static void Exit(string parameters)
+        {
+            Console.WriteLine("Exiting an application...");
+            isRunning = false;
         }
     }
 }

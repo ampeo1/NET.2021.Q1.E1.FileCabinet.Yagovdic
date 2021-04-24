@@ -89,6 +89,12 @@
             Creates File Cabinet.
             </summary>
         </member>
+        <member name="M:FileCabinetGenerator.Program.List(System.String)">
+            <summary>
+            Print all records.
+            </summary>
+            <param name="parameters">Parameter.</param>
+        </member>
         <member name="M:FileCabinetGenerator.Program.Print(System.Collections.Generic.IReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
             <summary>
             Print records.
@@ -108,6 +114,18 @@
             </summary>
             <param name="writer">Provider for writing.</param>
             <param name="snapshot">The state to be saved.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.PrintHelp(System.String)">
+            <summary>
+            Print help information.
+            </summary>
+            <param name="parameters">Parameter wich need print help information.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.Exit(System.String)">
+            <summary>
+            Exit from programm.
+            </summary>
+            <param name="parameters">Parameters.</param>
         </member>
         <member name="T:FileCabinetGenerator.Settings">
             <summary>

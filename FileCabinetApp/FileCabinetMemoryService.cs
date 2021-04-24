@@ -177,6 +177,36 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Updates records.
+        /// </summary>
+        /// <param name="snapshot">The state to be updated.</param>
+        public void Restore(FileCabinetServiceSnapshot snapshot)
+        {
+            if (snapshot is null)
+            {
+                throw new ArgumentNullException(nameof(snapshot));
+            }
+
+            if (snapshot.Records is null)
+            {
+                throw new ArgumentException("Snapshot hasn't FileCabinetRecords.", nameof(snapshot));
+            }
+
+            foreach (var item in snapshot.Records)
+            {
+                int index = this.records.FindIndex(0, this.records.Count, x => x.Id == item.Id);
+                if (index != -1)
+                {
+                    this.records[index] = item;
+                }
+                else
+                {
+                    this.records.Add(item);
+                }
+            }
+        }
+
+        /// <summary>
         /// Removes record from dictionary by key.
         /// </summary>
         /// <typeparam name="T">Type key.</typeparam>

@@ -53,6 +53,28 @@
             Third argument: Converted value.
             </returns>
         </member>
+        <member name="M:FileCabinetApp.Converter.IntConverted(System.String)">
+            <summary>
+            Converts from string to int.
+            </summary>
+            <param name="str">String representation.</param>
+            <returns>
+            First argument: True if successfully transformed; otherwise false.
+            Second argument: Error message if there is an error.
+            Third argument: Converted value.
+            </returns>
+        </member>
+        <member name="M:FileCabinetApp.Converter.ShortConverted(System.String)">
+            <summary>
+            Converts from string to short.
+            </summary>
+            <param name="str">String representation.</param>
+            <returns>
+            First argument: True if successfully transformed; otherwise false.
+            Second argument: Error message if there is an error.
+            Third argument: Converted value.
+            </returns>
+        </member>
         <member name="T:FileCabinetApp.CustomValidator">
             <summary>
             This class does validate data.
@@ -401,6 +423,9 @@
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.MakeSnapshot">
             <inheritdoc/>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <inheritdoc/>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.Dispose">
             <summary>
             Close current stream.
@@ -501,6 +526,12 @@
             Takes a snapshot state.
             </summary>
             <returns>Snapshot state.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Updates records.
+            </summary>
+            <param name="snapshot">The state to be updated.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveRecordFromDictiornary``1(System.Collections.Generic.Dictionary{``0,System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord}},``0,FileCabinetApp.FileCabinetRecord)">
             <summary>
@@ -651,7 +682,12 @@
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
             </summary>
-            <param name="records">Data to be written.</param>
+            <param name="records">File cabiner records.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
+            </summary>
         </member>
         <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
             <summary>
@@ -739,6 +775,12 @@
             Saves сurrent state.
             </summary>
             <returns>State.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Updates records.
+            </summary>
+            <param name="snapshot">The state to be updated.</param>
         </member>
         <member name="T:FileCabinetApp.IRecordValidator">
             <summary>

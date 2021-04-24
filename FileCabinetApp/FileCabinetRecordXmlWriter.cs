@@ -15,15 +15,6 @@ namespace FileCabinetApp
     /// </summary>
     public class FileCabinetRecordXmlWriter
     {
-        private const string RecordElement = "record";
-        private const string IdAttribute = "id";
-        private const string NameElement = "name";
-        private const string FirstNameAttribute = "first";
-        private const string LastNameAttribute = "last";
-        private const string DateOfBirthElement = "dateOfBirth";
-        private const string AgeAttribute = "age";
-        private const string AmountRecordsElement = "salary";
-        private const string AccessElement = "access";
         private StreamWriter writer;
         private XmlSerializer serializer;
 
