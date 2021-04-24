@@ -206,7 +206,7 @@ namespace FileCabinetGenerator
             IRecordValidator validator = new DefaultValidator();
             if (settings.FileCabinetType.Equals(typeof(FileCabinetMemoryService)))
             {
-                fileCabinetService = new FileCabinetMemoryService(validator);
+                fileCabinetService = new FileCabinetMemoryService(validator, settings.StartId);
             }
             else if (settings.FileCabinetType.Equals(typeof(FileCabinetFilesystemService)))
             {

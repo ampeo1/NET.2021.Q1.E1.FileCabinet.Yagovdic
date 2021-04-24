@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace FileCabinetApp
 {
@@ -22,46 +24,33 @@ namespace FileCabinetApp
         private const string AgeAttribute = "age";
         private const string AmountRecordsElement = "salary";
         private const string AccessElement = "access";
-        private XmlWriter writer;
+        private StreamWriter writer;
+        private XmlSerializer serializer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetRecordXmlWriter"/> class.
         /// </summary>
         /// <param name="writer">Provider for writting.</param>
-        public FileCabinetRecordXmlWriter(XmlWriter writer)
+        /// <param name="serializer">Serializer for xml.</param>
+        public FileCabinetRecordXmlWriter(StreamWriter writer, XmlSerializer serializer)
         {
             this.writer = writer;
+            this.serializer = serializer;
         }
 
         /// <summary>
         /// Writes data in xml file.
         /// </summary>
-        /// <exception cref="ArgumentNullException">Throws when <paramref name="record"/> is null.</exception>
-        /// <param name="record">The record to be saved.</param>
-        public void Writer(FileCabinetRecord record)
+        /// <exception cref="ArgumentNullException">Throws when <paramref name="records"/> is null.</exception>
+        /// <param name="records">The records to be saved.</param>
+        public void Writer(FileCabinetRecord[] records)
         {
-            if (record is null)
+            if (records is null)
             {
-                throw new ArgumentNullException($"{record}");
+                throw new ArgumentNullException($"{records}");
             }
 
-            this.writer.WriteStartElement(RecordElement);
-            this.writer.WriteAttributeString(IdAttribute, record.Id.ToString(CultureInfo.InvariantCulture));
-            this.writer.WriteStartElement(NameElement);
-            this.writer.WriteAttributeString(FirstNameAttribute, record.FirstName);
-            this.writer.WriteAttributeString(LastNameAttribute, record.LastName);
-            this.writer.WriteEndElement();
-            this.writer.WriteStartElement(DateOfBirthElement);
-            this.writer.WriteAttributeString(AgeAttribute, record.Age.ToString(CultureInfo.InvariantCulture));
-            this.writer.WriteString(record.DateOfBirth.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
-            this.writer.WriteEndElement();
-            this.writer.WriteStartElement(AmountRecordsElement);
-            this.writer.WriteString(record.Salary.ToString(CultureInfo.InvariantCulture));
-            this.writer.WriteEndElement();
-            this.writer.WriteStartElement(AccessElement);
-            this.writer.WriteString(record.Access.ToString());
-            this.writer.WriteEndElement();
-            this.writer.WriteEndElement();
+            this.serializer.Serialize(this.writer, records);
         }
     }
 }

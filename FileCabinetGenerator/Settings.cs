@@ -15,7 +15,6 @@ namespace FileCabinetGenerator
         public const string FileNameStorage = "FileCabinetGenerator.db";
 
         private string filePath = "FileGenerated.csv";
-        private string outputType = "csv";
         private int recordsAmount;
         private int startId;
         private Type fileCabinetType = typeof(FileCabinetMemoryService);
@@ -45,25 +44,6 @@ namespace FileCabinetGenerator
             set
             {
                 this.filePath = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets output type.
-        /// </summary>
-        /// <value>
-        /// Output type.
-        /// </value>
-        public string OutputType
-        {
-            get
-            {
-                return this.outputType;
-            }
-
-            set
-            {
-                this.outputType = value;
             }
         }
 

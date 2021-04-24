@@ -2,7 +2,7 @@
   "profiles": {
     "FileCabinetGenerator": {
       "commandName": "Project",
-      "commandLineArgs": "-t xml -o d:\\EPAM\\FinalTask\\records.xml -a 10 -i 4"
+      "commandLineArgs": "-t xml -o d:\\EPAM\\FinalTask\\records.xml -a 10 -i 4 -s memory"
     }
   }
 }

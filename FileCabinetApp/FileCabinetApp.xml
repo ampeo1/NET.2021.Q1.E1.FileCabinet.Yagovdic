@@ -544,6 +544,11 @@
             Representation record in file cabinet.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetRecord.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecord"/> class.
+            </summary>
+        </member>
         <member name="P:FileCabinetApp.FileCabinetRecord.Id">
             <summary>
             Gets or sets identifier.
@@ -623,18 +628,19 @@
             A class that writes data to a xml file.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.Xml.XmlWriter)">
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.IO.StreamWriter,System.Xml.Serialization.XmlSerializer)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
             </summary>
             <param name="writer">Provider for writting.</param>
+            <param name="serializer">Serializer for xml.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Writer(FileCabinetApp.FileCabinetRecord)">
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Writer(FileCabinetApp.FileCabinetRecord[])">
             <summary>
             Writes data in xml file.
             </summary>
-            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="record"/> is null.</exception>
-            <param name="record">The record to be saved.</param>
+            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="records"/> is null.</exception>
+            <param name="records">The records to be saved.</param>
         </member>
         <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
             <summary>

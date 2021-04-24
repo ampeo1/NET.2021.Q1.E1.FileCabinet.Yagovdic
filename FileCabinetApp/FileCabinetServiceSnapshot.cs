@@ -5,15 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace FileCabinetApp
 {
     /// <summary>
     /// Сlass that saves state.
     /// </summary>
+    [Serializable]
     public class FileCabinetServiceSnapshot
     {
-        private readonly FileCabinetRecord[] records;
+        [XmlArray("records")]
+        [XmlArrayItem("record")]
+        public readonly FileCabinetRecord[] records;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetServiceSnapshot"/> class.
@@ -43,19 +47,9 @@ namespace FileCabinetApp
         /// <param name="streamWriter">Provider for writing.</param>
         public void SaveToXml(StreamWriter streamWriter)
         {
-            using (XmlWriter xmlWriter = XmlWriter.Create(streamWriter))
-            {
-                xmlWriter.WriteStartDocument();
-                xmlWriter.WriteStartElement("records");
-                FileCabinetRecordXmlWriter writer = new FileCabinetRecordXmlWriter(xmlWriter);
-                foreach (var record in this.records)
-                {
-                    writer.Writer(record);
-                }
-
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteEndDocument();
-            }
+            XmlSerializer serializer = new XmlSerializer(typeof(FileCabinetRecord[]));
+            FileCabinetRecordXmlWriter xmlWriter = new FileCabinetRecordXmlWriter(streamWriter, serializer);
+            xmlWriter.Writer(this.records);
         }
     }
 }

@@ -44,7 +44,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(dataRecord)}");
             }
 
-            dataRecord.Id = this.id + 1;
+            dataRecord.Id = this.id++;
             FileCabinetRecord record = this.Create(dataRecord);
             this.AddRecordToDictionaries(record);
             this.records.Add(record);

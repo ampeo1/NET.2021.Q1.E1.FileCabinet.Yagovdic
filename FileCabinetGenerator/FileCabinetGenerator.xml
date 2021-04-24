@@ -135,14 +135,6 @@
             File path.
             </value>
         </member>
-        <member name="P:FileCabinetGenerator.Settings.OutputType">
-            <summary>
-            Gets or sets output type.
-            </summary>
-            <value>
-            Output type.
-            </value>
-        </member>
         <member name="P:FileCabinetGenerator.Settings.RecordsAmount">
             <summary>
             Gets or sets records amount.
