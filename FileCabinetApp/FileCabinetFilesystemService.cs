@@ -207,25 +207,6 @@ namespace FileCabinetApp
             }
         }
 
-        private long FindId(int id)
-        {
-            this.fileStream.Position = 0;
-            int shift = sizeof(int);
-            while (this.fileStream.Position < this.fileStream.Length)
-            {
-                byte[] data = new byte[shift];
-                this.fileStream.Read(data, 0, shift);
-                if (id == BitConverter.ToInt32(data, 0))
-                {
-                    return this.fileStream.Position - shift;
-                }
-
-                this.fileStream.Position += SizeRecord - shift;
-            }
-
-            return this.fileStream.Length;
-        }
-
         /// <summary>
         /// Close current stream.
         /// </summary>
@@ -272,6 +253,25 @@ namespace FileCabinetApp
             }
 
             return data.ToArray();
+        }
+
+        private long FindId(int id)
+        {
+            this.fileStream.Position = 0;
+            int shift = sizeof(int);
+            while (this.fileStream.Position < this.fileStream.Length)
+            {
+                byte[] data = new byte[shift];
+                this.fileStream.Read(data, 0, shift);
+                if (id == BitConverter.ToInt32(data, 0))
+                {
+                    return this.fileStream.Position - shift;
+                }
+
+                this.fileStream.Position += SizeRecord - shift;
+            }
+
+            return this.fileStream.Length;
         }
 
         private IReadOnlyCollection<FileCabinetRecord> FindString(string key, int shift)

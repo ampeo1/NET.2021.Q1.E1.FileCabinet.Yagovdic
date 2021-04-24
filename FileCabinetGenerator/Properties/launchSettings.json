@@ -2,7 +2,7 @@
   "profiles": {
     "FileCabinetGenerator": {
       "commandName": "Project",
-      "commandLineArgs": "-t csv -o d:\\EPAM\\FinalTask\\records1.csv -a 1 -i 4 -s file"
+      "commandLineArgs": "-t xml -o d:\\EPAM\\FinalTask\\records1.xml -a 1 -i 4"
     }
   }
 }

@@ -62,7 +62,7 @@ namespace FileCabinetGenerator
         private static Tuple<string, Action<string>>[] imports = new Tuple<string, Action<string>>[]
         {
             new Tuple<string, Action<string>>("csv", ImportFromCsv),
-            //new Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>("xml", ExportToXml),
+            new Tuple<string, Action<string>>("xml", ImportFromXml),
         };
 
         private static bool isRunning = true;
@@ -335,6 +335,26 @@ namespace FileCabinetGenerator
                 {
                     FileCabinetServiceSnapshot snapshot = new FileCabinetServiceSnapshot();
                     snapshot.LoadFromCsv(reader);
+                    fileCabinetService.Restore(snapshot);
+                }
+            }
+            catch (Exception ex) when (
+                ex is ArgumentException || ex is NotSupportedException || ex is FileNotFoundException || ex is IOException ||
+                ex is System.Security.SecurityException || ex is DirectoryNotFoundException || ex is UnauthorizedAccessException ||
+                ex is PathTooLongException)
+            {
+                Console.WriteLine($"Import failed: can't open file {path}.");
+            }
+        }
+
+        private static void ImportFromXml(string path)
+        {
+            try
+            {
+                using (StreamReader reader = new StreamReader(path))
+                {
+                    FileCabinetServiceSnapshot snapshot = new FileCabinetServiceSnapshot();
+                    snapshot.LoadFromXml(reader);
                     fileCabinetService.Restore(snapshot);
                 }
             }

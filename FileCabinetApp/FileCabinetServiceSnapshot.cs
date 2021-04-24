@@ -65,5 +65,11 @@ namespace FileCabinetApp
             FileCabinetRecordCsvReader csvReader = new FileCabinetRecordCsvReader(reader);
             this.records = csvReader.ReadAll().ToArray();
         }
+
+        public void LoadFromXml(StreamReader reader)
+        {
+            FileCabinetRecordXmlReader xmlReader = new FileCabinetRecordXmlReader(reader);
+            this.records = xmlReader.ReadAll().ToArray();
+        }
     }
 }
