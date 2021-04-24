@@ -10,7 +10,7 @@ namespace FileCabinetApp
     /// <summary>
     /// Representation file cabinet service in file.
     /// </summary>
-    public class FileCabinetFilesystemService : IFileCabinetService
+    public sealed class FileCabinetFilesystemService : IFileCabinetService, IDisposable
     {
         private const short SizeRecord = 276;
         private const byte SizeStringProperty = 120;
@@ -23,11 +23,19 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="validator">Validation-rules.</param>
         /// <param name="fileStream">File stream.</param>
-        public FileCabinetFilesystemService(IRecordValidator validator, FileStream fileStream)
+        /// <param name="startId">The id to start with.</param>
+        public FileCabinetFilesystemService(IRecordValidator validator, FileStream fileStream, int? startId = null)
         {
-            this.fileStream = fileStream ?? throw new ArgumentNullException(nameof(fileStream));
+            this.fileStream = fileStream ?? throw new ArgumentNullException(nameof(validator));
             this.validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            this.id = (int)fileStream.Length / SizeRecord;
+            if (startId is null)
+            {
+                this.id = (int)fileStream.Length / SizeRecord;
+            }
+            else
+            {
+                this.id = (int)startId;
+            }
         }
 
         /// <inheritdoc/>
@@ -178,6 +186,35 @@ namespace FileCabinetApp
             return new FileCabinetServiceSnapshot(this.GetRecords().ToArray());
         }
 
+        /// <inheritdoc/>
+        public void Restore(FileCabinetServiceSnapshot snapshot)
+        {
+            if (snapshot is null)
+            {
+                throw new ArgumentNullException(nameof(snapshot));
+            }
+
+            if (snapshot.Records is null)
+            {
+                throw new ArgumentException("Snapshot hasn't FileCabinetRecords.", nameof(snapshot));
+            }
+
+            foreach (var item in snapshot.Records)
+            {
+                this.fileStream.Position = this.FindId(item.Id);
+                byte[] data = ConvertRecordToBytes(item);
+                this.fileStream.Write(data, 0, data.Length);
+            }
+        }
+
+        /// <summary>
+        /// Close current stream.
+        /// </summary>
+        public void Dispose()
+        {
+            this.fileStream.Close();
+        }
+
         /// <summary>
         /// Converts record to array of bytes.
         /// </summary>
@@ -216,6 +253,25 @@ namespace FileCabinetApp
             }
 
             return data.ToArray();
+        }
+
+        private long FindId(int id)
+        {
+            this.fileStream.Position = 0;
+            int shift = sizeof(int);
+            while (this.fileStream.Position < this.fileStream.Length)
+            {
+                byte[] data = new byte[shift];
+                this.fileStream.Read(data, 0, shift);
+                if (id == BitConverter.ToInt32(data, 0))
+                {
+                    return this.fileStream.Position - shift;
+                }
+
+                this.fileStream.Position += SizeRecord - shift;
+            }
+
+            return this.fileStream.Length;
         }
 
         private IReadOnlyCollection<FileCabinetRecord> FindString(string key, int shift)

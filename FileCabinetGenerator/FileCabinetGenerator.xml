@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FileCabinetGenerator</name>
+    </assembly>
+    <members>
+        <member name="T:FileCabinetGenerator.Generator">
+            <summary>
+            Generate random DataRecord.
+            </summary>
+        </member>
+        <member name="M:FileCabinetGenerator.Generator.GenerateRecord(FileCabinetApp.IRecordValidator)">
+            <summary>
+            Generate DataRecord.
+            </summary>
+            <param name="validator">The rules by which the data will be randomized.</param>
+            <returns>DataRecord.</returns>
+        </member>
+        <member name="T:FileCabinetGenerator.Program">
+            <summary>
+            Interacts with API.
+            </summary>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.Main(System.String[])">
+            <summary>
+            Point of entry.
+            </summary>
+            <param name="args">Property.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.SetSettings(System.String[])">
+            <summary>
+            Set settings.
+            </summary>
+            <param name="args">property of settings.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.ExcuteCommand``1(System.String,System.Tuple{System.String,``0}[])">
+            <summary>
+            Find and return command.
+            </summary>
+            <typeparam name="T">Type command.</typeparam>
+            <param name="commandName">Command name.</param>
+            <param name="commands">Array of command.</param>
+            <returns>Command.</returns>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.PrintMissedCommandInfo(System.String)">
+            <summary>
+            Print that command missed.
+            </summary>
+            <param name="command">Missed command.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.SetOutputType(System.String)">
+            <summary>
+            Sets the type to be saved to.
+            </summary>
+            <param name="parameter">Parameter.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.SetOutput(System.String)">
+            <summary>
+            Sets the path where records should be saved.
+            </summary>
+            <param name="parameter">Parameter.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.SetRecordAmount(System.String)">
+            <summary>
+            Sets the number of records to be created.
+            </summary>
+            <param name="parameter">Parameter.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.SetStartId(System.String)">
+            <summary>
+            Sets the identifier from which to start generating data.
+            </summary>
+            <param name="parameter">Parameter.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.SetTypeFileCabinetService(System.String)">
+            <summary>
+            Set FileCabinet type.
+            </summary>
+            <param name="parameter">Parameter.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.GenerateRecords(System.Int32)">
+            <summary>
+            Generates records.
+            </summary>
+            <param name="amount">Number of records to create.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.CreateFileCabinet">
+            <summary>
+            Creates File Cabinet.
+            </summary>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.List(System.String)">
+            <summary>
+            Print all records.
+            </summary>
+            <param name="parameters">Parameter.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.Print(System.Collections.Generic.IReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Print records.
+            </summary>
+            <param name="records">Records which need print.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.ExportToCsv(System.IO.StreamWriter,FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Saves data to csv file.
+            </summary>
+            <param name="writer">Provider for writing.</param>
+            <param name="snapshot">The state to be saved.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.ExportToXml(System.IO.StreamWriter,FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Saves data to xml file.
+            </summary>
+            <param name="writer">Provider for writing.</param>
+            <param name="snapshot">The state to be saved.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.PrintHelp(System.String)">
+            <summary>
+            Print help information.
+            </summary>
+            <param name="parameters">Parameter wich need print help information.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Program.Exit(System.String)">
+            <summary>
+            Exit from programm.
+            </summary>
+            <param name="parameters">Parameters.</param>
+        </member>
+        <member name="T:FileCabinetGenerator.Settings">
+            <summary>
+            Settings for Program.
+            </summary>
+        </member>
+        <member name="F:FileCabinetGenerator.Settings.FileNameStorage">
+            <summary>
+            Name storage for file system cabient.
+            </summary>
+        </member>
+        <member name="P:FileCabinetGenerator.Settings.Validator">
+            <summary>
+            Gets validator.
+            </summary>
+            <value>
+            IRecordValidator.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.Settings.FilePath">
+            <summary>
+            Gets or sets file path.
+            </summary>
+            <value>
+            File path.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.Settings.RecordsAmount">
+            <summary>
+            Gets or sets records amount.
+            </summary>
+            <value>
+            Records amount.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.Settings.StartId">
+            <summary>
+            Gets or sets start id.
+            </summary>
+            <value>
+            Start id.
+            </value>
+        </member>
+        <member name="P:FileCabinetGenerator.Settings.FileCabinetType">
+            <summary>
+            Gets or sets file cabinet type.
+            </summary>
+            <value>
+            File cabinet type.
+            </value>
+        </member>
+    </members>
+</doc>

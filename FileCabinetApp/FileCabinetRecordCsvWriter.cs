@@ -54,7 +54,7 @@ namespace FileCabinetApp
             builder.Append(separator);
             builder.Append(record.Access);
             builder.Append(separator);
-            builder.Append(record.Salary);
+            builder.Append(record.Salary.ToString(CultureInfo.InvariantCulture));
             this.writer.WriteLine(builder.ToString());
         }
     }

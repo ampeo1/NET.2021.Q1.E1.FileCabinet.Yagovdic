@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace FileCabinetApp
 {
@@ -13,16 +15,26 @@ namespace FileCabinetApp
     /// </summary>
     public class FileCabinetServiceSnapshot
     {
-        private readonly FileCabinetRecord[] records;
+        private FileCabinetRecord[] records;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetServiceSnapshot"/> class.
         /// </summary>
-        /// <param name="records">Data to be written.</param>
+        /// <param name="records">File cabiner records.</param>
         public FileCabinetServiceSnapshot(FileCabinetRecord[] records)
         {
             this.records = records;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetServiceSnapshot"/> class.
+        /// </summary>
+        public FileCabinetServiceSnapshot()
+        {
+            this.records = Array.Empty<FileCabinetRecord>();
+        }
+
+        public ReadOnlyCollection<FileCabinetRecord> Records => Array.AsReadOnly(this.records);
 
         /// <summary>
         /// Writes data in Csv file.
@@ -43,19 +55,21 @@ namespace FileCabinetApp
         /// <param name="streamWriter">Provider for writing.</param>
         public void SaveToXml(StreamWriter streamWriter)
         {
-            using (XmlWriter xmlWriter = XmlWriter.Create(streamWriter))
-            {
-                xmlWriter.WriteStartDocument();
-                xmlWriter.WriteStartElement("records");
-                FileCabinetRecordXmlWriter writer = new FileCabinetRecordXmlWriter(xmlWriter);
-                foreach (var record in this.records)
-                {
-                    writer.Writer(record);
-                }
+            XmlSerializer serializer = new XmlSerializer(typeof(FileCabinetRecord[]));
+            FileCabinetRecordXmlWriter xmlWriter = new FileCabinetRecordXmlWriter(streamWriter, serializer);
+            xmlWriter.Writer(this.records);
+        }
 
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteEndDocument();
-            }
+        public void LoadFromCsv(StreamReader reader)
+        {
+            FileCabinetRecordCsvReader csvReader = new FileCabinetRecordCsvReader(reader);
+            this.records = csvReader.ReadAll().ToArray();
+        }
+
+        public void LoadFromXml(StreamReader reader)
+        {
+            FileCabinetRecordXmlReader xmlReader = new FileCabinetRecordXmlReader(reader);
+            this.records = xmlReader.ReadAll().ToArray();
         }
     }
 }

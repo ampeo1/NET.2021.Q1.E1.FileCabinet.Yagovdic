@@ -126,5 +126,75 @@ namespace FileCabinetApp
 
             return new Tuple<bool, string, decimal>(converted, errorMessage, convertedValue);
         }
+
+        /// <summary>
+        /// Converts from string to int.
+        /// </summary>
+        /// <param name="str">String representation.</param>
+        /// <returns>
+        /// First argument: True if successfully transformed; otherwise false.
+        /// Second argument: Error message if there is an error.
+        /// Third argument: Converted value.
+        /// </returns>
+        public static Tuple<bool, string, int> IntConverted(string str)
+        {
+            int convertedValue = 0;
+            string errorMessage = string.Empty;
+            bool converted = false;
+            try
+            {
+                convertedValue = int.Parse(str, CultureInfo.InvariantCulture);
+                converted = true;
+            }
+            catch (ArgumentNullException)
+            {
+                errorMessage = "Argument is null or empty";
+            }
+            catch (FormatException)
+            {
+                errorMessage = "Must be one character";
+            }
+            catch (OverflowException)
+            {
+                errorMessage = "Overflow has occurred";
+            }
+
+            return new Tuple<bool, string, int>(converted, errorMessage, convertedValue);
+        }
+
+        /// <summary>
+        /// Converts from string to short.
+        /// </summary>
+        /// <param name="str">String representation.</param>
+        /// <returns>
+        /// First argument: True if successfully transformed; otherwise false.
+        /// Second argument: Error message if there is an error.
+        /// Third argument: Converted value.
+        /// </returns>
+        public static Tuple<bool, string, short> ShortConverted(string str)
+        {
+            short convertedValue = 0;
+            string errorMessage = string.Empty;
+            bool converted = false;
+            try
+            {
+                convertedValue = short.Parse(str, CultureInfo.InvariantCulture);
+                converted = true;
+            }
+            catch (ArgumentNullException)
+            {
+                errorMessage = "Argument is null or empty";
+            }
+            catch (FormatException)
+            {
+                errorMessage = "Must be one character";
+            }
+            catch (OverflowException)
+            {
+                errorMessage = "Overflow has occurred";
+            }
+
+            return new Tuple<bool, string, short>(converted, errorMessage, convertedValue);
+        }
     }
 }

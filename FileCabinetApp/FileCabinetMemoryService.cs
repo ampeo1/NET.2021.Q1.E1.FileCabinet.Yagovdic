@@ -17,14 +17,17 @@ namespace FileCabinetApp
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
         private readonly IRecordValidator validator;
+        private int id;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
         /// </summary>
         /// <param name="validator">Validation-rules.</param>
-        public FileCabinetMemoryService(IRecordValidator validator)
+        /// <param name="startId">The id to start with.</param>
+        public FileCabinetMemoryService(IRecordValidator validator, int startId = 0)
         {
             this.validator = validator;
+            this.id = startId;
         }
 
         /// <summary>
@@ -41,7 +44,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(dataRecord)}");
             }
 
-            dataRecord.Id = this.records.Count + 1;
+            dataRecord.Id = this.id++;
             FileCabinetRecord record = this.Create(dataRecord);
             this.AddRecordToDictionaries(record);
             this.records.Add(record);
@@ -171,6 +174,36 @@ namespace FileCabinetApp
         public FileCabinetServiceSnapshot MakeSnapshot()
         {
             return new FileCabinetServiceSnapshot(this.records.ToArray());
+        }
+
+        /// <summary>
+        /// Updates records.
+        /// </summary>
+        /// <param name="snapshot">The state to be updated.</param>
+        public void Restore(FileCabinetServiceSnapshot snapshot)
+        {
+            if (snapshot is null)
+            {
+                throw new ArgumentNullException(nameof(snapshot));
+            }
+
+            if (snapshot.Records is null)
+            {
+                throw new ArgumentException("Snapshot hasn't FileCabinetRecords.", nameof(snapshot));
+            }
+
+            foreach (var item in snapshot.Records)
+            {
+                int index = this.records.FindIndex(0, this.records.Count, x => x.Id == item.Id);
+                if (index != -1)
+                {
+                    this.records[index] = item;
+                }
+                else
+                {
+                    this.records.Add(item);
+                }
+            }
         }
 
         /// <summary>

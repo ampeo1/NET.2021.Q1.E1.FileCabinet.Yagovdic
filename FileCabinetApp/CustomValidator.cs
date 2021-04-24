@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,77 @@ namespace FileCabinetApp
     /// </summary>
     public class CustomValidator : IRecordValidator
     {
+        private const char MinChar = 'a';
+        private const char MaxChar = 'g';
+        private const short MinLength = 1;
+        private const short MaxLength = 100;
+        private const decimal MaxSalary = 10000000m;
+        private const decimal MinSalary = decimal.Zero;
         private static readonly DateTime MinDate = new DateTime(1920, 01, 01);
+
+        /// <summary>
+        /// Gets min value for char.
+        /// </summary>
+        /// <value>
+        /// Min value for char.
+        /// </value>
+        public char MinValueForChar => MinChar;
+
+        /// <summary>
+        /// Gets max value for char.
+        /// </summary>
+        /// <value>
+        /// Max value for char.
+        /// </value>
+        public char MaxValueForChar => MaxChar;
+
+        /// <summary>
+        /// Gets min length for string.
+        /// </summary>
+        /// <value>
+        /// Min length for string.
+        /// </value>
+        public short MinLengthForString => MinLength;
+
+        /// <summary>
+        /// Gets max length for string.
+        /// </summary>
+        /// <value>
+        /// Max length for string.
+        /// </value>
+        public short MaxLengthForString => MaxLength;
+
+        /// <summary>
+        /// Gets min value for salary.
+        /// </summary>
+        /// <value>
+        /// Min value for salary.
+        /// </value>
+        public decimal MinValueForSalary => MinSalary;
+
+        /// <summary>
+        /// Gets max value for salary.
+        /// </summary>
+        /// <value>
+        /// Max value for salary.
+        /// </value>
+        public decimal MaxValueForSalary => MaxSalary;
+
+        /// <summary>
+        /// Gets min value for date of birth.
+        /// </summary>
+        /// <value>
+        /// Min value for date of birth.
+        /// </value>
+        public DateTime MinDateOfBirth => MinDate;
+
+        /// <summary>
+        /// Gets min value for date of birth.
+        /// </summary>
+        /// <value>
+        /// Min value for date of birth.
+        /// </value>
+        public DateTime MaxDateOfBirth => DateTime.Now;
 
         /// <summary>
         /// Validate access property.
@@ -24,7 +95,7 @@ namespace FileCabinetApp
         public Tuple<bool, string> ValidateAccess(char access)
         {
             string errorMessage = string.Empty;
-            if (access < 'a' || access > 'g')
+            if (access < MinChar || access > MaxChar)
             {
                 errorMessage = "Access doesn't contains [a, b, c, d, e, f, g]";
                 return new Tuple<bool, string>(false, errorMessage);
@@ -46,7 +117,7 @@ namespace FileCabinetApp
             string errorMessage = string.Empty;
             if (DateTime.Compare(DateTime.Now, dateOfBirth) < 0 || DateTime.Compare(MinDate, dateOfBirth) > 0)
             {
-                errorMessage = "Date of birth is less than 01-jan-1920 or greater than now";
+                errorMessage = $"Date of birth is less than {this.MinDateOfBirth.ToString("yyyy - MMM - dd", CultureInfo.InvariantCulture)} or greater than now";
                 return new Tuple<bool, string>(false, errorMessage);
             }
 
@@ -70,9 +141,9 @@ namespace FileCabinetApp
                 return new Tuple<bool, string>(false, errorMessage);
             }
 
-            if (firstName.Length < 1 || firstName.Length > 100)
+            if (firstName.Length < MinLength || firstName.Length > MaxLength)
             {
-                errorMessage = "Length is less than 1 or greater than 100";
+                errorMessage = $"Length is less than {MinLength} or greater than {MaxLength}";
                 return new Tuple<bool, string>(false, errorMessage);
             }
 
@@ -96,9 +167,9 @@ namespace FileCabinetApp
                 return new Tuple<bool, string>(false, errorMessage);
             }
 
-            if (lastName.Length < 1 || lastName.Length > 100)
+            if (lastName.Length < MinLength || lastName.Length > MaxLength)
             {
-                errorMessage = "Length is less than 1 or greater than 100";
+                errorMessage = $"Length is less than {MinLength} or greater than {MaxLength}";
                 return new Tuple<bool, string>(false, errorMessage);
             }
 
@@ -109,10 +180,9 @@ namespace FileCabinetApp
         public Tuple<bool, string> ValidateSalary(decimal salary)
         {
             string errorMessage = string.Empty;
-            decimal maxValue = 10000m;
-            if (salary.CompareTo(decimal.Zero) == -1 || salary.CompareTo(maxValue) == 1)
+            if (salary.CompareTo(MinSalary) == -1 || salary.CompareTo(MaxSalary) == 1)
             {
-                errorMessage = "Length is less than 0 or greater than 10000";
+                errorMessage = $"Length is less than {MinSalary} or greater than {MaxSalary}";
                 return new Tuple<bool, string>(false, errorMessage);
             }
 

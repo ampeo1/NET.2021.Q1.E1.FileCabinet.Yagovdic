@@ -12,6 +12,70 @@ namespace FileCabinetApp
     public interface IRecordValidator
     {
         /// <summary>
+        /// Gets min value for char.
+        /// </summary>
+        /// <value>
+        /// Min value for char.
+        /// </value>
+        public char MinValueForChar { get; }
+
+        /// <summary>
+        /// Gets max value for char.
+        /// </summary>
+        /// <value>
+        /// Max value for char.
+        /// </value>
+        public char MaxValueForChar { get; }
+
+        /// <summary>
+        /// Gets min length for string.
+        /// </summary>
+        /// <value>
+        /// Min length for string.
+        /// </value>
+        public short MinLengthForString { get; }
+
+        /// <summary>
+        /// Gets max length for string.
+        /// </summary>
+        /// <value>
+        /// Max length for string.
+        /// </value>
+        public short MaxLengthForString { get; }
+
+        /// <summary>
+        /// Gets min value for salary.
+        /// </summary>
+        /// <value>
+        /// Min value for salary.
+        /// </value>
+        public decimal MinValueForSalary { get; }
+
+        /// <summary>
+        /// Gets max value for salary.
+        /// </summary>
+        /// <value>
+        /// Max value for salary.
+        /// </value>
+        public decimal MaxValueForSalary { get; }
+
+        /// <summary>
+        /// Gets min value for date of birth.
+        /// </summary>
+        /// <value>
+        /// Min value for date of birth.
+        /// </value>
+        public DateTime MinDateOfBirth { get; }
+
+        /// <summary>
+        /// Gets min value for date of birth.
+        /// </summary>
+        /// <value>
+        /// Min value for date of birth.
+        /// </value>
+        public DateTime MaxDateOfBirth { get; }
+
+        /// <summary>
         /// Validate all arguments.
         /// </summary>
         /// <param name="dataRecord">Checked arguments.</param>

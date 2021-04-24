@@ -3,20 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace FileCabinetApp
 {
     /// <summary>
     /// Representation record in file cabinet.
     /// </summary>
+    [XmlType("record")]
     public class FileCabinetRecord
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetRecord"/> class.
+        /// </summary>
+        public FileCabinetRecord()
+        {
+        }
+
         /// <summary>
         /// Gets or sets identifier.
         /// </summary>
         /// <value>
         /// Identifier.
         /// </value>
+        [XmlAttribute("id")]
         public int Id { get; set; }
 
         /// <summary>
@@ -49,6 +59,7 @@ namespace FileCabinetApp
         /// <value>
         /// Access.
         /// </value>
+        [XmlElement(typeof(char))]
         public char Access { get; set; }
 
         /// <summary>
