@@ -83,6 +83,12 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
+        public bool Remove(int id)
+        {
+            return false;
+        }
+
+        /// <inheritdoc/>
         public IReadOnlyCollection<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth)
         {
             int shift = sizeof(int) + SizeStringProperty + SizeStringProperty;

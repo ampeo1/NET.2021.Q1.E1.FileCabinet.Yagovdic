@@ -31,6 +31,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("list", List),
+            new Tuple<string, Action<string>>("remove", Remove),
             new Tuple<string, Action<string>>("exit", Exit),
         };
 
@@ -72,7 +73,8 @@ namespace FileCabinetApp
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "stat", "prints the statistics of records", "The 'stat' command prints the statistics of records." },
             new string[] { "create", "creates new record", "The 'create' command creates new record" },
-            new string[] { "create", "change record", "The 'edit' command changes record" },
+            new string[] { "edit", "change record", "The 'edit' command changes record" },
+            new string[] { "remove", "removes record", "The 'record' command removes record" },
             new string[] { "list", "lists records", "The 'lists' command lists records" },
             new string[] { "find", "finds records", "The 'find' command finds records" },
             new string[] { "export", "exports records", "The 'export' command saves records" },
@@ -321,6 +323,30 @@ namespace FileCabinetApp
             catch (ArgumentException ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Remove record from IFileCabinetService.
+        /// </summary>
+        /// <param name="parameter">Id of the record to be deleted.</param>
+        private static void Remove(string parameter)
+        {
+            Tuple<bool, string, int> convertedValue = Converter.IntConverted(parameter);
+            if (!convertedValue.Item1)
+            {
+                Console.WriteLine(convertedValue.Item2);
+                return;
+            }
+
+            int id = convertedValue.Item3;
+            if (fileCabinetService.Remove(id))
+            {
+                Console.WriteLine($"Record #{id} is removed.");
+            }
+            else
+            {
+                Console.WriteLine($"Record #{id} doesn't exists.");
             }
         }
 

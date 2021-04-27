@@ -86,5 +86,12 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="snapshot">The state to be updated.</param>
         public void Restore(FileCabinetServiceSnapshot snapshot);
+
+        /// <summary>
+        /// Remove record.
+        /// </summary>
+        /// <param name="id">Id of the record to be deleted.</param>
+        /// <returns>True if the record has been deleted; otherwise false.</returns>
+        public bool Remove(int id);
     }
 }

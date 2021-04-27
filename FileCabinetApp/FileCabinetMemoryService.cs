@@ -206,6 +206,19 @@ namespace FileCabinetApp
             }
         }
 
+        /// <inheritdoc/>
+        public bool Remove(int id)
+        {
+            FileCabinetRecord record = this.records.Find(x => x.Id == id);
+            if (record is null)
+            {
+                return false;
+            }
+
+            this.records.Remove(record);
+            return true;
+        }
+
         /// <summary>
         /// Removes record from dictionary by key.
         /// </summary>

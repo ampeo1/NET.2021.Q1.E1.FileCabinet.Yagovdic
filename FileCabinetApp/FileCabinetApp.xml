@@ -399,6 +399,9 @@
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditRecord(FileCabinetApp.DataRecord)">
             <inheritdoc/>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Remove(System.Int32)">
+            <inheritdoc/>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByBirthDay(System.DateTime)">
             <inheritdoc/>
         </member>
@@ -532,6 +535,9 @@
             Updates records.
             </summary>
             <param name="snapshot">The state to be updated.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.Remove(System.Int32)">
+            <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveRecordFromDictiornary``1(System.Collections.Generic.Dictionary{``0,System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord}},``0,FileCabinetApp.FileCabinetRecord)">
             <summary>
@@ -782,6 +788,13 @@
             </summary>
             <param name="snapshot">The state to be updated.</param>
         </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.Remove(System.Int32)">
+            <summary>
+            Remove record.
+            </summary>
+            <param name="id">Id of the record to be deleted.</param>
+            <returns>True if the record has been deleted; otherwise false.</returns>
+        </member>
         <member name="T:FileCabinetApp.IRecordValidator">
             <summary>
             Validate record.
@@ -979,6 +992,12 @@
             Change record.
             </summary>
             <param name="parameters">Id record.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Remove(System.String)">
+            <summary>
+            Remove record from IFileCabinetService.
+            </summary>
+            <param name="parameter">Id of the record to be deleted.</param>
         </member>
         <member name="M:FileCabinetApp.Program.CollectRecordData">
             <summary>
