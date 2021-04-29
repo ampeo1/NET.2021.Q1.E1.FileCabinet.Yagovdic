@@ -284,6 +284,50 @@ namespace FileCabinetApp
             return data.ToArray();
         }
 
+        public int Purge()
+        {
+            this.fileStream.Position = 0;
+            int count = 0;
+            using (FileStream tempStream = new FileStream("temp.db", FileMode.Create, FileAccess.ReadWrite))
+            {
+                while (this.fileStream.Position < this.fileStream.Length)
+                {
+                    byte[] data = new byte[SizeRecord];
+                    this.fileStream.Read(data, 0, data.Length);
+                    if (!this.CheckDeleted(data))
+                    {
+                        tempStream.Write(data, 0, data.Length);
+                    }
+                    else
+                    {
+                        count++;
+                    }
+                }
+
+                this.fileStream.SetLength(0);
+                tempStream.Position = 0;
+                tempStream.CopyTo(this.fileStream);
+            }
+
+            return count;
+        }
+
+        private bool CheckDeleted(byte[] data)
+        {
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            if (data.Length != SizeRecord)
+            {
+                throw new ArgumentException("The number of bytes is not equal to the size of the record ", nameof(data));
+            }
+
+            short shift = sizeof(int);
+            return BitConverter.ToBoolean(data, shift);
+        }
+
         private bool FindId(int id)
         {
             this.fileStream.Position = 0;

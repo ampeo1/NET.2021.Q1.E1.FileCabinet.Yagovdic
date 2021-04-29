@@ -93,5 +93,7 @@ namespace FileCabinetApp
         /// <param name="id">Id of the record to be deleted.</param>
         /// <returns>True if the record has been deleted; otherwise false.</returns>
         public bool Remove(int id);
+
+        public int Purge();
     }
 }

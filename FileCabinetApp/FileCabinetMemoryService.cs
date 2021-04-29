@@ -219,6 +219,11 @@ namespace FileCabinetApp
             return true;
         }
 
+        public int Purge()
+        {
+            return 0;
+        }
+
         /// <summary>
         /// Removes record from dictionary by key.
         /// </summary>

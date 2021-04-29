@@ -32,6 +32,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("remove", Remove),
+            new Tuple<string, Action<string>>("purge", Purge),
             new Tuple<string, Action<string>>("exit", Exit),
         };
 
@@ -75,6 +76,7 @@ namespace FileCabinetApp
             new string[] { "create", "creates new record", "The 'create' command creates new record" },
             new string[] { "edit", "change record", "The 'edit' command changes record" },
             new string[] { "remove", "removes record", "The 'record' command removes record" },
+            new string[] { "purge", "defragments a file", "The 'purge' command defragments a file" },
             new string[] { "list", "lists records", "The 'lists' command lists records" },
             new string[] { "find", "finds records", "The 'find' command finds records" },
             new string[] { "export", "exports records", "The 'export' command saves records" },
@@ -348,6 +350,13 @@ namespace FileCabinetApp
             {
                 Console.WriteLine($"Record #{id} doesn't exists.");
             }
+        }
+
+        private static void Purge(string parameter)
+        {
+            int count = fileCabinetService.GetStat();
+            int removed = fileCabinetService.Purge();
+            Console.WriteLine($"Data file processing is completed: {removed} of {count}");
         }
 
         /// <summary>
