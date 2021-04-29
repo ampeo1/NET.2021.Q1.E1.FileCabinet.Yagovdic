@@ -399,6 +399,12 @@
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditRecord(FileCabinetApp.DataRecord)">
             <inheritdoc/>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Remove(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Purge">
+            <inheritdoc/>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByBirthDay(System.DateTime)">
             <inheritdoc/>
         </member>
@@ -414,7 +420,10 @@
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetRecords">
             <inheritdoc/>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetStat">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetCount">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetCountRemovedRecords">
             <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetValidator">
@@ -458,80 +467,43 @@
             <param name="startId">The id to start with.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetApp.DataRecord)">
-            <summary>
-            Creates new record.
-            </summary>
-            <param name="dataRecord">record data.</param>
-            <exception cref="T:System.ArgumentNullException">Trows when <paramref name="dataRecord"/> is null.</exception>
-            <exception cref="T:System.ArgumentException">Trows when data is invalid.</exception>
-            <returns>Record id.</returns>
+            <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.EditRecord(FileCabinetApp.DataRecord)">
-            <summary>
-            Changes record.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Trows when <paramref name="dataRecord"/> is null.</exception>
-            <exception cref="T:System.ArgumentException">Trows when data is invalid.</exception>
-            <param name="dataRecord">Record data.</param>
+            <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindIndexById(System.Int32)">
-            <summary>
-            Finds index record by id.
-            </summary>
-            <param name="id">Identifier of the searched record.</param>
-            <exception cref="T:System.ArgumentException">Throws when record not found.</exception>
-            <returns>Index record.</returns>
+            <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByFirstName(System.String)">
-            <summary>
-            Finds record by first name.
-            </summary>
-            <param name="firstName">First name of the searched record.</param>
-            <returns>Found records.</returns>
+            <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByLastname(System.String)">
-            <summary>
-            Finds record by last name.
-            </summary>
-            <param name="lastName">Last name of the searched record.</param>
-            <returns>Found records.</returns>
+            <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByBirthDay(System.DateTime)">
-            <summary>
-            Finds record by date of birth.
-            </summary>
-            <param name="dateOfBirth">date of birth of the searched record.</param>
-            <returns>Found records.</returns>
+            <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.GetRecords">
-            <summary>
-            Gets all records.
-            </summary>
-            <returns>Records.</returns>
+            <inheritdoc/>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetStat">
-            <summary>
-            Gets count of records.
-            </summary>
-            <returns>Count of records.</returns>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetCount">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetCountRemovedRecords">
+            <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.GetValidator">
-            <summary>
-            Gets validator.
-            </summary>
-            <returns>Validator.</returns>
+            <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.MakeSnapshot">
-            <summary>
-            Takes a snapshot state.
-            </summary>
-            <returns>Snapshot state.</returns>
+            <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
-            <summary>
-            Updates records.
-            </summary>
-            <param name="snapshot">The state to be updated.</param>
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.Remove(System.Int32)">
+            <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveRecordFromDictiornary``1(System.Collections.Generic.Dictionary{``0,System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord}},``0,FileCabinetApp.FileCabinetRecord)">
             <summary>
@@ -758,11 +730,17 @@
             </summary>
             <returns>Records.</returns>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.GetStat">
+        <member name="M:FileCabinetApp.IFileCabinetService.GetCount">
             <summary>
             Gets count of records.
             </summary>
             <returns>Count of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.GetCountRemovedRecords">
+            <summary>
+            Gets count deleted records.
+            </summary>
+            <returns>Count deleted records</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.GetValidator">
             <summary>
@@ -781,6 +759,19 @@
             Updates records.
             </summary>
             <param name="snapshot">The state to be updated.</param>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.Remove(System.Int32)">
+            <summary>
+            Remove record.
+            </summary>
+            <param name="id">Id of the record to be deleted.</param>
+            <returns>True if the record has been deleted; otherwise false.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.Purge">
+            <summary>
+            Defragments a file.
+            </summary>
+            <returns>Count deleted records.</returns>
         </member>
         <member name="T:FileCabinetApp.IRecordValidator">
             <summary>
@@ -979,6 +970,12 @@
             Change record.
             </summary>
             <param name="parameters">Id record.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Remove(System.String)">
+            <summary>
+            Remove record from IFileCabinetService.
+            </summary>
+            <param name="parameter">Id of the record to be deleted.</param>
         </member>
         <member name="M:FileCabinetApp.Program.CollectRecordData">
             <summary>

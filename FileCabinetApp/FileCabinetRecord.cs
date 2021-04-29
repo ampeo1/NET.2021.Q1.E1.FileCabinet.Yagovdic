@@ -59,7 +59,6 @@ namespace FileCabinetApp
         /// <value>
         /// Access.
         /// </value>
-        [XmlElement(typeof(char))]
         public char Access { get; set; }
 
         /// <summary>
