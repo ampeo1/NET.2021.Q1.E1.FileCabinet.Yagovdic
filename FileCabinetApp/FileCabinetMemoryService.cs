@@ -30,13 +30,7 @@ namespace FileCabinetApp
             this.id = startId;
         }
 
-        /// <summary>
-        /// Creates new record.
-        /// </summary>
-        /// <param name="dataRecord">record data.</param>
-        /// <exception cref="ArgumentNullException">Trows when <paramref name="dataRecord"/> is null.</exception>
-        /// <exception cref="ArgumentException">Trows when data is invalid.</exception>
-        /// <returns>Record id.</returns>
+        /// <inheritdoc/>
         public int CreateRecord(DataRecord dataRecord)
         {
             if (dataRecord is null)
@@ -52,12 +46,7 @@ namespace FileCabinetApp
             return record.Id;
         }
 
-        /// <summary>
-        /// Changes record.
-        /// </summary>
-        /// <exception cref="ArgumentNullException">Trows when <paramref name="dataRecord"/> is null.</exception>
-        /// <exception cref="ArgumentException">Trows when data is invalid.</exception>
-        /// <param name="dataRecord">Record data.</param>
+        /// <inheritdoc/>
         public void EditRecord(DataRecord dataRecord)
         {
             if (dataRecord is null)
@@ -72,12 +61,7 @@ namespace FileCabinetApp
             this.records[index] = record;
         }
 
-        /// <summary>
-        /// Finds index record by id.
-        /// </summary>
-        /// <param name="id">Identifier of the searched record.</param>
-        /// <exception cref="ArgumentException">Throws when record not found.</exception>
-        /// <returns>Index record.</returns>
+        /// <inheritdoc/>
         public int FindIndexById(int id)
         {
             int index = this.records.FindIndex(x => x.Id == id);
@@ -89,11 +73,7 @@ namespace FileCabinetApp
             return index;
         }
 
-        /// <summary>
-        /// Finds record by first name.
-        /// </summary>
-        /// <param name="firstName">First name of the searched record.</param>
-        /// <returns>Found records.</returns>
+        /// <inheritdoc/>
         public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
             if (this.firstNameDictionary.ContainsKey(firstName))
@@ -106,11 +86,7 @@ namespace FileCabinetApp
             }
         }
 
-        /// <summary>
-        /// Finds record by last name.
-        /// </summary>
-        /// <param name="lastName">Last name of the searched record.</param>
-        /// <returns>Found records.</returns>
+        /// <inheritdoc/>
         public IReadOnlyCollection<FileCabinetRecord> FindByLastname(string lastName)
         {
             if (this.lastNameDictionary.ContainsKey(lastName))
@@ -123,11 +99,7 @@ namespace FileCabinetApp
             }
         }
 
-        /// <summary>
-        /// Finds record by date of birth.
-        /// </summary>
-        /// <param name="dateOfBirth">date of birth of the searched record.</param>
-        /// <returns>Found records.</returns>
+        /// <inheritdoc/>
         public IReadOnlyCollection<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth)
         {
             if (this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
@@ -140,46 +112,37 @@ namespace FileCabinetApp
             }
         }
 
-        /// <summary>
-        /// Gets all records.
-        /// </summary>
-        /// <returns>Records.</returns>
+        /// <inheritdoc/>
         public IReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
             return this.records;
         }
 
-        /// <summary>
-        /// Gets count of records.
-        /// </summary>
-        /// <returns>Count of records.</returns>
-        public int GetStat()
+        /// <inheritdoc/>
+        public int GetCount()
         {
             return this.records.Count;
         }
 
-        /// <summary>
-        /// Gets validator.
-        /// </summary>
-        /// <returns>Validator.</returns>
+        /// <inheritdoc/>
+        public int GetCountRemovedRecords()
+        {
+            return 0;
+        }
+
+        /// <inheritdoc/>
         public IRecordValidator GetValidator()
         {
             return this.validator;
         }
 
-        /// <summary>
-        /// Takes a snapshot state.
-        /// </summary>
-        /// <returns>Snapshot state.</returns>
+        /// <inheritdoc/>
         public FileCabinetServiceSnapshot MakeSnapshot()
         {
             return new FileCabinetServiceSnapshot(this.records.ToArray());
         }
 
-        /// <summary>
-        /// Updates records.
-        /// </summary>
-        /// <param name="snapshot">The state to be updated.</param>
+        /// <inheritdoc/>
         public void Restore(FileCabinetServiceSnapshot snapshot)
         {
             if (snapshot is null)

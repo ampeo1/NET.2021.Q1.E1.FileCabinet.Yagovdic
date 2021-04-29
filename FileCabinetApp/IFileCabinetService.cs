@@ -67,7 +67,13 @@ namespace FileCabinetApp
         /// Gets count of records.
         /// </summary>
         /// <returns>Count of records.</returns>
-        public int GetStat();
+        public int GetCount();
+
+        /// <summary>
+        /// Gets count deleted records.
+        /// </summary>
+        /// <returns>Count deleted records</returns>
+        public int GetCountRemovedRecords();
 
         /// <summary>
         /// Gets validator.
@@ -94,6 +100,10 @@ namespace FileCabinetApp
         /// <returns>True if the record has been deleted; otherwise false.</returns>
         public bool Remove(int id);
 
+        /// <summary>
+        /// Defragments a file.
+        /// </summary>
+        /// <returns>Count deleted records.</returns>
         public int Purge();
     }
 }
