@@ -72,7 +72,7 @@ namespace FileCabinetApp
         /// <summary>
         /// Gets count deleted records.
         /// </summary>
-        /// <returns>Count deleted records</returns>
+        /// <returns>Count deleted records.</returns>
         public int GetCountRemovedRecords();
 
         /// <summary>

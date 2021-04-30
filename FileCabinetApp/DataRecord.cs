@@ -62,9 +62,16 @@ namespace FileCabinetApp
         /// <summary>
         /// Gathers information about a record.
         /// </summary>
+        /// <param name="service">File cabinet service.</param>
+        /// <exception cref="ArgumentNullException">Throws when service is null.</exception>
         /// <returns>Record data.</returns>
         public static DataRecord CollectRecordData(IFileCabinetService service)
         {
+            if (service is null)
+            {
+                throw new ArgumentNullException(nameof(service));
+            }
+
             DataRecord dataRecord = new DataRecord();
             IRecordValidator validator = service.GetValidator();
             Console.Write("First name: ");

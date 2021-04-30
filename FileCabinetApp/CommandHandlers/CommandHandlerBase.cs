@@ -28,7 +28,7 @@ namespace FileCabinetApp.CommandHandlers
         /// <summary>
         /// Sets next command.
         /// </summary>
-        /// <param name="handler">Command</param>
+        /// <param name="handler">Command.</param>
         public void SetNext(ICommandHandler handler)
         {
             this.nextHandler = handler;

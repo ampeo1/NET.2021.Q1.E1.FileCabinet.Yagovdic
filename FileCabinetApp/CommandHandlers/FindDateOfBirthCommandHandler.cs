@@ -22,7 +22,7 @@ namespace FileCabinetApp.CommandHandlers
         /// <summary>
         /// Finds records by date of birth.
         /// </summary>
-        /// <param name="command">Parameters command</param>
+        /// <param name="command">Parameters command.</param>
         public override void Handle(AppCommandRequest command)
         {
             if (this.GoToNextCommand(command))
