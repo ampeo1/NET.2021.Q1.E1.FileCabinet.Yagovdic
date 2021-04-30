@@ -59,7 +59,7 @@ namespace FileCabinetApp
                 throw new ArgumentOutOfRangeException(nameof(position));
             }
 
-            int index = 0;
+            int index;
             try
             {
                 index = checked((int)position);

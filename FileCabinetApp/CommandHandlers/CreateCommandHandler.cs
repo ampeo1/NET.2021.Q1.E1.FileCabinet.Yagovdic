@@ -6,6 +6,17 @@ namespace FileCabinetApp.CommandHandlers
 {
     public class CreateCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService service;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">File cabinet service.</param>
+        public CreateCommandHandler(IFileCabinetService service)
+        {
+            this.service = service;
+        }
+
         /// <inheritdoc/>
         protected override string NameCommand => "create";
 
@@ -25,7 +36,7 @@ namespace FileCabinetApp.CommandHandlers
             DataRecord dataRecord = DataRecord.CollectRecordData();
             try
             {
-                id = Program.fileCabinetService.CreateRecord(dataRecord);
+                id = this.service.CreateRecord(dataRecord);
                 Console.WriteLine($"Record #{id} is created.");
             }
             catch (ArgumentException ex)

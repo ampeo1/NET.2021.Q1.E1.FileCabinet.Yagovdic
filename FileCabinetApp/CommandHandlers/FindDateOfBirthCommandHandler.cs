@@ -7,6 +7,17 @@ namespace FileCabinetApp.CommandHandlers
 {
     public class FindDateOfBirthCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService service;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FindDateOfBirthCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">File cabinet service.</param>
+        public FindDateOfBirthCommandHandler(IFileCabinetService service)
+        {
+            this.service = service;
+        }
+
         /// <inheritdoc/>
         protected override string NameCommand => "dateofbirth";
 
@@ -26,7 +37,7 @@ namespace FileCabinetApp.CommandHandlers
                 Console.WriteLine("Error. Incorrect format, must be yyyy-mmm-dd");
             }
 
-            var records = Program.fileCabinetService.FindByBirthDay(date);
+            var records = this.service.FindByBirthDay(date);
             foreach (FileCabinetRecord record in records)
             {
                 Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}, age: {record.Age}, salary {record.Salary}, access {record.Access}");

@@ -6,9 +6,9 @@ namespace FileCabinetApp.CommandHandlers
 {
     public class AppCommandRequest
     {
-        public readonly string Command;
+        public string Command { get; }
 
-        public readonly string Parameters;
+        public string Parameters { get; }
 
         public AppCommandRequest(string command, string parameters)
         {

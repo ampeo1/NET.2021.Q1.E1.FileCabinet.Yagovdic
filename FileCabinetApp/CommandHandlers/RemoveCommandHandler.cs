@@ -6,6 +6,17 @@ namespace FileCabinetApp.CommandHandlers
 {
     public class RemoveCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService service;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RemoveCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">File cabinet service.</param>
+        public RemoveCommandHandler(IFileCabinetService service)
+        {
+            this.service = service;
+        }
+
         /// <inheritdoc/>
         protected override string NameCommand => "remove";
 
@@ -28,7 +39,7 @@ namespace FileCabinetApp.CommandHandlers
             }
 
             int id = convertedValue.Item3;
-            if (Program.fileCabinetService.Remove(id))
+            if (this.service.Remove(id))
             {
                 Console.WriteLine($"Record #{id} is removed.");
             }

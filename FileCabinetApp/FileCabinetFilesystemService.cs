@@ -222,6 +222,7 @@ namespace FileCabinetApp
                 {
                     count++;
                 }
+
                 this.fileStream.Position += SizeRecord - sizeof(bool);
             }
 

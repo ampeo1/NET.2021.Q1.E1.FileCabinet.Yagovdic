@@ -26,6 +26,7 @@ namespace FileCabinetApp
         /// <exception cref="ArgumentNullException">Trows when <paramref name="dataRecord"/> is null.</exception>
         /// <exception cref="ArgumentException">Trows when data is invalid.</exception>
         /// <param name="dataRecord">Record data.</param>
+        /// <param name="position">Position where you want to insert the record.</param>
         public void EditRecord(DataRecord dataRecord, long position);
 
         /// <summary>

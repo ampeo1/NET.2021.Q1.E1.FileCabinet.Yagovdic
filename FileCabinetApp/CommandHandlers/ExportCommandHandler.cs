@@ -7,6 +7,17 @@ namespace FileCabinetApp.CommandHandlers
 {
     public class ExportCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService service;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExportCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">File cabinet service.</param>
+        public ExportCommandHandler(IFileCabinetService service)
+        {
+            this.service = service;
+        }
+
         /// <inheritdoc/>
         protected override string NameCommand => "export";
 
@@ -41,7 +52,7 @@ namespace FileCabinetApp.CommandHandlers
                     return;
                 }
 
-                FileCabinetServiceSnapshot snapshot = Program.fileCabinetService.MakeSnapshot();
+                FileCabinetServiceSnapshot snapshot = this.service.MakeSnapshot();
                 using (StreamWriter writer = new StreamWriter(splitParameters[1], false))
                 {
                     executeCommand(writer, snapshot);

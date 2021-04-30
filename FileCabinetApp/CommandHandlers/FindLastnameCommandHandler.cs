@@ -7,6 +7,17 @@ namespace FileCabinetApp.CommandHandlers
 {
     public class FindLastnameCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService service;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FindLastnameCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">File cabinet service.</param>
+        public FindLastnameCommandHandler(IFileCabinetService service)
+        {
+            this.service = service;
+        }
+
         /// <inheritdoc/>
         protected override string NameCommand => "lastname";
 
@@ -21,7 +32,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            var records = Program.fileCabinetService.FindByLastname(command.Parameters);
+            var records = this.service.FindByLastname(command.Parameters);
             foreach (FileCabinetRecord record in records)
             {
                 Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}, age: {record.Age}, salary {record.Salary}, access {record.Access}");

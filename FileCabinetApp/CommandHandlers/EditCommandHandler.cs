@@ -7,6 +7,17 @@ namespace FileCabinetApp.CommandHandlers
 {
     public class EditCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService service;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EditCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">File cabinet service.</param>
+        public EditCommandHandler(IFileCabinetService service)
+        {
+            this.service = service;
+        }
+
         /// <inheritdoc/>
         protected override string NameCommand => "edit";
 
@@ -27,7 +38,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            long position = Program.fileCabinetService.FindById(id);
+            long position = this.service.FindById(id);
             if (position == -1)
             {
                 Console.WriteLine($"#{id} record is not found.");
@@ -39,7 +50,7 @@ namespace FileCabinetApp.CommandHandlers
 
             try
             {
-                Program.fileCabinetService.EditRecord(dataRecord, position);
+                this.service.EditRecord(dataRecord, position);
                 Console.WriteLine($"Record #{id} is updated.");
             }
             catch (ArgumentException ex)

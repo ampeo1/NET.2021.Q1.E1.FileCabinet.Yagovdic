@@ -6,6 +6,17 @@ namespace FileCabinetApp.CommandHandlers
 {
     public class StatCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService service;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StatCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">File cabinet service.</param>
+        public StatCommandHandler(IFileCabinetService service)
+        {
+            this.service = service;
+        }
+
         /// <inheritdoc/>
         protected override string NameCommand => "stat";
 
@@ -20,8 +31,8 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            var recordsCount = Program.fileCabinetService.GetCount();
-            var recordsRemoved = Program.fileCabinetService.GetCountRemovedRecords();
+            var recordsCount = this.service.GetCount();
+            var recordsRemoved = this.service.GetCountRemovedRecords();
             Console.WriteLine($"{recordsCount} record(s). {recordsRemoved} removed record(s).");
         }
     }

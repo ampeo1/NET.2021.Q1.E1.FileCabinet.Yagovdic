@@ -6,6 +6,17 @@ namespace FileCabinetApp.CommandHandlers
 {
     public class FindCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService service;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FindCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">File cabinet service.</param>
+        public FindCommandHandler(IFileCabinetService service)
+        {
+            this.service = service;
+        }
+
         /// <inheritdoc/>
         protected override string NameCommand => "find";
 
@@ -32,15 +43,15 @@ namespace FileCabinetApp.CommandHandlers
             const int parametersIndex = 1;
             var parameter = inputs.Length > 1 ? inputs[parametersIndex].Trim('\"') : string.Empty;
             AppCommandRequest newCommand = new AppCommandRequest(newCommandName, parameter);
-            ICommandHandler commandHandlers = CreateCommandHandlers();
+            ICommandHandler commandHandlers = this.CreateCommandHandlers();
             commandHandlers.Handle(newCommand);
         }
 
-        private static ICommandHandler CreateCommandHandlers()
+        private ICommandHandler CreateCommandHandlers()
         {
-            var findFirstNameHandler = new FindFirstnameCommandHandler();
-            var findLastNameHandler = new FindLastnameCommandHandler();
-            var findDateOfBirthHandler = new FindDateOfBirthCommandHandler();
+            var findFirstNameHandler = new FindFirstnameCommandHandler(this.service);
+            var findLastNameHandler = new FindLastnameCommandHandler(this.service);
+            var findDateOfBirthHandler = new FindDateOfBirthCommandHandler(this.service);
             findLastNameHandler.SetNext(findDateOfBirthHandler);
             findFirstNameHandler.SetNext(findLastNameHandler);
 

@@ -1,8 +1,6 @@
-﻿using FileCabinetApp.CommandHandlers;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System;
 using System.IO;
+using FileCabinetApp.CommandHandlers;
 
 namespace FileCabinetApp
 {
@@ -15,11 +13,6 @@ namespace FileCabinetApp
         /// If true than programm works else program doesn't work.
         /// </summary>
         public static bool isRunning = true;
-
-        /// <summary>
-        /// File cabinet service.
-        /// </summary>
-        public static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
 
         private const string DeveloperName = "Oleg Yagovdic";
         private const string NameFileStorage = "cabinet-records.db";
@@ -46,6 +39,11 @@ namespace FileCabinetApp
             new Tuple<string, Type>("memory", typeof(FileCabinetMemoryService)),
             new Tuple<string, Type>("file", typeof(FileCabinetFilesystemService)),
         };
+
+        /// <summary>
+        /// File cabinet service.
+        /// </summary>
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
 
         /// <summary>
         /// Point of entry.
@@ -160,15 +158,15 @@ namespace FileCabinetApp
         private static ICommandHandler CreateCommandHandlers()
         {
             var helpHandler = new HelpCommandHandler();
-            var createHandler = new CreateCommandHandler();
-            var editHandler = new EditCommandHandler();
-            var removeHandler = new RemoveCommandHandler();
-            var purgeHandler = new PurgeCommandHandler();
-            var listHandler = new ListCommandHandler();
+            var createHandler = new CreateCommandHandler(fileCabinetService);
+            var editHandler = new EditCommandHandler(fileCabinetService);
+            var removeHandler = new RemoveCommandHandler(fileCabinetService);
+            var purgeHandler = new PurgeCommandHandler(fileCabinetService);
+            var listHandler = new ListCommandHandler(fileCabinetService);
             var exitHandler = new ExitCommandHandler();
-            var exportHandler = new ExportCommandHandler();
-            var findHandler = new FindCommandHandler();
-            var statHandler = new StatCommandHandler();
+            var exportHandler = new ExportCommandHandler(fileCabinetService);
+            var findHandler = new FindCommandHandler(fileCabinetService);
+            var statHandler = new StatCommandHandler(fileCabinetService);
 
             helpHandler.SetNext(createHandler);
             createHandler.SetNext(editHandler);
