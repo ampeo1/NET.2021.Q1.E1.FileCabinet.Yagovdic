@@ -63,10 +63,10 @@ namespace FileCabinetApp
         /// Gathers information about a record.
         /// </summary>
         /// <returns>Record data.</returns>
-        public static DataRecord CollectRecordData()
+        public static DataRecord CollectRecordData(IFileCabinetService service)
         {
             DataRecord dataRecord = new DataRecord();
-            IRecordValidator validator = Program.fileCabinetService.GetValidator();
+            IRecordValidator validator = service.GetValidator();
             Console.Write("First name: ");
             dataRecord.FirstName = ReadInput(Converter.StringConverter, validator.ValidateFirstName);
 

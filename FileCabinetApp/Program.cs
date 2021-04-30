@@ -9,11 +9,6 @@ namespace FileCabinetApp
     /// </summary>
     public static class Program
     {
-        /// <summary>
-        /// If true than programm works else program doesn't work.
-        /// </summary>
-        public static bool isRunning = true;
-
         private const string DeveloperName = "Oleg Yagovdic";
         private const string NameFileStorage = "cabinet-records.db";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
@@ -44,6 +39,11 @@ namespace FileCabinetApp
         /// File cabinet service.
         /// </summary>
         private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+
+        /// <summary>
+        /// If true than programm works else program doesn't work.
+        /// </summary>
+        private static bool isRunning = true;
 
         /// <summary>
         /// Point of entry.
@@ -163,7 +163,7 @@ namespace FileCabinetApp
             var removeHandler = new RemoveCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var listHandler = new ListCommandHandler(fileCabinetService);
-            var exitHandler = new ExitCommandHandler();
+            var exitHandler = new ExitCommandHandler(ChangeStatus);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var findHandler = new FindCommandHandler(fileCabinetService);
             var statHandler = new StatCommandHandler(fileCabinetService);
@@ -215,6 +215,11 @@ namespace FileCabinetApp
         {
             Console.WriteLine($"There is no '{command}' command.");
             Console.WriteLine();
+        }
+
+        private static void ChangeStatus(bool newStatus)
+        {
+            isRunning = newStatus;
         }
     }
 }

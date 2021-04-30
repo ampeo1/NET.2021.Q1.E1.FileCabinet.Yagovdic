@@ -6,6 +6,17 @@ namespace FileCabinetApp.CommandHandlers
 {
     public class ExitCommandHandler : CommandHandlerBase
     {
+        private Action<bool> changeStatus;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExitCommandHandler"/> class.
+        /// </summary>
+        /// <param name="changeStatus">The delegate which changes the status of the program.</param>
+        public ExitCommandHandler(Action<bool> changeStatus)
+        {
+            this.changeStatus = changeStatus;
+        }
+
         /// <inheritdoc/>
         protected override string NameCommand { get => "exit"; }
 
@@ -21,7 +32,7 @@ namespace FileCabinetApp.CommandHandlers
             }
 
             Console.WriteLine("Exiting an application...");
-            Program.isRunning = false;
+            this.changeStatus(false);
         }
     }
 }

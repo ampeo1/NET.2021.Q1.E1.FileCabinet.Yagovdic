@@ -5,17 +5,15 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
-    public class EditCommandHandler : CommandHandlerBase
+    public class EditCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IFileCabinetService service;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="EditCommandHandler"/> class.
         /// </summary>
         /// <param name="service">File cabinet service.</param>
         public EditCommandHandler(IFileCabinetService service)
+            : base(service)
         {
-            this.service = service;
         }
 
         /// <inheritdoc/>
@@ -45,7 +43,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            DataRecord dataRecord = DataRecord.CollectRecordData();
+            DataRecord dataRecord = DataRecord.CollectRecordData(this.service);
             dataRecord.Id = id;
 
             try

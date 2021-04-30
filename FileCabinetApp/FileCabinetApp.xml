@@ -36,6 +36,12 @@
             <param name="command">Request command.</param>
             <returns>True if satisfies; otherwise False.</returns>
         </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CreateCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.CreateCommandHandler"/> class.
+            </summary>
+            <param name="service">File cabinet service.</param>
+        </member>
         <member name="P:FileCabinetApp.CommandHandlers.CreateCommandHandler.NameCommand">
             <inheritdoc/>
         </member>
@@ -44,6 +50,12 @@
             Create new record.
             </summary>
             <param name="command">Parameters command.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.EditCommandHandler"/> class.
+            </summary>
+            <param name="service">File cabinet service.</param>
         </member>
         <member name="P:FileCabinetApp.CommandHandlers.EditCommandHandler.NameCommand">
             <inheritdoc/>
@@ -54,6 +66,12 @@
             </summary>
             <param name="command">Parameters command.</param>
         </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ExitCommandHandler.#ctor(System.Action{System.Boolean})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ExitCommandHandler"/> class.
+            </summary>
+            <param name="changeStatus">The delegate which changes the status of the program.</param>
+        </member>
         <member name="P:FileCabinetApp.CommandHandlers.ExitCommandHandler.NameCommand">
             <inheritdoc/>
         </member>
@@ -62,6 +80,12 @@
             Exit from programm.
             </summary>
             <param name="command">Parameters command.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ExportCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ExportCommandHandler"/> class.
+            </summary>
+            <param name="service">File cabinet service.</param>
         </member>
         <member name="P:FileCabinetApp.CommandHandlers.ExportCommandHandler.NameCommand">
             <inheritdoc/>
@@ -93,6 +117,12 @@
             <param name="writer">Provider for writing.</param>
             <param name="snapshot">The state to be saved.</param>
         </member>
+        <member name="M:FileCabinetApp.CommandHandlers.FindCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.FindCommandHandler"/> class.
+            </summary>
+            <param name="service">File cabinet service.</param>
+        </member>
         <member name="P:FileCabinetApp.CommandHandlers.FindCommandHandler.NameCommand">
             <inheritdoc/>
         </member>
@@ -101,6 +131,12 @@
             Selects the desired search.
             </summary>
             <param name="command">Parameters command.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.FindDateOfBirthCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.FindDateOfBirthCommandHandler"/> class.
+            </summary>
+            <param name="service">File cabinet service.</param>
         </member>
         <member name="P:FileCabinetApp.CommandHandlers.FindDateOfBirthCommandHandler.NameCommand">
             <inheritdoc/>
@@ -111,6 +147,12 @@
             </summary>
             <param name="command">Parameters command</param>
         </member>
+        <member name="M:FileCabinetApp.CommandHandlers.FindFirstnameCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.FindFirstnameCommandHandler"/> class.
+            </summary>
+            <param name="service">File cabinet service.</param>
+        </member>
         <member name="P:FileCabinetApp.CommandHandlers.FindFirstnameCommandHandler.NameCommand">
             <inheritdoc/>
         </member>
@@ -119,6 +161,12 @@
             Finds records by firstname.
             </summary>
             <param name="command">Parameters command.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.FindLastnameCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.FindLastnameCommandHandler"/> class.
+            </summary>
+            <param name="service">File cabinet service.</param>
         </member>
         <member name="P:FileCabinetApp.CommandHandlers.FindLastnameCommandHandler.NameCommand">
             <inheritdoc/>
@@ -138,6 +186,12 @@
             </summary>
             <param name="command">Parameters command.</param>
         </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ListCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ListCommandHandler"/> class.
+            </summary>
+            <param name="service">File cabinet service.</param>
+        </member>
         <member name="P:FileCabinetApp.CommandHandlers.ListCommandHandler.NameCommand">
             <inheritdoc/>
         </member>
@@ -146,6 +200,12 @@
             Prints all records.
             </summary>
             <param name="command">Parameters command.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.PurgeCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.PurgeCommandHandler"/> class.
+            </summary>
+            <param name="service">File cabinet service.</param>
         </member>
         <member name="P:FileCabinetApp.CommandHandlers.PurgeCommandHandler.NameCommand">
             <inheritdoc/>
@@ -156,6 +216,12 @@
             </summary>
             <param name="command">Parameters of command.</param>
         </member>
+        <member name="M:FileCabinetApp.CommandHandlers.RemoveCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.RemoveCommandHandler"/> class.
+            </summary>
+            <param name="service">File cabinet service.</param>
+        </member>
         <member name="P:FileCabinetApp.CommandHandlers.RemoveCommandHandler.NameCommand">
             <inheritdoc/>
         </member>
@@ -164,6 +230,23 @@
             Removes record.
             </summary>
             <param name="command">Parameters command.</param>
+        </member>
+        <member name="F:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.service">
+            <summary>
+            File cabinet service.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase"/> class.
+            </summary>
+            <param name="service">File cabinet service.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.StatCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.StatCommandHandler"/> class.
+            </summary>
+            <param name="service">File cabinet service.</param>
         </member>
         <member name="P:FileCabinetApp.CommandHandlers.StatCommandHandler.NameCommand">
             <inheritdoc/>
@@ -424,7 +507,7 @@
             Salary.
             </value>
         </member>
-        <member name="M:FileCabinetApp.DataRecord.CollectRecordData">
+        <member name="M:FileCabinetApp.DataRecord.CollectRecordData(FileCabinetApp.IFileCabinetService)">
             <summary>
             Gathers information about a record.
             </summary>
@@ -879,6 +962,7 @@
             <exception cref="T:System.ArgumentNullException">Trows when <paramref name="dataRecord"/> is null.</exception>
             <exception cref="T:System.ArgumentException">Trows when data is invalid.</exception>
             <param name="dataRecord">Record data.</param>
+            <param name="position">Position where you want to insert the record.</param>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.FindById(System.Int32)">
             <summary>
@@ -1087,14 +1171,14 @@
             Interacts with API.
             </summary>
         </member>
-        <member name="F:FileCabinetApp.Program.isRunning">
-            <summary>
-            If true than programm works else program doesn't work.
-            </summary>
-        </member>
         <member name="F:FileCabinetApp.Program.fileCabinetService">
             <summary>
             File cabinet service.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Program.isRunning">
+            <summary>
+            If true than programm works else program doesn't work.
             </summary>
         </member>
         <member name="M:FileCabinetApp.Program.Main(System.String[])">

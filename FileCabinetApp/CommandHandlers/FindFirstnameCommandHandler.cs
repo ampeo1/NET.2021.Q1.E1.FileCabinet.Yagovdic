@@ -5,17 +5,15 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
-    public class FindFirstnameCommandHandler : CommandHandlerBase
+    public class FindFirstnameCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IFileCabinetService service;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="FindFirstnameCommandHandler"/> class.
         /// </summary>
         /// <param name="service">File cabinet service.</param>
         public FindFirstnameCommandHandler(IFileCabinetService service)
+            : base(service)
         {
-            this.service = service;
         }
 
         /// <inheritdoc/>

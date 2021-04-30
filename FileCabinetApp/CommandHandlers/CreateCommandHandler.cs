@@ -4,17 +4,15 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
-    public class CreateCommandHandler : CommandHandlerBase
+    public class CreateCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IFileCabinetService service;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateCommandHandler"/> class.
         /// </summary>
         /// <param name="service">File cabinet service.</param>
         public CreateCommandHandler(IFileCabinetService service)
+            : base(service)
         {
-            this.service = service;
         }
 
         /// <inheritdoc/>
@@ -33,7 +31,7 @@ namespace FileCabinetApp.CommandHandlers
 
             int id;
 
-            DataRecord dataRecord = DataRecord.CollectRecordData();
+            DataRecord dataRecord = DataRecord.CollectRecordData(this.service);
             try
             {
                 id = this.service.CreateRecord(dataRecord);
