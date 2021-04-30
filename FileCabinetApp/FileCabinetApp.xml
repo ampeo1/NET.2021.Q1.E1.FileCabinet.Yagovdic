@@ -4,130 +4,175 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.PrintHelp(System.String)">
+        <member name="T:FileCabinetApp.CommandHandlers.CommandHandlerBase">
             <summary>
-            Print help information.
+            Base class for Command.
             </summary>
-            <param name="parameters">Parameter wich need print help information.</param>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.PrintMissedCommandInfo(System.String)">
+        <member name="P:FileCabinetApp.CommandHandlers.CommandHandlerBase.NameCommand">
             <summary>
-            Print that command missed.
+            Gets name current command.
             </summary>
-            <param name="command">Missed command.</param>
+            <value>
+            Name current command.
+            </value>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Stat(System.String)">
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
             <summary>
-            Prints statistics.
+            Will try to execute the command.
             </summary>
-            <param name="parameters">Parameter.</param>
+            <param name="command">Parameters command.</param>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Create(System.String)">
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.SetNext(FileCabinetApp.CommandHandlers.ICommandHandler)">
+            <summary>
+            Sets next command.
+            </summary>
+            <param name="handler">Command</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.GoToNextCommand(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Checks the current command satisfies the request; if not, then go to the next command.
+            </summary>
+            <param name="command">Request command.</param>
+            <returns>True if satisfies; otherwise False.</returns>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.CreateCommandHandler.NameCommand">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CreateCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
             <summary>
             Create new record.
             </summary>
-            <param name="parameters">Parameter.</param>
+            <param name="command">Parameters command.</param>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Edit(System.String)">
+        <member name="P:FileCabinetApp.CommandHandlers.EditCommandHandler.NameCommand">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
             <summary>
             Change record.
             </summary>
-            <param name="parameters">Id record.</param>
+            <param name="command">Parameters command.</param>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Remove(System.String)">
+        <member name="P:FileCabinetApp.CommandHandlers.ExitCommandHandler.NameCommand">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ExitCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
             <summary>
-            Remove record from IFileCabinetService.
+            Exit from programm.
             </summary>
-            <param name="parameter">Id of the record to be deleted.</param>
+            <param name="command">Parameters command.</param>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.CollectRecordData">
+        <member name="P:FileCabinetApp.CommandHandlers.ExportCommandHandler.NameCommand">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ExportCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
             <summary>
-            Gathers information about a record.
+            Exports data in file.
             </summary>
-            <returns>Record data.</returns>
+            <param name="command">Parameters command.</param>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
+        <member name="M:FileCabinetApp.CommandHandlers.ExportCommandHandler.CheckFile(System.String)">
             <summary>
-            Reads data from the console.
+            Checks file. If the file contains something, it will ask if it can be overwritten.
             </summary>
-            <typeparam name="T">Type of object being read.</typeparam>
-            <param name="converter">Function that performs convertation.</param>
-            <param name="validator">Function that performs validation.</param>
-            <returns>Processed data.</returns>
+            <param name="path">Path to file.</param>
+            <returns>True if verification was successful; otherwise false.</returns>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Find(System.String)">
-            <summary>
-            Finds record.
-            </summary>
-            <param name="parameters">search property and search data.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.FindByFirstname(System.String)">
-            <summary>
-            Find record by first name.
-            </summary>
-            <param name="firstname">First name.</param>
-            <returns>Found records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.FindByLastname(System.String)">
-            <summary>
-            Find record by last name.
-            </summary>
-            <param name="lastname">last name.</param>
-            <returns>Found records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.FindByBirthDay(System.String)">
-            <summary>
-            Find record by date of birth.
-            </summary>
-            <param name="birthday">Date of birth.</param>
-            <returns>Found records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.List(System.String)">
-            <summary>
-            Print all records.
-            </summary>
-            <param name="parameters">Parameter.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Print(System.Collections.Generic.IReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
-            <summary>
-            Print records.
-            </summary>
-            <param name="records">Records which need print.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Export(System.String)">
-            <summary>
-            Command that saves data.
-            </summary>
-            <param name="parameters">Command parameters.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.ExcuteCommand``1(System.String,System.Tuple{System.String,``0}[])">
-            <summary>
-            Find and return command.
-            </summary>
-            <typeparam name="T">Type command.</typeparam>
-            <param name="commandName">Command name.</param>
-            <param name="commands">Array of command.</param>
-            <returns>Command.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.ExportToCsv(System.IO.StreamWriter,FileCabinetApp.FileCabinetServiceSnapshot)">
+        <member name="M:FileCabinetApp.CommandHandlers.ExportCommandHandler.ExportToCsv(System.IO.StreamWriter,FileCabinetApp.FileCabinetServiceSnapshot)">
             <summary>
             Saves data to csv file.
             </summary>
             <param name="writer">Provider for writing.</param>
             <param name="snapshot">The state to be saved.</param>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.ExportToXml(System.IO.StreamWriter,FileCabinetApp.FileCabinetServiceSnapshot)">
+        <member name="M:FileCabinetApp.CommandHandlers.ExportCommandHandler.ExportToXml(System.IO.StreamWriter,FileCabinetApp.FileCabinetServiceSnapshot)">
             <summary>
             Saves data to xml file.
             </summary>
             <param name="writer">Provider for writing.</param>
             <param name="snapshot">The state to be saved.</param>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Exit(System.String)">
+        <member name="P:FileCabinetApp.CommandHandlers.FindCommandHandler.NameCommand">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.FindCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
             <summary>
-            Exit from programm.
+            Selects the desired search.
             </summary>
-            <param name="parameters">Parameters.</param>
+            <param name="command">Parameters command.</param>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.FindDateOfBirthCommandHandler.NameCommand">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.FindDateOfBirthCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Finds records by date of birth.
+            </summary>
+            <param name="command">Parameters command</param>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.FindFirstnameCommandHandler.NameCommand">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.FindFirstnameCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Finds records by firstname.
+            </summary>
+            <param name="command">Parameters command.</param>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.FindLastnameCommandHandler.NameCommand">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.FindLastnameCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Finds records by lastname.
+            </summary>
+            <param name="command">Parameters command.</param>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.HelpCommandHandler.NameCommand">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.HelpCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Print help information.
+            </summary>
+            <param name="command">Parameters command.</param>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.ListCommandHandler.NameCommand">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ListCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Prints all records.
+            </summary>
+            <param name="command">Parameters command.</param>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.PurgeCommandHandler.NameCommand">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.PurgeCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Defragments a file.
+            </summary>
+            <param name="command">Parameters of command.</param>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.RemoveCommandHandler.NameCommand">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.RemoveCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Removes record.
+            </summary>
+            <param name="command">Parameters command.</param>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.StatCommandHandler.NameCommand">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.StatCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Prints statistics.
+            </summary>
+            <param name="command">Parameters command.</param>
         </member>
         <member name="T:FileCabinetApp.Converter">
             <summary>
@@ -379,6 +424,21 @@
             Salary.
             </value>
         </member>
+        <member name="M:FileCabinetApp.DataRecord.CollectRecordData">
+            <summary>
+            Gathers information about a record.
+            </summary>
+            <returns>Record data.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DataRecord.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
+            <summary>
+            Reads data from the console.
+            </summary>
+            <typeparam name="T">Type of object being read.</typeparam>
+            <param name="converter">Function that performs convertation.</param>
+            <param name="validator">Function that performs validation.</param>
+            <returns>Processed data.</returns>
+        </member>
         <member name="T:FileCabinetApp.DefaultValidator">
             <summary>
             This class does validate data.
@@ -521,7 +581,7 @@
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.CreateRecord(FileCabinetApp.DataRecord)">
             <inheritdoc/>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditRecord(FileCabinetApp.DataRecord)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditRecord(FileCabinetApp.DataRecord,System.Int64)">
             <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.Remove(System.Int32)">
@@ -537,9 +597,6 @@
             <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByLastname(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindIndexById(System.Int32)">
             <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetRecords">
@@ -558,6 +615,9 @@
             <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindById(System.Int32)">
             <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.Dispose">
@@ -594,10 +654,10 @@
         <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetApp.DataRecord)">
             <inheritdoc/>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditRecord(FileCabinetApp.DataRecord)">
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditRecord(FileCabinetApp.DataRecord,System.Int64)">
             <inheritdoc/>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindIndexById(System.Int32)">
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindById(System.Int32)">
             <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByFirstName(System.String)">
@@ -812,7 +872,7 @@
             <exception cref="T:System.ArgumentException">Trows when data is invalid.</exception>
             <returns>Record id.</returns>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.EditRecord(FileCabinetApp.DataRecord)">
+        <member name="M:FileCabinetApp.IFileCabinetService.EditRecord(FileCabinetApp.DataRecord,System.Int64)">
             <summary>
             Changes record.
             </summary>
@@ -820,13 +880,12 @@
             <exception cref="T:System.ArgumentException">Trows when data is invalid.</exception>
             <param name="dataRecord">Record data.</param>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.FindIndexById(System.Int32)">
+        <member name="M:FileCabinetApp.IFileCabinetService.FindById(System.Int32)">
             <summary>
-            Finds index record by id.
+            Finds position of record by id.
             </summary>
             <param name="id">Identifier of the searched record.</param>
-            <exception cref="T:System.ArgumentException">Throws when record not found.</exception>
-            <returns>Index record.</returns>
+            <returns>if record finds that return position of record else return -1.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.FindByFirstName(System.String)">
             <summary>

@@ -26,15 +26,14 @@ namespace FileCabinetApp
         /// <exception cref="ArgumentNullException">Trows when <paramref name="dataRecord"/> is null.</exception>
         /// <exception cref="ArgumentException">Trows when data is invalid.</exception>
         /// <param name="dataRecord">Record data.</param>
-        public void EditRecord(DataRecord dataRecord);
+        public void EditRecord(DataRecord dataRecord, long position);
 
         /// <summary>
-        /// Finds index record by id.
+        /// Finds position of record by id.
         /// </summary>
         /// <param name="id">Identifier of the searched record.</param>
-        /// <exception cref="ArgumentException">Throws when record not found.</exception>
-        /// <returns>Index record.</returns>
-        public int FindIndexById(int id);
+        /// <returns>if record finds that return position of record else return -1.</returns>
+        public long FindById(int id);
 
         /// <summary>
         /// Finds record by first name.

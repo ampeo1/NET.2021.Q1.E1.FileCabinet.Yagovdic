@@ -57,31 +57,28 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public void EditRecord(DataRecord dataRecord)
+        public void EditRecord(DataRecord dataRecord, long position)
         {
             if (dataRecord is null)
             {
                 throw new ArgumentNullException(nameof(dataRecord));
             }
 
-            FileCabinetRecord record = this.Create(dataRecord);
-            this.fileStream.Position = 0;
-            while (this.fileStream.Position < this.fileStream.Length)
+            if (position < 0 || position > this.fileStream.Length)
             {
-                if (this.FindId(dataRecord.Id))
-                {
-                    byte[] data = ConvertRecordToBytes(record);
-                    this.fileStream.Write(data, 0, data.Length);
-
-                    return;
-                }
+                throw new ArgumentOutOfRangeException(nameof(position));
             }
+
+            FileCabinetRecord record = this.Create(dataRecord);
+            this.fileStream.Position = position;
+            byte[] data = ConvertRecordToBytes(record);
+            this.fileStream.Write(data, 0, data.Length);
         }
 
         /// <inheritdoc/>
         public bool Remove(int id)
         {
-            if (this.FindId(id))
+            if (this.FindById(id) != -1)
             {
                 short shift = sizeof(int);
                 this.fileStream.Position += shift;
@@ -188,28 +185,6 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public int FindIndexById(int id)
-        {
-            this.fileStream.Position = 0;
-            while (this.fileStream.Position < this.fileStream.Length)
-            {
-                short shift = sizeof(int) + sizeof(bool);
-                byte[] data = new byte[shift];
-                this.fileStream.Read(data, 0, data.Length);
-                int recordId = BitConverter.ToInt32(data, 0);
-                bool isDeleted = BitConverter.ToBoolean(data, sizeof(int));
-                if (id == recordId && !isDeleted)
-                {
-                    return id;
-                }
-
-                this.fileStream.Position += SizeRecord;
-            }
-
-            throw new ArgumentException("Id not found", nameof(id));
-        }
-
-        /// <inheritdoc/>
         public IReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
             List<FileCabinetRecord> records = new List<FileCabinetRecord>();
@@ -280,10 +255,33 @@ namespace FileCabinetApp
 
             foreach (var item in snapshot.Records)
             {
-                this.FindId(item.Id);
+                this.FindById(item.Id);
                 byte[] data = ConvertRecordToBytes(item);
                 this.fileStream.Write(data, 0, data.Length);
             }
+        }
+
+        /// <inheritdoc/>
+        public long FindById(int id)
+        {
+            this.fileStream.Position = 0;
+            int shift = sizeof(int) + sizeof(bool);
+            while (this.fileStream.Position < this.fileStream.Length)
+            {
+                byte[] data = new byte[shift];
+                this.fileStream.Read(data, 0, shift);
+                int recordId = BitConverter.ToInt32(data, 0);
+                bool isDeleted = BitConverter.ToBoolean(data, sizeof(int));
+                if (id == recordId && !isDeleted)
+                {
+                    this.fileStream.Position -= shift;
+                    return this.fileStream.Position;
+                }
+
+                this.fileStream.Position += SizeRecord - shift;
+            }
+
+            return -1;
         }
 
         /// <summary>
@@ -334,28 +332,6 @@ namespace FileCabinetApp
             }
 
             return data.ToArray();
-        }
-
-        private bool FindId(int id)
-        {
-            this.fileStream.Position = 0;
-            int shift = sizeof(int) + sizeof(bool);
-            while (this.fileStream.Position < this.fileStream.Length)
-            {
-                byte[] data = new byte[shift];
-                this.fileStream.Read(data, 0, shift);
-                int recordId = BitConverter.ToInt32(data, 0);
-                bool isDeleted = BitConverter.ToBoolean(data, sizeof(int));
-                if (id == recordId && !isDeleted)
-                {
-                    this.fileStream.Position -= shift;
-                    return true;
-                }
-
-                this.fileStream.Position += SizeRecord - shift;
-            }
-
-            return false;
         }
 
         private IReadOnlyCollection<FileCabinetRecord> FindString(string key, int shift)

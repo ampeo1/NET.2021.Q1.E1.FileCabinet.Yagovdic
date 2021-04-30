@@ -47,14 +47,28 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public void EditRecord(DataRecord dataRecord)
+        public void EditRecord(DataRecord dataRecord, long position)
         {
             if (dataRecord is null)
             {
                 throw new ArgumentNullException($"{nameof(dataRecord)}");
             }
 
-            int index = this.FindIndexById(dataRecord.Id);
+            if (position < 0 || position > this.records.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(position));
+            }
+
+            int index = 0;
+            try
+            {
+                index = checked((int)position);
+            }
+            catch (OverflowException)
+            {
+                return;
+            }
+
             FileCabinetRecord record = this.Create(dataRecord);
             this.RemoveRecordFromDictionaries(this.records[index]);
             this.AddRecordToDictionaries(record);
@@ -62,15 +76,9 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public int FindIndexById(int id)
+        public long FindById(int id)
         {
-            int index = this.records.FindIndex(x => x.Id == id);
-            if (index == -1)
-            {
-                throw new ArgumentException($"{nameof(id)} record is not found.");
-            }
-
-            return index;
+            return this.records.FindIndex(x => x.Id == id);
         }
 
         /// <inheritdoc/>
