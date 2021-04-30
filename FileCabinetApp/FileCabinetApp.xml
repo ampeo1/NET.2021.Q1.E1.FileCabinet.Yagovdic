@@ -4,6 +4,131 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.PrintHelp(System.String)">
+            <summary>
+            Print help information.
+            </summary>
+            <param name="parameters">Parameter wich need print help information.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.PrintMissedCommandInfo(System.String)">
+            <summary>
+            Print that command missed.
+            </summary>
+            <param name="command">Missed command.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Stat(System.String)">
+            <summary>
+            Prints statistics.
+            </summary>
+            <param name="parameters">Parameter.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Create(System.String)">
+            <summary>
+            Create new record.
+            </summary>
+            <param name="parameters">Parameter.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Edit(System.String)">
+            <summary>
+            Change record.
+            </summary>
+            <param name="parameters">Id record.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Remove(System.String)">
+            <summary>
+            Remove record from IFileCabinetService.
+            </summary>
+            <param name="parameter">Id of the record to be deleted.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.CollectRecordData">
+            <summary>
+            Gathers information about a record.
+            </summary>
+            <returns>Record data.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
+            <summary>
+            Reads data from the console.
+            </summary>
+            <typeparam name="T">Type of object being read.</typeparam>
+            <param name="converter">Function that performs convertation.</param>
+            <param name="validator">Function that performs validation.</param>
+            <returns>Processed data.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Find(System.String)">
+            <summary>
+            Finds record.
+            </summary>
+            <param name="parameters">search property and search data.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.FindByFirstname(System.String)">
+            <summary>
+            Find record by first name.
+            </summary>
+            <param name="firstname">First name.</param>
+            <returns>Found records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.FindByLastname(System.String)">
+            <summary>
+            Find record by last name.
+            </summary>
+            <param name="lastname">last name.</param>
+            <returns>Found records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.FindByBirthDay(System.String)">
+            <summary>
+            Find record by date of birth.
+            </summary>
+            <param name="birthday">Date of birth.</param>
+            <returns>Found records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.List(System.String)">
+            <summary>
+            Print all records.
+            </summary>
+            <param name="parameters">Parameter.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Print(System.Collections.Generic.IReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Print records.
+            </summary>
+            <param name="records">Records which need print.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Export(System.String)">
+            <summary>
+            Command that saves data.
+            </summary>
+            <param name="parameters">Command parameters.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.ExcuteCommand``1(System.String,System.Tuple{System.String,``0}[])">
+            <summary>
+            Find and return command.
+            </summary>
+            <typeparam name="T">Type command.</typeparam>
+            <param name="commandName">Command name.</param>
+            <param name="commands">Array of command.</param>
+            <returns>Command.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.ExportToCsv(System.IO.StreamWriter,FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Saves data to csv file.
+            </summary>
+            <param name="writer">Provider for writing.</param>
+            <param name="snapshot">The state to be saved.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.ExportToXml(System.IO.StreamWriter,FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Saves data to xml file.
+            </summary>
+            <param name="writer">Provider for writing.</param>
+            <param name="snapshot">The state to be saved.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandler.Exit(System.String)">
+            <summary>
+            Exit from programm.
+            </summary>
+            <param name="parameters">Parameters.</param>
+        </member>
         <member name="T:FileCabinetApp.Converter">
             <summary>
             This class converts data.
@@ -903,6 +1028,16 @@
             Interacts with API.
             </summary>
         </member>
+        <member name="F:FileCabinetApp.Program.isRunning">
+            <summary>
+            If true than programm works else program doesn't work.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Program.fileCabinetService">
+            <summary>
+            File cabinet service.
+            </summary>
+        </member>
         <member name="M:FileCabinetApp.Program.Main(System.String[])">
             <summary>
             Point of entry.
@@ -946,116 +1081,6 @@
             Print that command missed.
             </summary>
             <param name="command">Missed command.</param>
-        </member>
-        <member name="M:FileCabinetApp.Program.PrintHelp(System.String)">
-            <summary>
-            Print help information.
-            </summary>
-            <param name="parameters">Parameter wich need print help information.</param>
-        </member>
-        <member name="M:FileCabinetApp.Program.Stat(System.String)">
-            <summary>
-            Prints statistics.
-            </summary>
-            <param name="parameters">Parameter.</param>
-        </member>
-        <member name="M:FileCabinetApp.Program.Create(System.String)">
-            <summary>
-            Create new record.
-            </summary>
-            <param name="parameters">Parameter.</param>
-        </member>
-        <member name="M:FileCabinetApp.Program.Edit(System.String)">
-            <summary>
-            Change record.
-            </summary>
-            <param name="parameters">Id record.</param>
-        </member>
-        <member name="M:FileCabinetApp.Program.Remove(System.String)">
-            <summary>
-            Remove record from IFileCabinetService.
-            </summary>
-            <param name="parameter">Id of the record to be deleted.</param>
-        </member>
-        <member name="M:FileCabinetApp.Program.CollectRecordData">
-            <summary>
-            Gathers information about a record.
-            </summary>
-            <returns>Record data.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Program.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
-            <summary>
-            Reads data from the console.
-            </summary>
-            <typeparam name="T">Type of object being read.</typeparam>
-            <param name="converter">Function that performs convertation.</param>
-            <param name="validator">Function that performs validation.</param>
-            <returns>Processed data.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Program.Find(System.String)">
-            <summary>
-            Finds record.
-            </summary>
-            <param name="parameters">search property and search data.</param>
-        </member>
-        <member name="M:FileCabinetApp.Program.FindByFirstname(System.String)">
-            <summary>
-            Find record by first name.
-            </summary>
-            <param name="firstname">First name.</param>
-            <returns>Found records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Program.FindByLastname(System.String)">
-            <summary>
-            Find record by last name.
-            </summary>
-            <param name="lastname">last name.</param>
-            <returns>Found records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Program.FindByBirthDay(System.String)">
-            <summary>
-            Find record by date of birth.
-            </summary>
-            <param name="birthday">Date of birth.</param>
-            <returns>Found records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Program.List(System.String)">
-            <summary>
-            Print all records.
-            </summary>
-            <param name="parameters">Parameter.</param>
-        </member>
-        <member name="M:FileCabinetApp.Program.Print(System.Collections.Generic.IReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
-            <summary>
-            Print records.
-            </summary>
-            <param name="records">Records which need print.</param>
-        </member>
-        <member name="M:FileCabinetApp.Program.Export(System.String)">
-            <summary>
-            Command that saves data.
-            </summary>
-            <param name="parameters">Command parameters.</param>
-        </member>
-        <member name="M:FileCabinetApp.Program.ExportToCsv(System.IO.StreamWriter,FileCabinetApp.FileCabinetServiceSnapshot)">
-            <summary>
-            Saves data to csv file.
-            </summary>
-            <param name="writer">Provider for writing.</param>
-            <param name="snapshot">The state to be saved.</param>
-        </member>
-        <member name="M:FileCabinetApp.Program.ExportToXml(System.IO.StreamWriter,FileCabinetApp.FileCabinetServiceSnapshot)">
-            <summary>
-            Saves data to xml file.
-            </summary>
-            <param name="writer">Provider for writing.</param>
-            <param name="snapshot">The state to be saved.</param>
-        </member>
-        <member name="M:FileCabinetApp.Program.Exit(System.String)">
-            <summary>
-            Exit from programm.
-            </summary>
-            <param name="parameters">Parameters.</param>
         </member>
     </members>
 </doc>
