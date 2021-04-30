@@ -7,13 +7,17 @@ namespace FileCabinetApp.CommandHandlers
 {
     public class FindFirstnameCommandHandler : ServiceCommandHandlerBase
     {
+        private readonly IRecordPrinter printer;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FindFirstnameCommandHandler"/> class.
         /// </summary>
         /// <param name="service">File cabinet service.</param>
-        public FindFirstnameCommandHandler(IFileCabinetService service)
+        /// <param name="printer">Print style.</param>
+        public FindFirstnameCommandHandler(IFileCabinetService service, IRecordPrinter printer)
             : base(service)
         {
+            this.printer = printer;
         }
 
         /// <inheritdoc/>
@@ -31,10 +35,7 @@ namespace FileCabinetApp.CommandHandlers
             }
 
             var records = this.service.FindByFirstName(command.Parameters);
-            foreach (FileCabinetRecord record in records)
-            {
-                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}, age: {record.Age}, salary {record.Salary}, access {record.Access}");
-            }
+            this.printer.Print(records);
         }
     }
 }

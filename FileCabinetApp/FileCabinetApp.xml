@@ -27,7 +27,7 @@
             <summary>
             Sets next command.
             </summary>
-            <param name="handler">Command</param>
+            <param name="handler">Command.</param>
         </member>
         <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.GoToNextCommand(FileCabinetApp.CommandHandlers.AppCommandRequest)">
             <summary>
@@ -50,6 +50,14 @@
             Create new record.
             </summary>
             <param name="command">Parameters command.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.DefaultRecordPrinter">
+            <summary>
+            Class which prints records in default format.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.DefaultRecordPrinter.Print(System.Collections.Generic.IEnumerable{FileCabinetApp.FileCabinetRecord})">
+            <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
             <summary>
@@ -117,7 +125,7 @@
             <param name="writer">Provider for writing.</param>
             <param name="snapshot">The state to be saved.</param>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.FindCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+        <member name="M:FileCabinetApp.CommandHandlers.FindCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,FileCabinetApp.CommandHandlers.IRecordPrinter)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.FindCommandHandler"/> class.
             </summary>
@@ -132,11 +140,12 @@
             </summary>
             <param name="command">Parameters command.</param>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.FindDateOfBirthCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+        <member name="M:FileCabinetApp.CommandHandlers.FindDateOfBirthCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,FileCabinetApp.CommandHandlers.IRecordPrinter)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.FindDateOfBirthCommandHandler"/> class.
             </summary>
             <param name="service">File cabinet service.</param>
+            <param name="printer">Print style.</param>
         </member>
         <member name="P:FileCabinetApp.CommandHandlers.FindDateOfBirthCommandHandler.NameCommand">
             <inheritdoc/>
@@ -145,13 +154,14 @@
             <summary>
             Finds records by date of birth.
             </summary>
-            <param name="command">Parameters command</param>
+            <param name="command">Parameters command.</param>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.FindFirstnameCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+        <member name="M:FileCabinetApp.CommandHandlers.FindFirstnameCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,FileCabinetApp.CommandHandlers.IRecordPrinter)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.FindFirstnameCommandHandler"/> class.
             </summary>
             <param name="service">File cabinet service.</param>
+            <param name="printer">Print style.</param>
         </member>
         <member name="P:FileCabinetApp.CommandHandlers.FindFirstnameCommandHandler.NameCommand">
             <inheritdoc/>
@@ -162,11 +172,12 @@
             </summary>
             <param name="command">Parameters command.</param>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.FindLastnameCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+        <member name="M:FileCabinetApp.CommandHandlers.FindLastnameCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,FileCabinetApp.CommandHandlers.IRecordPrinter)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.FindLastnameCommandHandler"/> class.
             </summary>
             <param name="service">File cabinet service.</param>
+            <param name="printer">Print style.</param>
         </member>
         <member name="P:FileCabinetApp.CommandHandlers.FindLastnameCommandHandler.NameCommand">
             <inheritdoc/>
@@ -186,11 +197,23 @@
             </summary>
             <param name="command">Parameters command.</param>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.ListCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+        <member name="T:FileCabinetApp.CommandHandlers.IRecordPrinter">
+            <summary>
+            Print interface.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.IRecordPrinter.Print(System.Collections.Generic.IEnumerable{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Prints records.
+            </summary>
+            <param name="records">Records to be printed.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ListCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,FileCabinetApp.CommandHandlers.IRecordPrinter)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ListCommandHandler"/> class.
             </summary>
             <param name="service">File cabinet service.</param>
+            <param name="printer">Print style.</param>
         </member>
         <member name="P:FileCabinetApp.CommandHandlers.ListCommandHandler.NameCommand">
             <inheritdoc/>
@@ -511,6 +534,8 @@
             <summary>
             Gathers information about a record.
             </summary>
+            <param name="service">File cabinet service.</param>
+            <exception cref="T:System.ArgumentNullException">Throws when service is null.</exception>
             <returns>Record data.</returns>
         </member>
         <member name="M:FileCabinetApp.DataRecord.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
@@ -1008,7 +1033,7 @@
             <summary>
             Gets count deleted records.
             </summary>
-            <returns>Count deleted records</returns>
+            <returns>Count deleted records.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.GetValidator">
             <summary>

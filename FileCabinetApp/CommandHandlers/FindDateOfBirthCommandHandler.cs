@@ -7,13 +7,17 @@ namespace FileCabinetApp.CommandHandlers
 {
     public class FindDateOfBirthCommandHandler : ServiceCommandHandlerBase
     {
+        private readonly IRecordPrinter printer;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FindDateOfBirthCommandHandler"/> class.
         /// </summary>
         /// <param name="service">File cabinet service.</param>
-        public FindDateOfBirthCommandHandler(IFileCabinetService service)
+        /// <param name="printer">Print style.</param>
+        public FindDateOfBirthCommandHandler(IFileCabinetService service, IRecordPrinter printer)
             : base(service)
         {
+            this.printer = printer;
         }
 
         /// <inheritdoc/>
@@ -36,10 +40,7 @@ namespace FileCabinetApp.CommandHandlers
             }
 
             var records = this.service.FindByBirthDay(date);
-            foreach (FileCabinetRecord record in records)
-            {
-                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}, age: {record.Age}, salary {record.Salary}, access {record.Access}");
-            }
+            this.printer.Print(records);
         }
     }
 }

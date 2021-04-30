@@ -157,15 +157,16 @@ namespace FileCabinetApp
 
         private static ICommandHandler CreateCommandHandlers()
         {
+            var recordPrinte = new DefaultRecordPrinter();
             var helpHandler = new HelpCommandHandler();
             var createHandler = new CreateCommandHandler(fileCabinetService);
             var editHandler = new EditCommandHandler(fileCabinetService);
             var removeHandler = new RemoveCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
-            var listHandler = new ListCommandHandler(fileCabinetService);
+            var listHandler = new ListCommandHandler(fileCabinetService, recordPrinte);
             var exitHandler = new ExitCommandHandler(ChangeStatus);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
-            var findHandler = new FindCommandHandler(fileCabinetService);
+            var findHandler = new FindCommandHandler(fileCabinetService, recordPrinte);
             var statHandler = new StatCommandHandler(fileCabinetService);
 
             helpHandler.SetNext(createHandler);

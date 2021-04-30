@@ -6,13 +6,15 @@ namespace FileCabinetApp.CommandHandlers
 {
     public class FindCommandHandler : ServiceCommandHandlerBase
     {
+        private readonly IRecordPrinter printer;
         /// <summary>
         /// Initializes a new instance of the <see cref="FindCommandHandler"/> class.
         /// </summary>
         /// <param name="service">File cabinet service.</param>
-        public FindCommandHandler(IFileCabinetService service)
+        public FindCommandHandler(IFileCabinetService service, IRecordPrinter printer)
             : base(service)
         {
+            this.printer = printer;
         }
 
         /// <inheritdoc/>
@@ -47,9 +49,9 @@ namespace FileCabinetApp.CommandHandlers
 
         private ICommandHandler CreateCommandHandlers()
         {
-            var findFirstNameHandler = new FindFirstnameCommandHandler(this.service);
-            var findLastNameHandler = new FindLastnameCommandHandler(this.service);
-            var findDateOfBirthHandler = new FindDateOfBirthCommandHandler(this.service);
+            var findFirstNameHandler = new FindFirstnameCommandHandler(this.service, this.printer);
+            var findLastNameHandler = new FindLastnameCommandHandler(this.service, this.printer);
+            var findDateOfBirthHandler = new FindDateOfBirthCommandHandler(this.service, this.printer);
             findLastNameHandler.SetNext(findDateOfBirthHandler);
             findFirstNameHandler.SetNext(findLastNameHandler);
 
