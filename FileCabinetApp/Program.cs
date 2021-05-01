@@ -20,6 +20,8 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("-v", SetTypeValidationRules),
             new Tuple<string, Action<string>>("--storage", SetTypeFileCabinetService),
             new Tuple<string, Action<string>>("-s", SetTypeFileCabinetService),
+            new Tuple<string, Action<string>>("-use-stopwatch", SetStopWatch),
+            new Tuple<string, Action<string>>("-use-logger", SetLogger),
 };
 
         private static readonly Tuple<string, IRecordValidator>[] Validators = new Tuple<string, IRecordValidator>[]
@@ -37,6 +39,8 @@ namespace FileCabinetApp
         private static IRecordValidator validator = new ValidatorBuilder().CreateDefault();
         private static Type service = typeof(FileCabinetMemoryService);
         private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(validator);
+        private static bool useStopWatch;
+        private static bool useLogger;
         private static bool isRunning = true;
 
         /// <summary>
@@ -90,7 +94,7 @@ namespace FileCabinetApp
                 else if (args[i].StartsWith('-'))
                 {
                     command = args[i];
-                    if (i + 1 < args.Length)
+                    if (i + 1 < args.Length && !command.Equals("-use-logger") && !command.Equals("-use-stopwatch"))
                     {
                         i++;
                         parameter = args[i];
@@ -132,6 +136,16 @@ namespace FileCabinetApp
             service = ExcuteCommand(parameter, FileCabinetServices);
         }
 
+        private static void SetStopWatch(string parameter)
+        {
+            useStopWatch = true;
+        }
+
+        private static void SetLogger(string parameter)
+        {
+            useLogger = true;
+        }
+
         /// <summary>
         /// Creates file cabinet service.
         /// </summary>
@@ -145,6 +159,16 @@ namespace FileCabinetApp
             {
                 FileStream fileStream = new FileStream(NameFileStorage, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 fileCabinetService = new FileCabinetFilesystemService(validator, fileStream);
+            }
+
+            if (useStopWatch)
+            {
+                fileCabinetService = new ServiceMeter(fileCabinetService);
+            }
+
+            if (useLogger)
+            {
+                fileCabinetService = new ServiceLogger(fileCabinetService);
             }
         }
 
