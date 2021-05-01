@@ -36,16 +36,15 @@ namespace FileCabinetApp.Validators
                 throw new ArgumentNullException(nameof(dataRecord));
             }
 
-            string errorMessage = string.Empty;
             if (string.IsNullOrWhiteSpace(dataRecord.LastName))
             {
-                errorMessage = "Argument is null or with whiteSpace";
+                string errorMessage = "Argument is null or with whiteSpace";
                 throw new ArgumentNullException(errorMessage, nameof(dataRecord.LastName));
             }
 
             if (dataRecord.LastName.Length < this.minLength || dataRecord.LastName.Length > this.maxLength)
             {
-                errorMessage = $"Length is less than {this.minLength} or greater than {this.maxLength}";
+                string errorMessage = $"Length is less than {this.minLength} or greater than {this.maxLength}";
                 throw new ArgumentException(errorMessage, nameof(dataRecord));
             }
         }

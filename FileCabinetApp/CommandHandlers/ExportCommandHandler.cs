@@ -5,6 +5,9 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Export records command.
+    /// </summary>
     public class ExportCommandHandler : ServiceCommandHandlerBase
     {
         /// <summary>

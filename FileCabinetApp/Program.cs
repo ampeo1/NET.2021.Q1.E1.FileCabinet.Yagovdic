@@ -13,30 +13,31 @@ namespace FileCabinetApp
         private const string DeveloperName = "Oleg Yagovdic";
         private const string NameFileStorage = "cabinet-records.db";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
-        private static IRecordValidator validator = new ValidatorBuilder().CreateDefault();
-        private static Type service = typeof(FileCabinetMemoryService);
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(validator);
-        private static bool isRunning = true;
 
-        private static Tuple<string, Action<string>>[] programSetting = new Tuple<string, Action<string>>[]
-       {
+        private static readonly Tuple<string, Action<string>>[] ProgramSetting = new Tuple<string, Action<string>>[]
+{
             new Tuple<string, Action<string>>("--validation-rules", SetTypeValidationRules),
             new Tuple<string, Action<string>>("-v", SetTypeValidationRules),
             new Tuple<string, Action<string>>("--storage", SetTypeFileCabinetService),
             new Tuple<string, Action<string>>("-s", SetTypeFileCabinetService),
-       };
+};
 
-        private static Tuple<string, IRecordValidator>[] validators = new Tuple<string, IRecordValidator>[]
+        private static readonly Tuple<string, IRecordValidator>[] Validators = new Tuple<string, IRecordValidator>[]
         {
             new Tuple<string, IRecordValidator>("default", new ValidatorBuilder().CreateDefault()),
             new Tuple<string, IRecordValidator>("custom", new ValidatorBuilder().CreateCustom()),
         };
 
-        private static Tuple<string, Type>[] fileCabinetServices = new Tuple<string, Type>[]
+        private static readonly Tuple<string, Type>[] FileCabinetServices = new Tuple<string, Type>[]
         {
             new Tuple<string, Type>("memory", typeof(FileCabinetMemoryService)),
             new Tuple<string, Type>("file", typeof(FileCabinetFilesystemService)),
         };
+
+        private static IRecordValidator validator = new ValidatorBuilder().CreateDefault();
+        private static Type service = typeof(FileCabinetMemoryService);
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(validator);
+        private static bool isRunning = true;
 
         /// <summary>
         /// Point of entry.
@@ -102,7 +103,7 @@ namespace FileCabinetApp
 
                 try
                 {
-                    ExcuteCommand(command, programSetting)(parameter);
+                    ExcuteCommand(command, ProgramSetting)(parameter);
                 }
                 catch (ArgumentException)
                 {
@@ -119,7 +120,7 @@ namespace FileCabinetApp
         /// <param name="parameter">Validation parameter.</param>
         private static void SetTypeValidationRules(string parameter)
         {
-            validator = ExcuteCommand(parameter, validators);
+            validator = ExcuteCommand(parameter, Validators);
         }
 
         /// <summary>
@@ -128,7 +129,7 @@ namespace FileCabinetApp
         /// <param name="parameter">Validation parameter.</param>
         private static void SetTypeFileCabinetService(string parameter)
         {
-            service = ExcuteCommand(parameter, fileCabinetServices);
+            service = ExcuteCommand(parameter, FileCabinetServices);
         }
 
         /// <summary>

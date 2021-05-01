@@ -5,6 +5,9 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Edit record command.
+    /// </summary>
     public class EditCommandHandler : ServiceCommandHandlerBase
     {
         /// <summary>

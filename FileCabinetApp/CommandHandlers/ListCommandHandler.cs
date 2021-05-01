@@ -5,6 +5,9 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Prints all records.
+    /// </summary>
     public class ListCommandHandler : ServiceCommandHandlerBase
     {
         private readonly IRecordPrinter printer;

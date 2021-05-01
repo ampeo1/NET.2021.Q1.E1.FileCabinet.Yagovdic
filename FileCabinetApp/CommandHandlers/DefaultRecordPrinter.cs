@@ -11,8 +11,14 @@ namespace FileCabinetApp.CommandHandlers
     public class DefaultRecordPrinter : IRecordPrinter
     {
         /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Throws when <paramref name="records"/> is null.</exception>
         public void Print(IEnumerable<FileCabinetRecord> records)
         {
+            if (records is null)
+            {
+                throw new ArgumentNullException(nameof(records));
+            }
+
             foreach (FileCabinetRecord record in records)
             {
                 Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}, age: {record.Age}, salary {record.Salary}, access {record.Access}");

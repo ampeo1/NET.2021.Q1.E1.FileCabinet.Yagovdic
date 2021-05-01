@@ -4,6 +4,9 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Help command.
+    /// </summary>
     public class HelpCommandHandler : CommandHandlerBase
     {
         private readonly string[][] helpMessages = new string[][]

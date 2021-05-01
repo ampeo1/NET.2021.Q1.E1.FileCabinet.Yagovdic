@@ -5,6 +5,9 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Find first name command.
+    /// </summary>
     public class FindFirstnameCommandHandler : ServiceCommandHandlerBase
     {
         private readonly IRecordPrinter printer;

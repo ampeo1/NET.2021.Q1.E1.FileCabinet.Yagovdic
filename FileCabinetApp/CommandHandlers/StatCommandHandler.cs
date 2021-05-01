@@ -4,6 +4,9 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Command which prints statistics.
+    /// </summary>
     public class StatCommandHandler : ServiceCommandHandlerBase
     {
         /// <summary>

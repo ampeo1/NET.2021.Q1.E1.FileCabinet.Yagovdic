@@ -4,6 +4,9 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Create record command.
+    /// </summary>
     public class CreateCommandHandler : ServiceCommandHandlerBase
     {
         /// <summary>

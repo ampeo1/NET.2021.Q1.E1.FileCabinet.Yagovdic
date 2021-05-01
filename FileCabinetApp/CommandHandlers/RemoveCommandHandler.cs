@@ -4,6 +4,9 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Remove command.
+    /// </summary>
     public class RemoveCommandHandler : ServiceCommandHandlerBase
     {
         /// <summary>

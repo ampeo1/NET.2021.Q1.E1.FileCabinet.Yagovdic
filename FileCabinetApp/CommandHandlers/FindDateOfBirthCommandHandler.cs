@@ -5,6 +5,9 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Find date of birth command.
+    /// </summary>
     public class FindDateOfBirthCommandHandler : ServiceCommandHandlerBase
     {
         private readonly IRecordPrinter printer;

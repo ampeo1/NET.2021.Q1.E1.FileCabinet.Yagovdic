@@ -4,13 +4,18 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Find command.
+    /// </summary>
     public class FindCommandHandler : ServiceCommandHandlerBase
     {
         private readonly IRecordPrinter printer;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FindCommandHandler"/> class.
         /// </summary>
         /// <param name="service">File cabinet service.</param>
+        /// <param name="printer">Print type.</param>
         public FindCommandHandler(IFileCabinetService service, IRecordPrinter printer)
             : base(service)
         {

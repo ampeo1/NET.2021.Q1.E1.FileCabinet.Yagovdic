@@ -4,6 +4,9 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Purge command.
+    /// </summary>
     public class PurgeCommandHandler : ServiceCommandHandlerBase
     {
         /// <summary>

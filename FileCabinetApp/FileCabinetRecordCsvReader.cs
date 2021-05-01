@@ -6,15 +6,26 @@ using System.Text;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// Class for reading records from csv file.
+    /// </summary>
     public class FileCabinetRecordCsvReader
     {
         private readonly StreamReader reader;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetRecordCsvReader"/> class.
+        /// </summary>
+        /// <param name="reader">Reader.</param>
         public FileCabinetRecordCsvReader(StreamReader reader)
         {
             this.reader = reader;
         }
 
+        /// <summary>
+        /// Reads all records from csv file.
+        /// </summary>
+        /// <returns>Records which contains in file.</returns>
         public IList<FileCabinetRecord> ReadAll()
         {
             char separator = ',';
@@ -51,6 +62,14 @@ namespace FileCabinetApp
             return records;
         }
 
+        /// <summary>
+        /// Checking data.
+        /// </summary>
+        /// <typeparam name="T">Type data.</typeparam>
+        /// <param name="converter">Converter.</param>
+        /// <param name="parameter">Parameter to be converted.</param>
+        /// <exception cref="ArgumentException">Throws when parameters didn't converte.</exception>
+        /// <returns>Converted parameter.</returns>
         private static T DataChecking<T>(Func<string, Tuple<bool, string, T>> converter, string parameter)
         {
             Tuple<bool, string, T> result = converter(parameter);

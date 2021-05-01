@@ -16,6 +16,5 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="dataRecord">Checked arguments.</param>
         public void ValidateParameters(DataRecord dataRecord);
-
     }
 }

@@ -4,9 +4,12 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Exit Command.
+    /// </summary>
     public class ExitCommandHandler : CommandHandlerBase
     {
-        private Action<bool> changeStatus;
+        private readonly Action<bool> changeStatus;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExitCommandHandler"/> class.

@@ -36,11 +36,9 @@ namespace FileCabinetApp.Validators
                 throw new ArgumentNullException(nameof(dataRecord));
             }
 
-            string errorMessage = string.Empty;
-
             if (dataRecord.Access < this.min || dataRecord.Access > this.max)
             {
-                errorMessage = $"Access doesn't contains {this.min} - {this.max}";
+                string errorMessage = $"Access doesn't contains {this.min} - {this.max}";
                 throw new ArgumentException(errorMessage, nameof(dataRecord));
             }
         }

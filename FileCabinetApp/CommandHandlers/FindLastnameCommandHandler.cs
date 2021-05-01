@@ -5,6 +5,9 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Find last name command.
+    /// </summary>
     public class FindLastnameCommandHandler : ServiceCommandHandlerBase
     {
         private readonly IRecordPrinter printer;

@@ -4,6 +4,9 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Base class for commands.
+    /// </summary>
     public abstract class ServiceCommandHandlerBase : CommandHandlerBase
     {
         /// <summary>
