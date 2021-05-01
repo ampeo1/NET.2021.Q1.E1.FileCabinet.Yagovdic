@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FileCabinetApp.Validators;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -190,6 +191,10 @@ namespace FileCabinetApp
             return true;
         }
 
+        /// <summary>
+        /// Always return 0.
+        /// </summary>
+        /// <returns>0.</returns>
         public int Purge()
         {
             return 0;

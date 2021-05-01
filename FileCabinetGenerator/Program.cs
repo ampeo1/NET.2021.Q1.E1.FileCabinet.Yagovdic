@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using FileCabinetApp;
+using FileCabinetApp.Validators;
 
 namespace FileCabinetGenerator
 {
@@ -254,7 +255,7 @@ namespace FileCabinetGenerator
         {
             for (int i = 0; i < amount; i++)
             {
-                fileCabinetService.CreateRecord(Generator.GenerateRecord(settings.Validator));
+                fileCabinetService.CreateRecord(Generator.GenerateRecord());
             }
         }
 
@@ -263,7 +264,7 @@ namespace FileCabinetGenerator
         /// </summary>
         private static void CreateFileCabinet()
         {
-            IRecordValidator validator = new DefaultValidator();
+            IRecordValidator validator = new ValidatorBuilder().CreateDefault();
             if (settings.FileCabinetType.Equals(typeof(FileCabinetMemoryService)))
             {
                 fileCabinetService = new FileCabinetMemoryService(validator, settings.StartId);

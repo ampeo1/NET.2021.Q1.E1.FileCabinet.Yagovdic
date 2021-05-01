@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using FileCabinetApp.CommandHandlers;
+using FileCabinetApp.Validators;
 
 namespace FileCabinetApp
 {
@@ -12,8 +13,10 @@ namespace FileCabinetApp
         private const string DeveloperName = "Oleg Yagovdic";
         private const string NameFileStorage = "cabinet-records.db";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
-        private static Type validator = typeof(DefaultValidator);
+        private static IRecordValidator validator = new ValidatorBuilder().CreateDefault();
         private static Type service = typeof(FileCabinetMemoryService);
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(validator);
+        private static bool isRunning = true;
 
         private static Tuple<string, Action<string>>[] programSetting = new Tuple<string, Action<string>>[]
        {
@@ -23,10 +26,10 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("-s", SetTypeFileCabinetService),
        };
 
-        private static Tuple<string, Type>[] validators = new Tuple<string, Type>[]
+        private static Tuple<string, IRecordValidator>[] validators = new Tuple<string, IRecordValidator>[]
         {
-            new Tuple<string, Type>("default", typeof(DefaultValidator)),
-            new Tuple<string, Type>("custom", typeof(CustomValidator)),
+            new Tuple<string, IRecordValidator>("default", new ValidatorBuilder().CreateDefault()),
+            new Tuple<string, IRecordValidator>("custom", new ValidatorBuilder().CreateCustom()),
         };
 
         private static Tuple<string, Type>[] fileCabinetServices = new Tuple<string, Type>[]
@@ -34,16 +37,6 @@ namespace FileCabinetApp
             new Tuple<string, Type>("memory", typeof(FileCabinetMemoryService)),
             new Tuple<string, Type>("file", typeof(FileCabinetFilesystemService)),
         };
-
-        /// <summary>
-        /// File cabinet service.
-        /// </summary>
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-
-        /// <summary>
-        /// If true than programm works else program doesn't work.
-        /// </summary>
-        private static bool isRunning = true;
 
         /// <summary>
         /// Point of entry.
@@ -143,15 +136,14 @@ namespace FileCabinetApp
         /// </summary>
         private static void CreateFileCabinetService()
         {
-            IRecordValidator recordValidator = (IRecordValidator)validator.GetConstructor(Array.Empty<Type>()).Invoke(Array.Empty<object>());
             if (service.Equals(typeof(FileCabinetMemoryService)))
             {
-                fileCabinetService = new FileCabinetMemoryService(recordValidator);
+                fileCabinetService = new FileCabinetMemoryService(validator);
             }
             else if (service.Equals(typeof(FileCabinetFilesystemService)))
             {
                 FileStream fileStream = new FileStream(NameFileStorage, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                fileCabinetService = new FileCabinetFilesystemService(recordValidator, fileStream);
+                fileCabinetService = new FileCabinetFilesystemService(validator, fileStream);
             }
         }
 

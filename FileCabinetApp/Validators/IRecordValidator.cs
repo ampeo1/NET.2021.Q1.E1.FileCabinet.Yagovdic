@@ -12,9 +12,10 @@ namespace FileCabinetApp
     public interface IRecordValidator
     {
         /// <summary>
-        /// Validate all arguments.
+        /// Validate parameters.
         /// </summary>
         /// <param name="dataRecord">Checked arguments.</param>
         public void ValidateParameters(DataRecord dataRecord);
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using FileCabinetApp;
+using FileCabinetApp.Validators;
 
 namespace FileCabinetGenerator
 {
@@ -18,7 +19,7 @@ namespace FileCabinetGenerator
         private int recordsAmount;
         private int startId;
         private Type fileCabinetType = typeof(FileCabinetMemoryService);
-        private IRecordValidator validator = new DefaultValidator();
+        private IRecordValidator validator = new ValidatorBuilder().CreateDefault();
 
         /// <summary>
         /// Gets validator.

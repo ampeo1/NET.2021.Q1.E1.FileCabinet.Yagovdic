@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using FileCabinetApp;
+using FileCabinetApp.Validators;
 
 namespace FileCabinetGenerator
 {
@@ -14,22 +15,16 @@ namespace FileCabinetGenerator
         /// <summary>
         /// Generate DataRecord.
         /// </summary>
-        /// <param name="validator">The rules by which the data will be randomized.</param>
         /// <returns>DataRecord.</returns>
-        public static DataRecord GenerateRecord(IRecordValidator validator)
+        public static DataRecord GenerateRecord()
         {
-            if (validator is null)
-            {
-                throw new ArgumentNullException(nameof(validator));
-            }
-
             DataRecord record = new DataRecord
             {
-                FirstName = GenerateString(validator.MinLengthForString, validator.MaxLengthForString),
-                LastName = GenerateString(validator.MinLengthForString, validator.MaxLengthForString),
-                Access = GenerateChar(validator.MinValueForChar, validator.MaxValueForChar),
-                DateOfBirth = GenerateDateTime(validator.MinDateOfBirth, validator.MaxDateOfBirth),
-                Salary = GenerateDecimal(validator.MinValueForSalary, validator.MaxValueForSalary),
+                FirstName = GenerateString(DefaultValidator.MinLengthForString, DefaultValidator.MaxLengthForString),
+                LastName = GenerateString(DefaultValidator.MinLengthForString, DefaultValidator.MaxLengthForString),
+                Access = GenerateChar(DefaultValidator.MinValueForChar, DefaultValidator.MaxValueForChar),
+                DateOfBirth = GenerateDateTime(DefaultValidator.MinDateOfBirth, DefaultValidator.MaxDateOfBirth),
+                Salary = GenerateDecimal(DefaultValidator.MinValueForSalary, DefaultValidator.MaxValueForSalary),
             };
             return record;
         }

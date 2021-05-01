@@ -351,132 +351,6 @@
             Third argument: Converted value.
             </returns>
         </member>
-        <member name="T:FileCabinetApp.CustomValidator">
-            <summary>
-            This class does validate data.
-            </summary>
-        </member>
-        <member name="P:FileCabinetApp.CustomValidator.MinValueForChar">
-            <summary>
-            Gets min value for char.
-            </summary>
-            <value>
-            Min value for char.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.CustomValidator.MaxValueForChar">
-            <summary>
-            Gets max value for char.
-            </summary>
-            <value>
-            Max value for char.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.CustomValidator.MinLengthForString">
-            <summary>
-            Gets min length for string.
-            </summary>
-            <value>
-            Min length for string.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.CustomValidator.MaxLengthForString">
-            <summary>
-            Gets max length for string.
-            </summary>
-            <value>
-            Max length for string.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.CustomValidator.MinValueForSalary">
-            <summary>
-            Gets min value for salary.
-            </summary>
-            <value>
-            Min value for salary.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.CustomValidator.MaxValueForSalary">
-            <summary>
-            Gets max value for salary.
-            </summary>
-            <value>
-            Max value for salary.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.CustomValidator.MinDateOfBirth">
-            <summary>
-            Gets min value for date of birth.
-            </summary>
-            <value>
-            Min value for date of birth.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.CustomValidator.MaxDateOfBirth">
-            <summary>
-            Gets min value for date of birth.
-            </summary>
-            <value>
-            Min value for date of birth.
-            </value>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateAccess(System.Char)">
-            <summary>
-            Validate access property.
-            </summary>
-            <param name="access">Checked argument.</param>
-            <returns>
-            First argument: True if successfully validated; otherwise false.
-            Second argument: Error message if there is an error.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateDateOfBirth(System.DateTime)">
-            <summary>
-            Validate date of birth property.
-            </summary>
-            <param name="dateOfBirth">Checked argument.</param>
-            <returns>
-            First argument: True if successfully validated; otherwise false.
-            Second argument: Error message if there is an error.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateFirstName(System.String)">
-            <summary>
-            Validate first name property.
-            </summary>
-            <param name="firstName">Checked argument.</param>
-            <returns>
-            First argument: True if successfully validated; otherwise false.
-            Second argument: Error message if there is an error.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateLastName(System.String)">
-            <summary>
-            Validate last name property.
-            </summary>
-            <param name="lastName">Checked argument.</param>
-            <returns>
-            First argument: True if successfully validated; otherwise false.
-            Second argument: Error message if there is an error.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateSalary(System.Decimal)">
-            <inheritdoc/>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateParameters(FileCabinetApp.DataRecord)">
-            <summary>
-            Validate all arguments.
-            </summary>
-            <param name="dataRecord">Checked arguments.</param>
-            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="dataRecord"/> is null.</exception>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.CheckResult(System.Tuple{System.Boolean,System.String})">
-            <summary>
-            Checks if validation was successful.
-            </summary>
-            <param name="resultValidation">Result of validation.</param>
-            <exception cref="T:System.ArgumentException">Throws when validation failed.</exception>
-        </member>
         <member name="T:FileCabinetApp.DataRecord">
             <summary>
             Introduce Parameter Object.
@@ -538,140 +412,13 @@
             <exception cref="T:System.ArgumentNullException">Throws when service is null.</exception>
             <returns>Record data.</returns>
         </member>
-        <member name="M:FileCabinetApp.DataRecord.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
+        <member name="M:FileCabinetApp.DataRecord.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}})">
             <summary>
             Reads data from the console.
             </summary>
             <typeparam name="T">Type of object being read.</typeparam>
             <param name="converter">Function that performs convertation.</param>
-            <param name="validator">Function that performs validation.</param>
             <returns>Processed data.</returns>
-        </member>
-        <member name="T:FileCabinetApp.DefaultValidator">
-            <summary>
-            This class does validate data.
-            </summary>
-        </member>
-        <member name="P:FileCabinetApp.DefaultValidator.MinValueForChar">
-            <summary>
-            Gets min value for char.
-            </summary>
-            <value>
-            Min value for char.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.DefaultValidator.MaxValueForChar">
-            <summary>
-            Gets max value for char.
-            </summary>
-            <value>
-            Max value for char.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.DefaultValidator.MinLengthForString">
-            <summary>
-            Gets min length for string.
-            </summary>
-            <value>
-            Min length for string.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.DefaultValidator.MaxLengthForString">
-            <summary>
-            Gets max length for string.
-            </summary>
-            <value>
-            Max length for string.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.DefaultValidator.MinValueForSalary">
-            <summary>
-            Gets min value for salary.
-            </summary>
-            <value>
-            Min value for salary.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.DefaultValidator.MaxValueForSalary">
-            <summary>
-            Gets max value for salary.
-            </summary>
-            <value>
-            Max value for salary.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.DefaultValidator.MinDateOfBirth">
-            <summary>
-            Gets min value for date of birth.
-            </summary>
-            <value>
-            Min value for date of birth.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.DefaultValidator.MaxDateOfBirth">
-            <summary>
-            Gets min value for date of birth.
-            </summary>
-            <value>
-            Min value for date of birth.
-            </value>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateAccess(System.Char)">
-            <summary>
-            Validate access property.
-            </summary>
-            <param name="access">Checked argument.</param>
-            <returns>
-            First argument: True if successfully validated; otherwise false.
-            Second argument: Error message if there is an error.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateDateOfBirth(System.DateTime)">
-            <summary>
-            Validate date of birth property.
-            </summary>
-            <param name="dateOfBirth">Checked argument.</param>
-            <returns>
-            First argument: True if successfully validated; otherwise false.
-            Second argument: Error message if there is an error.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateFirstName(System.String)">
-            <summary>
-            Validate first name property.
-            </summary>
-            <param name="firstName">Checked argument.</param>
-            <returns>
-            First argument: True if successfully validated; otherwise false.
-            Second argument: Error message if there is an error.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateLastName(System.String)">
-            <summary>
-            Validate last name property.
-            </summary>
-            <param name="lastName">Checked argument.</param>
-            <returns>
-            First argument: True if successfully validated; otherwise false.
-            Second argument: Error message if there is an error.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateSalary(System.Decimal)">
-            <inheritdoc/>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateParameters(FileCabinetApp.DataRecord)">
-            <summary>
-            Validate all arguments.
-            </summary>
-            <param name="dataRecord">Checked arguments.</param>
-            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="dataRecord"/> is null.</exception>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.CheckResult(System.Tuple{System.Boolean,System.String})">
-            <summary>
-            Checks if validation was successful.
-            </summary>
-            <param name="resultValidation">Result of validation.</param>
-            <exception cref="T:System.ArgumentException">Throws when validation failed.</exception>
         </member>
         <member name="T:FileCabinetApp.FileCabinetFilesystemService">
             <summary>
@@ -797,6 +544,12 @@
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.Remove(System.Int32)">
             <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.Purge">
+            <summary>
+            Always return 0.
+            </summary>
+            <returns>0.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveRecordFromDictiornary``1(System.Collections.Generic.Dictionary{``0,System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord}},``0,FileCabinetApp.FileCabinetRecord)">
             <summary>
@@ -1066,144 +819,9 @@
             </summary>
             <returns>Count deleted records.</returns>
         </member>
-        <member name="T:FileCabinetApp.IRecordValidator">
-            <summary>
-            Validate record.
-            </summary>
-        </member>
-        <member name="P:FileCabinetApp.IRecordValidator.MinValueForChar">
-            <summary>
-            Gets min value for char.
-            </summary>
-            <value>
-            Min value for char.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.IRecordValidator.MaxValueForChar">
-            <summary>
-            Gets max value for char.
-            </summary>
-            <value>
-            Max value for char.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.IRecordValidator.MinLengthForString">
-            <summary>
-            Gets min length for string.
-            </summary>
-            <value>
-            Min length for string.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.IRecordValidator.MaxLengthForString">
-            <summary>
-            Gets max length for string.
-            </summary>
-            <value>
-            Max length for string.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.IRecordValidator.MinValueForSalary">
-            <summary>
-            Gets min value for salary.
-            </summary>
-            <value>
-            Min value for salary.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.IRecordValidator.MaxValueForSalary">
-            <summary>
-            Gets max value for salary.
-            </summary>
-            <value>
-            Max value for salary.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.IRecordValidator.MinDateOfBirth">
-            <summary>
-            Gets min value for date of birth.
-            </summary>
-            <value>
-            Min value for date of birth.
-            </value>
-        </member>
-        <member name="P:FileCabinetApp.IRecordValidator.MaxDateOfBirth">
-            <summary>
-            Gets min value for date of birth.
-            </summary>
-            <value>
-            Min value for date of birth.
-            </value>
-        </member>
-        <member name="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.DataRecord)">
-            <summary>
-            Validate all arguments.
-            </summary>
-            <param name="dataRecord">Checked arguments.</param>
-        </member>
-        <member name="M:FileCabinetApp.IRecordValidator.ValidateFirstName(System.String)">
-            <summary>
-            Validate first name property.
-            </summary>
-            <param name="firstName">Checked argument.</param>
-            <returns>
-            First argument: True if successfully validated; otherwise false.
-            Second argument: Error message if there is an error.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.IRecordValidator.ValidateLastName(System.String)">
-            <summary>
-            Validate last name property.
-            </summary>
-            <param name="lastName">Checked argument.</param>
-            <returns>
-            First argument: True if successfully validated; otherwise false.
-            Second argument: Error message if there is an error.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.IRecordValidator.ValidateAccess(System.Char)">
-            <summary>
-            Validate access property.
-            </summary>
-            <param name="access">Checked argument.</param>
-            <returns>
-            First argument: True if successfully validated; otherwise false.
-            Second argument: Error message if there is an error.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.IRecordValidator.ValidateDateOfBirth(System.DateTime)">
-            <summary>
-            Validate date of birth property.
-            </summary>
-            <param name="dateOfBirth">Checked argument.</param>
-            <returns>
-            First argument: True if successfully validated; otherwise false.
-            Second argument: Error message if there is an error.
-            </returns>
-        </member>
-        <member name="M:FileCabinetApp.IRecordValidator.ValidateSalary(System.Decimal)">
-            <summary>
-            Validate salary property.
-            </summary>
-            <param name="salary">Checked argument.</param>
-            <returns>
-            First argument: True if successfully validated; otherwise false.
-            Second argument: Error message if there is an error.
-            </returns>
-        </member>
         <member name="T:FileCabinetApp.Program">
             <summary>
             Interacts with API.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Program.fileCabinetService">
-            <summary>
-            File cabinet service.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Program.isRunning">
-            <summary>
-            If true than programm works else program doesn't work.
             </summary>
         </member>
         <member name="M:FileCabinetApp.Program.Main(System.String[])">
@@ -1249,6 +867,135 @@
             Print that command missed.
             </summary>
             <param name="command">Missed command.</param>
+        </member>
+        <member name="T:FileCabinetApp.Validators.AccessValidator">
+            <summary>
+            Validate access.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.AccessValidator.#ctor(System.Char,System.Char)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.AccessValidator"/> class.
+            </summary>
+            <param name="min">Min char for validation.</param>
+            <param name="max">Max char for validation.</param>
+        </member>
+        <member name="M:FileCabinetApp.Validators.AccessValidator.ValidateParameters(FileCabinetApp.DataRecord)">
+            <summary>
+            Validate access.
+            </summary>
+            <param name="dataRecord">Data for validations.</param>
+            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="dataRecord"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Throws when value char greater than max value char or less than min value char.</exception>
+        </member>
+        <member name="T:FileCabinetApp.Validators.CompositeValidator">
+            <summary>
+            Composite for validators.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.CompositeValidator.#ctor(System.Collections.Generic.IEnumerable{FileCabinetApp.IRecordValidator})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.CompositeValidator"/> class.
+            </summary>
+            <param name="validators">Validators.</param>
+        </member>
+        <member name="M:FileCabinetApp.Validators.CompositeValidator.ValidateParameters(FileCabinetApp.DataRecord)">
+            <summary>
+            Validate parameters.
+            </summary>
+            <param name="dataRecord">Parameters.</param>
+            <exception cref="T:System.ArgumentException">Throws when parameters doesn't validate.</exception>
+        </member>
+        <member name="T:FileCabinetApp.Validators.DateOfBirthValidator">
+            <summary>
+            Validate date of birth.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DateOfBirthValidator.#ctor(System.DateTime,System.DateTime)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.DateOfBirthValidator"/> class.
+            </summary>
+            <param name="from">Min date for validation.</param>
+            <param name="to">Max date for validation.</param>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DateOfBirthValidator.ValidateParameters(FileCabinetApp.DataRecord)">
+            <summary>
+            Validate date of birth.
+            </summary>
+            <param name="dataRecord">Data for validations.</param>
+            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="dataRecord"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Throws when date of birth greater than max date or less than min date.</exception>
+        </member>
+        <member name="T:FileCabinetApp.Validators.FirstnameValidator">
+            <summary>
+            Validate firstname.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.FirstnameValidator.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.FirstnameValidator"/> class.
+            </summary>
+            <param name="minLength">Min length for validation.</param>
+            <param name="maxLength">Max length for validation.</param>
+        </member>
+        <member name="M:FileCabinetApp.Validators.FirstnameValidator.ValidateParameters(FileCabinetApp.DataRecord)">
+            <summary>
+            Validate firstname.
+            </summary>
+            <param name="dataRecord">Data for validations.</param>
+            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="dataRecord"/> is null or firstname is null.</exception>
+            <exception cref="T:System.ArgumentException">Throws when length firtsname greater than max length or less than min length.</exception>
+        </member>
+        <member name="T:FileCabinetApp.Validators.LastnameValidator">
+            <summary>
+            Validate lastname.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.LastnameValidator.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.LastnameValidator"/> class.
+            </summary>
+            <param name="minLength">Min length for validation.</param>
+            <param name="maxLength">Max length for validation.</param>
+        </member>
+        <member name="M:FileCabinetApp.Validators.LastnameValidator.ValidateParameters(FileCabinetApp.DataRecord)">
+            <summary>
+            Validate lastname.
+            </summary>
+            <param name="dataRecord">Data for validations.</param>
+            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="dataRecord"/> is null or lastname is null.</exception>
+            <exception cref="T:System.ArgumentException">Throws when length lastname greater than max length or less than min length.</exception>
+        </member>
+        <member name="T:FileCabinetApp.Validators.SalaryValidator">
+            <summary>
+            Validate salary.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.SalaryValidator.#ctor(System.Decimal,System.Decimal)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.SalaryValidator"/> class.
+            </summary>
+            <param name="minSalary">Min value for validation.</param>
+            <param name="maxSalary">Max value for validation.</param>
+        </member>
+        <member name="M:FileCabinetApp.Validators.SalaryValidator.ValidateParameters(FileCabinetApp.DataRecord)">
+            <summary>
+            Validate salary.
+            </summary>
+            <param name="dataRecord">Data for validations.</param>
+            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="dataRecord"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Throws when salary greater than max value or less than min value.</exception>
+        </member>
+        <member name="T:FileCabinetApp.IRecordValidator">
+            <summary>
+            Validate record.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.DataRecord)">
+            <summary>
+            Validate parameters.
+            </summary>
+            <param name="dataRecord">Checked arguments.</param>
         </member>
     </members>
 </doc>

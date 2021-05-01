@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FileCabinetApp.Validators;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -75,19 +76,19 @@ namespace FileCabinetApp
             DataRecord dataRecord = new DataRecord();
             IRecordValidator validator = service.GetValidator();
             Console.Write("First name: ");
-            dataRecord.FirstName = ReadInput(Converter.StringConverter, validator.ValidateFirstName);
+            dataRecord.FirstName = ReadInput(Converter.StringConverter);
 
             Console.Write("Last Name: ");
-            dataRecord.LastName = ReadInput(Converter.StringConverter, validator.ValidateLastName);
+            dataRecord.LastName = ReadInput(Converter.StringConverter);
 
             Console.Write("Date of birth: ");
-            dataRecord.DateOfBirth = ReadInput(Converter.DateConverter, validator.ValidateDateOfBirth);
+            dataRecord.DateOfBirth = ReadInput(Converter.DateConverter);
 
             Console.Write("Access: ");
-            dataRecord.Access = ReadInput(Converter.CharConverted, validator.ValidateAccess);
+            dataRecord.Access = ReadInput(Converter.CharConverted);
 
             Console.Write("Salary: ");
-            dataRecord.Salary = ReadInput(Converter.DecimalConverted, validator.ValidateSalary);
+            dataRecord.Salary = ReadInput(Converter.DecimalConverted);
 
             return dataRecord;
         }
@@ -97,9 +98,8 @@ namespace FileCabinetApp
         /// </summary>
         /// <typeparam name="T">Type of object being read.</typeparam>
         /// <param name="converter">Function that performs convertation.</param>
-        /// <param name="validator">Function that performs validation.</param>
         /// <returns>Processed data.</returns>
-        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
+        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter)
         {
             do
             {
@@ -115,13 +115,6 @@ namespace FileCabinetApp
                 }
 
                 value = conversionResult.Item3;
-
-                var validationResult = validator(value);
-                if (!validationResult.Item1)
-                {
-                    Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
-                    continue;
-                }
 
                 return value;
             }
