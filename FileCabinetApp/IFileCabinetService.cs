@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FileCabinetApp.Validators;
 
 namespace FileCabinetApp
 {
@@ -26,15 +27,15 @@ namespace FileCabinetApp
         /// <exception cref="ArgumentNullException">Trows when <paramref name="dataRecord"/> is null.</exception>
         /// <exception cref="ArgumentException">Trows when data is invalid.</exception>
         /// <param name="dataRecord">Record data.</param>
-        public void EditRecord(DataRecord dataRecord);
+        /// <param name="position">Position where you want to insert the record.</param>
+        public void EditRecord(DataRecord dataRecord, long position);
 
         /// <summary>
-        /// Finds index record by id.
+        /// Finds position of record by id.
         /// </summary>
         /// <param name="id">Identifier of the searched record.</param>
-        /// <exception cref="ArgumentException">Throws when record not found.</exception>
-        /// <returns>Index record.</returns>
-        public int FindIndexById(int id);
+        /// <returns>if record finds that return position of record else return -1.</returns>
+        public long FindById(int id);
 
         /// <summary>
         /// Finds record by first name.
@@ -72,7 +73,7 @@ namespace FileCabinetApp
         /// <summary>
         /// Gets count deleted records.
         /// </summary>
-        /// <returns>Count deleted records</returns>
+        /// <returns>Count deleted records.</returns>
         public int GetCountRemovedRecords();
 
         /// <summary>

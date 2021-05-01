@@ -34,6 +34,12 @@ namespace FileCabinetApp
             this.records = Array.Empty<FileCabinetRecord>();
         }
 
+        /// <summary>
+        /// Gets all records.
+        /// </summary>
+        /// <value>
+        /// Records.
+        /// </value>
         public ReadOnlyCollection<FileCabinetRecord> Records => Array.AsReadOnly(this.records);
 
         /// <summary>
@@ -60,12 +66,20 @@ namespace FileCabinetApp
             xmlWriter.Writer(this.records);
         }
 
+        /// <summary>
+        /// Load records from csv file.
+        /// </summary>
+        /// <param name="reader">Stream Reader.</param>
         public void LoadFromCsv(StreamReader reader)
         {
             FileCabinetRecordCsvReader csvReader = new FileCabinetRecordCsvReader(reader);
             this.records = csvReader.ReadAll().ToArray();
         }
 
+        /// <summary>
+        /// Load records from xml file.
+        /// </summary>
+        /// <param name="reader">Stream Reader.</param>
         public void LoadFromXml(StreamReader reader)
         {
             FileCabinetRecordXmlReader xmlReader = new FileCabinetRecordXmlReader(reader);

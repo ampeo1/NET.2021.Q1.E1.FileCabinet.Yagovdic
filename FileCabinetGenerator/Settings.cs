@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using FileCabinetApp;
+using FileCabinetApp.Validators;
 
 namespace FileCabinetGenerator
 {
@@ -13,12 +14,11 @@ namespace FileCabinetGenerator
         /// Name storage for file system cabient.
         /// </summary>
         public const string FileNameStorage = "FileCabinetGenerator.db";
-
+        private readonly IRecordValidator validator = new ValidatorBuilder().CreateDefault();
         private string filePath = "FileGenerated.csv";
         private int recordsAmount;
         private int startId;
         private Type fileCabinetType = typeof(FileCabinetMemoryService);
-        private IRecordValidator validator = new DefaultValidator();
 
         /// <summary>
         /// Gets validator.

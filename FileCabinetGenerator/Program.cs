@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using FileCabinetApp;
+using FileCabinetApp.Validators;
 
 namespace FileCabinetGenerator
 {
@@ -31,7 +32,7 @@ namespace FileCabinetGenerator
             new Tuple<string, Action<string>>("-s", SetTypeFileCabinetService),
         };
 
-        private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
+        private static readonly Tuple<string, Action<string>>[] Commands = new Tuple<string, Action<string>>[]
         {
             new Tuple<string, Action<string>>("help", PrintHelp),
             new Tuple<string, Action<string>>("import", Import),
@@ -39,7 +40,7 @@ namespace FileCabinetGenerator
             new Tuple<string, Action<string>>("exit", Exit),
         };
 
-        private static string[][] helpMessages = new string[][]
+        private static readonly string[][] HelpMessages = new string[][]
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "import", "import records", "The 'import' command imports data from file." },
@@ -47,26 +48,26 @@ namespace FileCabinetGenerator
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
         };
 
-        private static Tuple<string, Type>[] fileCabinetServices = new Tuple<string, Type>[]
+        private static readonly Tuple<string, Type>[] FileCabinetServices = new Tuple<string, Type>[]
         {
             new Tuple<string, Type>("memory", typeof(FileCabinetMemoryService)),
             new Tuple<string, Type>("file", typeof(FileCabinetFilesystemService)),
         };
 
-        private static Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>[] exports = new Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>[]
+        private static readonly Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>[] Exports = new Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>[]
         {
             new Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>("csv", ExportToCsv),
             new Tuple<string, Action<StreamWriter, FileCabinetServiceSnapshot>>("xml", ExportToXml),
         };
 
-        private static Tuple<string, Action<string>>[] imports = new Tuple<string, Action<string>>[]
+        private static readonly Tuple<string, Action<string>>[] Imports = new Tuple<string, Action<string>>[]
         {
             new Tuple<string, Action<string>>("csv", ImportFromCsv),
             new Tuple<string, Action<string>>("xml", ImportFromXml),
         };
 
+        private static readonly Settings SettingsApp = new Settings();
         private static bool isRunning = true;
-        private static Settings settings = new Settings();
         private static IFileCabinetService fileCabinetService;
         private static Action<StreamWriter, FileCabinetServiceSnapshot> exportMethod = ExportToCsv;
 
@@ -95,7 +96,7 @@ namespace FileCabinetGenerator
                 var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
                 try
                 {
-                    ExcuteCommand(command, commands)(parameters);
+                    ExcuteCommand(command, Commands)(parameters);
                 }
                 catch (ArgumentException)
                 {
@@ -151,7 +152,7 @@ namespace FileCabinetGenerator
             CreateFileCabinet();
             try
             {
-                GenerateRecords(settings.RecordsAmount);
+                GenerateRecords(SettingsApp.RecordsAmount);
                 Export(exportMethod);
             }
             catch (Exception ex) when (
@@ -205,7 +206,7 @@ namespace FileCabinetGenerator
         /// <param name="parameter">Parameter.</param>
         private static void SetOutputType(string parameter)
         {
-            exportMethod = ExcuteCommand(parameter, exports);
+            exportMethod = ExcuteCommand(parameter, Exports);
         }
 
         /// <summary>
@@ -214,7 +215,7 @@ namespace FileCabinetGenerator
         /// <param name="parameter">Parameter.</param>
         private static void SetOutput(string parameter)
         {
-            settings.FilePath = parameter;
+            SettingsApp.FilePath = parameter;
         }
 
         /// <summary>
@@ -224,7 +225,7 @@ namespace FileCabinetGenerator
         private static void SetRecordAmount(string parameter)
         {
             _ = int.TryParse(parameter, out int amount);
-            settings.RecordsAmount = amount;
+            SettingsApp.RecordsAmount = amount;
         }
 
         /// <summary>
@@ -234,7 +235,7 @@ namespace FileCabinetGenerator
         private static void SetStartId(string parameter)
         {
             _ = int.TryParse(parameter, out int id);
-            settings.StartId = id;
+            SettingsApp.StartId = id;
         }
 
         /// <summary>
@@ -243,7 +244,7 @@ namespace FileCabinetGenerator
         /// <param name="parameter">Parameter.</param>
         private static void SetTypeFileCabinetService(string parameter)
         {
-            settings.FileCabinetType = ExcuteCommand(parameter, fileCabinetServices);
+            SettingsApp.FileCabinetType = ExcuteCommand(parameter, FileCabinetServices);
         }
 
         /// <summary>
@@ -254,7 +255,7 @@ namespace FileCabinetGenerator
         {
             for (int i = 0; i < amount; i++)
             {
-                fileCabinetService.CreateRecord(Generator.GenerateRecord(settings.Validator));
+                fileCabinetService.CreateRecord(Generator.GenerateRecord());
             }
         }
 
@@ -263,15 +264,15 @@ namespace FileCabinetGenerator
         /// </summary>
         private static void CreateFileCabinet()
         {
-            IRecordValidator validator = new DefaultValidator();
-            if (settings.FileCabinetType.Equals(typeof(FileCabinetMemoryService)))
+            IRecordValidator validator = new ValidatorBuilder().CreateDefault();
+            if (SettingsApp.FileCabinetType.Equals(typeof(FileCabinetMemoryService)))
             {
-                fileCabinetService = new FileCabinetMemoryService(validator, settings.StartId);
+                fileCabinetService = new FileCabinetMemoryService(validator, SettingsApp.StartId);
             }
-            else if (settings.FileCabinetType.Equals(typeof(FileCabinetFilesystemService)))
+            else if (SettingsApp.FileCabinetType.Equals(typeof(FileCabinetFilesystemService)))
             {
                 FileStream fileStream = new FileStream(Settings.FileNameStorage, FileMode.Create, FileAccess.ReadWrite);
-                fileCabinetService = new FileCabinetFilesystemService(validator, fileStream, settings.StartId);
+                fileCabinetService = new FileCabinetFilesystemService(validator, fileStream, SettingsApp.StartId);
             }
         }
 
@@ -301,12 +302,12 @@ namespace FileCabinetGenerator
         private static void Export(Action<StreamWriter, FileCabinetServiceSnapshot> exportMethod)
         {
             FileCabinetServiceSnapshot snapshot = fileCabinetService.MakeSnapshot();
-            using (StreamWriter writer = new StreamWriter(settings.FilePath))
+            using (StreamWriter writer = new StreamWriter(SettingsApp.FilePath))
             {
                 exportMethod(writer, snapshot);
             }
 
-            Console.WriteLine($"{settings.RecordsAmount} records were written to {settings.FilePath}");
+            Console.WriteLine($"{SettingsApp.RecordsAmount} records were written to {SettingsApp.FilePath}");
         }
 
         private static void Import(string parameters)
@@ -322,7 +323,7 @@ namespace FileCabinetGenerator
                 return;
             }
 
-            ExcuteCommand(command, imports)(path);
+            ExcuteCommand(command, Imports)(path);
         }
 
         private static void ImportFromCsv(string path)
@@ -393,10 +394,10 @@ namespace FileCabinetGenerator
         {
             if (!string.IsNullOrEmpty(parameters))
             {
-                var index = Array.FindIndex(helpMessages, 0, helpMessages.Length, i => string.Equals(i[Program.CommandHelpIndex], parameters, StringComparison.InvariantCultureIgnoreCase));
+                var index = Array.FindIndex(HelpMessages, 0, HelpMessages.Length, i => string.Equals(i[Program.CommandHelpIndex], parameters, StringComparison.InvariantCultureIgnoreCase));
                 if (index >= 0)
                 {
-                    Console.WriteLine(helpMessages[index][Program.ExplanationHelpIndex]);
+                    Console.WriteLine(HelpMessages[index][Program.ExplanationHelpIndex]);
                 }
                 else
                 {
@@ -407,7 +408,7 @@ namespace FileCabinetGenerator
             {
                 Console.WriteLine("Available commands:");
 
-                foreach (var helpMessage in helpMessages)
+                foreach (var helpMessage in HelpMessages)
                 {
                     Console.WriteLine("\t{0}\t- {1}", helpMessage[Program.CommandHelpIndex], helpMessage[Program.DescriptionHelpIndex]);
                 }
