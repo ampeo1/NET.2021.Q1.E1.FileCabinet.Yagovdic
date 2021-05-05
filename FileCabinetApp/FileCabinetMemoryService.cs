@@ -82,41 +82,44 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IRecordIterator FindByFirstName(string firstName)
         {
             if (this.firstNameDictionary.ContainsKey(firstName))
             {
-                return this.firstNameDictionary[firstName];
+                var records = this.firstNameDictionary[firstName];
+                return new MemoryIterator(records.ToArray());
             }
             else
             {
-                return Array.Empty<FileCabinetRecord>();
+                return new MemoryIterator(Array.Empty<FileCabinetRecord>());
             }
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> FindByLastname(string lastName)
+        public IRecordIterator FindByLastname(string lastName)
         {
             if (this.lastNameDictionary.ContainsKey(lastName))
             {
-                return this.lastNameDictionary[lastName];
+                var records = this.lastNameDictionary[lastName];
+                return new MemoryIterator(records.ToArray());
             }
             else
             {
-                return Array.Empty<FileCabinetRecord>();
+                return new MemoryIterator(Array.Empty<FileCabinetRecord>());
             }
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth)
+        public IRecordIterator FindByBirthDay(DateTime dateOfBirth)
         {
             if (this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
             {
-                return this.dateOfBirthDictionary[dateOfBirth];
+                var records = this.dateOfBirthDictionary[dateOfBirth];
+                return new MemoryIterator(records.ToArray());
             }
             else
             {
-                return Array.Empty<FileCabinetRecord>();
+                return new MemoryIterator(Array.Empty<FileCabinetRecord>());
             }
         }
 

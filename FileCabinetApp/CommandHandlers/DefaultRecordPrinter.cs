@@ -24,5 +24,21 @@ namespace FileCabinetApp.CommandHandlers
                 Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}, age: {record.Age}, salary {record.Salary}, access {record.Access}");
             }
         }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Throws when <paramref name="iterator"/> is null.</exception>
+        public void PrintForIterator(IRecordIterator iterator)
+        {
+            if (iterator is null)
+            {
+                throw new ArgumentNullException(nameof(iterator));
+            }
+
+            while (iterator.HasMore())
+            {
+                FileCabinetRecord record = iterator.GetNext();
+                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", CultureInfo.InvariantCulture)}, age: {record.Age}, salary {record.Salary}, access {record.Access}");
+            }
+        }
     }
 }

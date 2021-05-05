@@ -149,21 +149,24 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth)
+        public IRecordIterator FindByBirthDay(DateTime dateOfBirth)
         {
-            return this.FindRecordsByDictionary(this.dateOfBirthDictionary, dateOfBirth);
+            List<long> positions = this.FindRecordsByDictionary(this.dateOfBirthDictionary, dateOfBirth);
+            return new FileSystemIterator(this.fileStream, positions);
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IRecordIterator FindByFirstName(string firstName)
         {
-            return this.FindRecordsByDictionary(this.firstNameDictionary, firstName);
+            List<long> positions = this.FindRecordsByDictionary(this.firstNameDictionary, firstName);
+            return new FileSystemIterator(this.fileStream, positions);
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> FindByLastname(string lastName)
+        public IRecordIterator FindByLastname(string lastName)
         {
-            return this.FindRecordsByDictionary(this.lastNameDictionary, lastName);
+            List<long> positions = this.FindRecordsByDictionary(this.lastNameDictionary, lastName);
+            return new FileSystemIterator(this.fileStream, positions);
         }
 
         /// <inheritdoc/>
@@ -341,21 +344,15 @@ namespace FileCabinetApp
             return data.ToArray();
         }
 
-        private IReadOnlyCollection<FileCabinetRecord> FindRecordsByDictionary<T>(Dictionary<T, List<long>> dictionary, T key)
+        private List<long> FindRecordsByDictionary<T>(Dictionary<T, List<long>> dictionary, T key)
         {
-            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
+            List<long> positions = new List<long>();
             if (dictionary.ContainsKey(key))
             {
-                List<long> positions = dictionary[key];
-
-                foreach (long position in positions)
-                {
-                    this.fileStream.Position = position;
-                    records.Add(this.ReadRecord());
-                }
+                positions = dictionary[key];
             }
 
-            return records;
+            return positions;
         }
 
         /// <summary>

@@ -94,6 +94,10 @@
             <inheritdoc/>
             <exception cref="T:System.ArgumentNullException">Throws when <paramref name="records"/> is null.</exception>
         </member>
+        <member name="M:FileCabinetApp.CommandHandlers.DefaultRecordPrinter.PrintForIterator(FileCabinetApp.IRecordIterator)">
+            <inheritdoc/>
+            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="iterator"/> is null.</exception>
+        </member>
         <member name="T:FileCabinetApp.CommandHandlers.EditCommandHandler">
             <summary>
             Edit record command.
@@ -300,6 +304,12 @@
             Prints records.
             </summary>
             <param name="records">Records to be printed.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.IRecordPrinter.PrintForIterator(FileCabinetApp.IRecordIterator)">
+            <summary>
+            Prints records.
+            </summary>
+            <param name="iterator">Iterator for records.</param>
         </member>
         <member name="T:FileCabinetApp.CommandHandlers.ListCommandHandler">
             <summary>
@@ -1030,6 +1040,28 @@
             Defragments a file.
             </summary>
             <returns>Count deleted records.</returns>
+        </member>
+        <member name="T:FileCabinetApp.IRecordIterator">
+            <summary>
+            Interface iterator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IRecordIterator.GetNext">
+            <summary>
+            Gets next FileCabinetRecord.
+            </summary>
+            <returns>FileCabinerRecord.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IRecordIterator.HasMore">
+            <summary>
+            Checks if there is a next item.
+            </summary>
+            <returns>True if has; otherwise false.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IRecordIterator.Reset">
+            <summary>
+            Back to the beginning.
+            </summary>
         </member>
         <member name="T:FileCabinetApp.Program">
             <summary>

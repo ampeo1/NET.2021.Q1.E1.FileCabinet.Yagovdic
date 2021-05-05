@@ -63,39 +63,39 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth)
+        public IRecordIterator FindByBirthDay(DateTime dateOfBirth)
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
-            var records = this.service.FindByBirthDay(dateOfBirth);
+            var iterator = this.service.FindByBirthDay(dateOfBirth);
             stopWatch.Stop();
             Console.WriteLine($"Find by date of birth method execution duration is {stopWatch.ElapsedTicks} ticks.");
 
-            return records;
+            return iterator;
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> FindByLastname(string lastName)
+        public IRecordIterator FindByLastname(string lastName)
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
-            var records = this.service.FindByLastname(lastName);
+            var iterator = this.service.FindByLastname(lastName);
             stopWatch.Stop();
             Console.WriteLine($"Find by last name method execution duration is {stopWatch.ElapsedTicks} ticks.");
 
-            return records;
+            return iterator;
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IRecordIterator FindByFirstName(string firstName)
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
-            var records = this.service.FindByFirstName(firstName);
+            var iterator = this.service.FindByFirstName(firstName);
             stopWatch.Stop();
             Console.WriteLine($"Find by first name method execution duration is {stopWatch.ElapsedTicks} ticks.");
 
-            return records;
+            return iterator;
         }
 
         /// <inheritdoc/>
