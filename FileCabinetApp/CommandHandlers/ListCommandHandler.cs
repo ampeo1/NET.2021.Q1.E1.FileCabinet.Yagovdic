@@ -37,7 +37,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            IReadOnlyCollection<FileCabinetRecord> records = this.service.GetRecords();
+            var records = this.service.GetRecords();
             this.printer.Print(records);
         }
     }

@@ -42,27 +42,27 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">First name of the searched record.</param>
         /// <returns>Found records.</returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName);
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName);
 
         /// <summary>
         /// Finds record by last name.
         /// </summary>
         /// <param name="lastName">Last name of the searched record.</param>
         /// <returns>Found records.</returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByLastname(string lastName);
+        public IEnumerable<FileCabinetRecord> FindByLastname(string lastName);
 
         /// <summary>
         /// Finds record by date of birth.
         /// </summary>
         /// <param name="dateOfBirth">date of birth of the searched record.</param>
         /// <returns>Found records.</returns>
-        public IReadOnlyCollection<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth);
+        public IEnumerable<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth);
 
         /// <summary>
         /// Gets all records.
         /// </summary>
         /// <returns>Records.</returns>
-        public IReadOnlyCollection<FileCabinetRecord> GetRecords();
+        public IEnumerable<FileCabinetRecord> GetRecords();
 
         /// <summary>
         /// Gets count of records.

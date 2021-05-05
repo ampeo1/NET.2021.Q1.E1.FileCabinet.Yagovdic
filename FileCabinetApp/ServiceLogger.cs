@@ -81,19 +81,21 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth)
         {
             StringBuilder builder = new StringBuilder();
             builder.Append($"Calling {nameof(this.FindByBirthDay)} with {nameof(dateOfBirth)} = '{dateOfBirth:dd/MM/yyyy}'");
             this.WriteLog(builder.ToString());
 
-            var records = this.service.FindByBirthDay(dateOfBirth).ToList();
+            var records = this.service.FindByBirthDay(dateOfBirth);
 
             builder = new StringBuilder();
             builder.Append($"{nameof(this.FindByBirthDay)} returned [ ");
-            for (int i = 0; i < records.Count; i++)
+            int i = 0;
+            foreach (var record in records)
             {
-                builder.Append($"{i}. {ConvertClassToString(records[i])}");
+                builder.Append($"{i}. {ConvertClassToString(record)}");
+                i++;
             }
 
             builder.Append(" ]");
@@ -103,19 +105,21 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             StringBuilder builder = new StringBuilder();
             builder.Append($"Calling {nameof(this.FindByFirstName)} with {nameof(firstName)} = '{firstName}'");
             this.WriteLog(builder.ToString());
 
-            var records = this.service.FindByFirstName(firstName).ToList();
+            var records = this.service.FindByFirstName(firstName);
 
             builder = new StringBuilder();
             builder.Append($"{nameof(this.FindByFirstName)} returned [ ");
-            for (int i = 0; i < records.Count; i++)
+            int i = 0;
+            foreach (var record in records)
             {
-                builder.Append($"{i}. {ConvertClassToString(records[i])}");
+                builder.Append($"{i}. {ConvertClassToString(record)}");
+                i++;
             }
 
             builder.Append(" ]");
@@ -141,19 +145,21 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> FindByLastname(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastname(string lastName)
         {
             StringBuilder builder = new StringBuilder();
             builder.Append($"Calling {nameof(this.FindByLastname)} with {nameof(lastName)} = {lastName}");
             this.WriteLog(builder.ToString());
 
-            var records = this.service.FindByLastname(lastName).ToList();
+            var records = this.service.FindByLastname(lastName);
 
             builder = new StringBuilder();
             builder.Append($"{nameof(this.FindByLastname)} returned [ ");
-            for (int i = 0; i < records.Count; i++)
+            int i = 0;
+            foreach (var record in records)
             {
-                builder.Append($"{i}. {ConvertClassToString(records[i])}");
+                builder.Append($"{i}. {ConvertClassToString(record)}");
+                i++;
             }
 
             builder.Append(" ]");
@@ -191,7 +197,7 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> GetRecords()
+        public IEnumerable<FileCabinetRecord> GetRecords()
         {
             string log = $"Calling {nameof(this.GetRecords)}";
             this.WriteLog(log);

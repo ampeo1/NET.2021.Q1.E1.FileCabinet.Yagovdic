@@ -82,46 +82,52 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
+            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
             if (this.firstNameDictionary.ContainsKey(firstName))
             {
-                return this.firstNameDictionary[firstName];
+                records = this.firstNameDictionary[firstName];
             }
-            else
+
+            foreach (var record in records)
             {
-                return Array.Empty<FileCabinetRecord>();
+                yield return record;
             }
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> FindByLastname(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastname(string lastName)
         {
+            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
             if (this.lastNameDictionary.ContainsKey(lastName))
             {
-                return this.lastNameDictionary[lastName];
+                records = this.lastNameDictionary[lastName];
             }
-            else
+
+            foreach (var record in records)
             {
-                return Array.Empty<FileCabinetRecord>();
+                yield return record;
             }
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth)
         {
+            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
             if (this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
             {
-                return this.dateOfBirthDictionary[dateOfBirth];
+                records = this.dateOfBirthDictionary[dateOfBirth];
             }
-            else
+
+            foreach (var record in records)
             {
-                return Array.Empty<FileCabinetRecord>();
+                yield return record;
             }
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> GetRecords()
+        public IEnumerable<FileCabinetRecord> GetRecords()
         {
             return this.records;
         }

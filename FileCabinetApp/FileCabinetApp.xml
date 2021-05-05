@@ -598,12 +598,42 @@
             Close current stream.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.AddRecordToDictionary``1(System.Collections.Generic.Dictionary{``0,System.Collections.Generic.List{System.Int64}},``0,System.Int64)">
+            <summary>
+            Adds record to dictionary by key.
+            </summary>
+            <typeparam name="T">Type key.</typeparam>
+            <param name="dictionary">The dictionary in which to add the element.</param>
+            <param name="key">The key by which the search will be.</param>
+            <param name="position">Position record in file.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RemoveRecordFromDictiornary``1(System.Collections.Generic.Dictionary{``0,System.Collections.Generic.List{System.Int64}},``0,System.Int64)">
+            <summary>
+            Removes record from dictionary by key.
+            </summary>
+            <typeparam name="T">Type key.</typeparam>
+            <param name="dictionary">The dictionary in which to remove the element.</param>
+            <param name="key">The key by which the search will be.</param>
+            <param name="position">Position record in file.</param>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.ConvertRecordToBytes(FileCabinetApp.FileCabinetRecord)">
             <summary>
             Converts record to array of bytes.
             </summary>
             <param name="record">Record wich needs to convert.</param>
             <returns>Array of bytes.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.AddRecordToDictionaries(FileCabinetApp.FileCabinetRecord,System.Int64)">
+            <summary>
+            Adds a record to all dictionaries.
+            </summary>
+            <param name="record">The record which need to add.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RemoveRecordFromDictionaries(FileCabinetApp.FileCabinetRecord,System.Int64)">
+            <summary>
+            Removes a record to all dictionaries.
+            </summary>
+            <param name="record">The record which need to remove.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.Create(FileCabinetApp.DataRecord)">
             <summary>
