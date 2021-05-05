@@ -1031,28 +1031,6 @@
             </summary>
             <returns>Count deleted records.</returns>
         </member>
-        <member name="T:FileCabinetApp.IRecordIterator">
-            <summary>
-            Interface iterator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.IRecordIterator.GetNext">
-            <summary>
-            Gets next FileCabinetRecord.
-            </summary>
-            <returns>FileCabinerRecord.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IRecordIterator.HasMore">
-            <summary>
-            Checks if there is a next item.
-            </summary>
-            <returns>True if has; otherwise false.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IRecordIterator.Reset">
-            <summary>
-            Back to the beginning.
-            </summary>
-        </member>
         <member name="T:FileCabinetApp.Program">
             <summary>
             Interacts with API.

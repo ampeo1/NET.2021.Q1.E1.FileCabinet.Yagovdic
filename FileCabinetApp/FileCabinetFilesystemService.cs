@@ -41,7 +41,7 @@ namespace FileCabinetApp
                 this.id = (int)startId;
             }
 
-            IReadOnlyCollection<FileCabinetRecord> records = this.GetRecords();
+            var records = this.GetRecords();
             long position = 0;
             foreach (var record in records)
             {
@@ -152,38 +152,47 @@ namespace FileCabinetApp
         public IEnumerable<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth)
         {
             List<long> positions = this.FindRecordsByDictionary(this.dateOfBirthDictionary, dateOfBirth);
-            return new EnumerableFilesystem(this.fileStream, positions);
+            foreach (var position in positions)
+            {
+                this.fileStream.Position = position;
+                yield return this.ReadRecord();
+            }
         }
 
         /// <inheritdoc/>
         public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             List<long> positions = this.FindRecordsByDictionary(this.firstNameDictionary, firstName);
-            return new EnumerableFilesystem(this.fileStream, positions);
+            foreach (var position in positions)
+            {
+                this.fileStream.Position = position;
+                yield return this.ReadRecord();
+            }
         }
 
         /// <inheritdoc/>
         public IEnumerable<FileCabinetRecord> FindByLastname(string lastName)
         {
             List<long> positions = this.FindRecordsByDictionary(this.lastNameDictionary, lastName);
-            return new EnumerableFilesystem(this.fileStream, positions);
+            foreach (var position in positions)
+            {
+                this.fileStream.Position = position;
+                yield return this.ReadRecord();
+            }
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> GetRecords()
+        public IEnumerable<FileCabinetRecord> GetRecords()
         {
-            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
             this.fileStream.Position = 0;
             while (this.fileStream.Position < this.fileStream.Length)
             {
                 FileCabinetRecord record = this.ReadRecord();
                 if (record != null)
                 {
-                    records.Add(record);
+                    yield return record;
                 }
             }
-
-            return records;
         }
 
         /// <inheritdoc/>

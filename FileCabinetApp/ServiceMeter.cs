@@ -133,7 +133,7 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> GetRecords()
+        public IEnumerable<FileCabinetRecord> GetRecords()
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();

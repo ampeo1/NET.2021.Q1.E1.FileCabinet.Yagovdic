@@ -84,47 +84,50 @@ namespace FileCabinetApp
         /// <inheritdoc/>
         public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
+            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
             if (this.firstNameDictionary.ContainsKey(firstName))
             {
-                var records = this.firstNameDictionary[firstName];
-                return new EnumerableMemory(records.ToArray());
+                records = this.firstNameDictionary[firstName];
             }
-            else
+
+            foreach (var record in records)
             {
-                return new EnumerableMemory(Array.Empty<FileCabinetRecord>());
+                yield return record;
             }
         }
 
         /// <inheritdoc/>
         public IEnumerable<FileCabinetRecord> FindByLastname(string lastName)
         {
+            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
             if (this.lastNameDictionary.ContainsKey(lastName))
             {
-                var records = this.lastNameDictionary[lastName];
-                return new EnumerableMemory(records.ToArray());
+                records = this.lastNameDictionary[lastName];
             }
-            else
+
+            foreach (var record in records)
             {
-                return new EnumerableMemory(Array.Empty<FileCabinetRecord>());
+                yield return record;
             }
         }
 
         /// <inheritdoc/>
         public IEnumerable<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth)
         {
+            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
             if (this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
             {
-                var records = this.dateOfBirthDictionary[dateOfBirth];
-                return new EnumerableMemory(records.ToArray());
+                records = this.dateOfBirthDictionary[dateOfBirth];
             }
-            else
+
+            foreach (var record in records)
             {
-                return new EnumerableMemory(Array.Empty<FileCabinetRecord>());
+                yield return record;
             }
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> GetRecords()
+        public IEnumerable<FileCabinetRecord> GetRecords()
         {
             return this.records;
         }

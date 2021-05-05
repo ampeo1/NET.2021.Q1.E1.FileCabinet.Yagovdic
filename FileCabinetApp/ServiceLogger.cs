@@ -197,7 +197,7 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public IReadOnlyCollection<FileCabinetRecord> GetRecords()
+        public IEnumerable<FileCabinetRecord> GetRecords()
         {
             string log = $"Calling {nameof(this.GetRecords)}";
             this.WriteLog(log);

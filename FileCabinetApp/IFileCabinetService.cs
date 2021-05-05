@@ -62,7 +62,7 @@ namespace FileCabinetApp
         /// Gets all records.
         /// </summary>
         /// <returns>Records.</returns>
-        public IReadOnlyCollection<FileCabinetRecord> GetRecords();
+        public IEnumerable<FileCabinetRecord> GetRecords();
 
         /// <summary>
         /// Gets count of records.
