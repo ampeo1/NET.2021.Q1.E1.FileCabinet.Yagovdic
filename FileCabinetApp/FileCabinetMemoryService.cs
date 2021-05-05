@@ -82,44 +82,44 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public IRecordIterator FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             if (this.firstNameDictionary.ContainsKey(firstName))
             {
                 var records = this.firstNameDictionary[firstName];
-                return new MemoryIterator(records.ToArray());
+                return new EnumerableMemory(records.ToArray());
             }
             else
             {
-                return new MemoryIterator(Array.Empty<FileCabinetRecord>());
+                return new EnumerableMemory(Array.Empty<FileCabinetRecord>());
             }
         }
 
         /// <inheritdoc/>
-        public IRecordIterator FindByLastname(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastname(string lastName)
         {
             if (this.lastNameDictionary.ContainsKey(lastName))
             {
                 var records = this.lastNameDictionary[lastName];
-                return new MemoryIterator(records.ToArray());
+                return new EnumerableMemory(records.ToArray());
             }
             else
             {
-                return new MemoryIterator(Array.Empty<FileCabinetRecord>());
+                return new EnumerableMemory(Array.Empty<FileCabinetRecord>());
             }
         }
 
         /// <inheritdoc/>
-        public IRecordIterator FindByBirthDay(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth)
         {
             if (this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
             {
                 var records = this.dateOfBirthDictionary[dateOfBirth];
-                return new MemoryIterator(records.ToArray());
+                return new EnumerableMemory(records.ToArray());
             }
             else
             {
-                return new MemoryIterator(Array.Empty<FileCabinetRecord>());
+                return new EnumerableMemory(Array.Empty<FileCabinetRecord>());
             }
         }
 

@@ -43,7 +43,7 @@ namespace FileCabinetApp.CommandHandlers
             }
 
             var records = this.service.FindByBirthDay(date);
-            this.printer.PrintForIterator(records);
+            this.printer.Print(records);
         }
     }
 }

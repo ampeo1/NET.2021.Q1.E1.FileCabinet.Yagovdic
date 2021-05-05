@@ -94,10 +94,6 @@
             <inheritdoc/>
             <exception cref="T:System.ArgumentNullException">Throws when <paramref name="records"/> is null.</exception>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.DefaultRecordPrinter.PrintForIterator(FileCabinetApp.IRecordIterator)">
-            <inheritdoc/>
-            <exception cref="T:System.ArgumentNullException">Throws when <paramref name="iterator"/> is null.</exception>
-        </member>
         <member name="T:FileCabinetApp.CommandHandlers.EditCommandHandler">
             <summary>
             Edit record command.
@@ -304,12 +300,6 @@
             Prints records.
             </summary>
             <param name="records">Records to be printed.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.IRecordPrinter.PrintForIterator(FileCabinetApp.IRecordIterator)">
-            <summary>
-            Prints records.
-            </summary>
-            <param name="iterator">Iterator for records.</param>
         </member>
         <member name="T:FileCabinetApp.CommandHandlers.ListCommandHandler">
             <summary>

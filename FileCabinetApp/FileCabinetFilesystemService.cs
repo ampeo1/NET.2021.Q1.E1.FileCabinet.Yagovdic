@@ -149,24 +149,24 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public IRecordIterator FindByBirthDay(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth)
         {
             List<long> positions = this.FindRecordsByDictionary(this.dateOfBirthDictionary, dateOfBirth);
-            return new FileSystemIterator(this.fileStream, positions);
+            return new EnumerableFilesystem(this.fileStream, positions);
         }
 
         /// <inheritdoc/>
-        public IRecordIterator FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             List<long> positions = this.FindRecordsByDictionary(this.firstNameDictionary, firstName);
-            return new FileSystemIterator(this.fileStream, positions);
+            return new EnumerableFilesystem(this.fileStream, positions);
         }
 
         /// <inheritdoc/>
-        public IRecordIterator FindByLastname(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastname(string lastName)
         {
             List<long> positions = this.FindRecordsByDictionary(this.lastNameDictionary, lastName);
-            return new FileSystemIterator(this.fileStream, positions);
+            return new EnumerableFilesystem(this.fileStream, positions);
         }
 
         /// <inheritdoc/>

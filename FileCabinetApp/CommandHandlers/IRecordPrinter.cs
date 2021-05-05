@@ -14,11 +14,5 @@ namespace FileCabinetApp.CommandHandlers
         /// </summary>
         /// <param name="records">Records to be printed.</param>
         public void Print(IEnumerable<FileCabinetRecord> records);
-
-        /// <summary>
-        /// Prints records.
-        /// </summary>
-        /// <param name="iterator">Iterator for records.</param>
-        public void PrintForIterator(IRecordIterator iterator);
     }
 }

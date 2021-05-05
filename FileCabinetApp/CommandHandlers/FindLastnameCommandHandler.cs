@@ -38,7 +38,7 @@ namespace FileCabinetApp.CommandHandlers
             }
 
             var records = this.service.FindByLastname(command.Parameters);
-            this.printer.PrintForIterator(records);
+            this.printer.Print(records);
         }
     }
 }
