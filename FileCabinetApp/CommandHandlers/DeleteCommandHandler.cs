@@ -6,17 +6,39 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Delete command.
+    /// </summary>
     public class DeleteCommandHandler : CRUDCommandHandlerBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeleteCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">IFileCabinetService.</param>
         public DeleteCommandHandler(IFileCabinetService service)
             : base(service)
         {
         }
 
+        /// <summary>
+        /// Gets name command.
+        /// </summary>
+        /// <value>
+        /// Name command.
+        /// </value>
         protected override string NameCommand => "delete";
 
+        /// <summary>
+        /// Executes the command.
+        /// </summary>
+        /// <param name="command">Command info.</param>
         public override void Handle(AppCommandRequest command)
         {
+            if (command is null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
             if (this.GoToNextCommand(command))
             {
                 return;

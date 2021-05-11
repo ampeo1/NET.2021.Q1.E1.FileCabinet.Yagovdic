@@ -75,8 +75,8 @@ namespace FileCabinetApp.CommandHandlers
                     return true;
                 }
 
-                int firstIndex = 0, lastIndex = i[commandHelpIndex].Length - 1;
-                if (i[commandHelpIndex][firstIndex].Equals(command[firstIndex]) || i[commandHelpIndex][lastIndex].Equals(command[command.Length - 1]))
+                int firstIndex = 0;
+                if (i[commandHelpIndex][firstIndex].Equals(command[firstIndex]) || i[commandHelpIndex][^1].Equals(command[^1]))
                 {
                     return true;
                 }

@@ -6,13 +6,26 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Base class for CRUD classes.
+    /// </summary>
     public abstract class CRUDCommandHandlerBase : ServiceCommandHandlerBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CRUDCommandHandlerBase"/> class.
+        /// </summary>
+        /// <param name="service">IFileCabinetService.</param>
         protected CRUDCommandHandlerBase(IFileCabinetService service)
             : base(service)
         {
         }
 
+        /// <summary>
+        /// Adds a property to the dictionary and binds a value to it.
+        /// </summary>
+        /// <param name="nameProperties">Property names.</param>
+        /// <param name="valueProperties">Property values.</param>
+        /// <returns>Dictionary with property info and value this property.</returns>
         protected static Dictionary<PropertyInfo, object> ParseParameters(string[] nameProperties, string[] valueProperties)
         {
             if (nameProperties is null || valueProperties is null)
@@ -41,6 +54,11 @@ namespace FileCabinetApp.CommandHandlers
             return properties;
         }
 
+        /// <summary>
+        /// Separates parameters in parentheses.
+        /// </summary>
+        /// <param name="parameters">Parameters.</param>
+        /// <returns>Split parameters.</returns>
         protected static string[] SplitBrackets(string parameters)
         {
             if (string.IsNullOrEmpty(parameters))
@@ -59,6 +77,12 @@ namespace FileCabinetApp.CommandHandlers
             return splitParameters;
         }
 
+        /// <summary>
+        /// Separates parameters that are in the form "property = value".
+        /// </summary>
+        /// <param name="parameters">Parameters.</param>
+        /// <param name="separator">Separator.</param>
+        /// <returns>(Properties, Values).</returns>
         protected static (string[], string[]) SplitParameters(string parameters, string separator)
         {
             if (string.IsNullOrEmpty(parameters))
@@ -89,6 +113,12 @@ namespace FileCabinetApp.CommandHandlers
             return (nameProperties.ToArray(), valueProperties.ToArray());
         }
 
+        /// <summary>
+        /// Parse string.
+        /// </summary>
+        /// <param name="value">The string to be parsed.</param>
+        /// <param name="type">The type to parse into.</param>
+        /// <returns>Parsed object.</returns>
         protected static object ParseValue(string value, Type type)
         {
             if (type != typeof(DateTime))
@@ -115,6 +145,11 @@ namespace FileCabinetApp.CommandHandlers
             }
         }
 
+        /// <summary>
+        /// Finds records by properties.
+        /// </summary>
+        /// <param name="properties">Properties.</param>
+        /// <returns>Found records.</returns>
         protected IEnumerable<FileCabinetRecord> FindRecords(Dictionary<PropertyInfo, object> properties)
         {
             if (properties is null)

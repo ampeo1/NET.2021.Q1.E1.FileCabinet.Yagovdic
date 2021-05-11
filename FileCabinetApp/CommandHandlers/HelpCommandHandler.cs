@@ -9,6 +9,9 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class HelpCommandHandler : CommandHandlerBase
     {
+        /// <summary>
+        /// List of command information.
+        /// </summary>
         public static readonly string[][] HelpMessages = new string[][]
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
@@ -32,6 +35,11 @@ namespace FileCabinetApp.CommandHandlers
         /// <param name="command">Parameters command.</param>
         public override void Handle(AppCommandRequest command)
         {
+            if (command is null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
             if (this.GoToNextCommand(command))
             {
                 return;

@@ -6,15 +6,32 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    /// Insert command.
+    /// </summary>
     public class InsertCommandHandler : CRUDCommandHandlerBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InsertCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">IFileCabinetService.</param>
         public InsertCommandHandler(IFileCabinetService service)
             : base(service)
         {
         }
 
+        /// <summary>
+        /// Gets name command.
+        /// </summary>
+        /// <value>
+        /// Name command.
+        /// </value>
         protected override string NameCommand => "insert";
 
+        /// <summary>
+        /// Executes the command.
+        /// </summary>
+        /// <param name="command">Command info.</param>
         public override void Handle(AppCommandRequest command)
         {
             if (this.GoToNextCommand(command))
