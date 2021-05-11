@@ -26,7 +26,7 @@ namespace FileCabinetApp.CommandHandlers
 
             if (!parameters.StartsWith("where", StringComparison.InvariantCultureIgnoreCase))
             {
-                Console.WriteLine("Invalid format. Doesn't start with wehre.");
+                Console.WriteLine("Invalid format. Doesn't start with where.");
                 return;
             }
 
@@ -34,18 +34,19 @@ namespace FileCabinetApp.CommandHandlers
             string[] nameProperties, valueProperties;
 
             Dictionary<PropertyInfo, object> properties;
+            IEnumerable<FileCabinetRecord> records;
+            string separator = "and";
             try
             {
-                (nameProperties, valueProperties) = SplitWhereParameters(parameters);
+                (nameProperties, valueProperties) = SplitParameters(parameters, separator);
                 properties = ParseParameters(nameProperties, valueProperties);
+                records = this.FindRecords(properties);
             }
             catch (ArgumentException ex)
             {
                 Console.WriteLine(ex.Message);
                 return;
             }
-
-            IEnumerable<FileCabinetRecord> records = this.FindRecords(properties);
 
             List<int> ids = new List<int>();
             foreach (var record in records)

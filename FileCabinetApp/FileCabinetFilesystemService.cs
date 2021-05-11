@@ -58,7 +58,12 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(dataRecord));
             }
 
-            dataRecord.Id = ++this.id;
+            while (this.dictionaryForId.ContainsKey(this.id))
+            {
+                this.id++;
+            }
+
+            dataRecord.Id = this.id;
             FileCabinetRecord record = this.Create(dataRecord);
 
             byte[] data = ConvertRecordToBytes(record);

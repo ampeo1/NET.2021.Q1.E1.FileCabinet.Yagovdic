@@ -86,14 +86,14 @@ namespace FileCabinetApp.CommandHandlers
             return splitParameters;
         }
 
-        protected static (string[], string[]) SplitWhereParameters(string parameters)
+        protected static (string[], string[]) SplitParameters(string parameters, string separator)
         {
             if (string.IsNullOrEmpty(parameters))
             {
                 throw new ArgumentNullException(nameof(parameters));
             }
 
-            string[] splitParameters = parameters.Split("and", StringSplitOptions.RemoveEmptyEntries);
+            string[] splitParameters = parameters.Split(separator, StringSplitOptions.RemoveEmptyEntries);
 
             char trimForName = ' ';
             char[] trimForValue = new char[] { ' ', '\'' };
@@ -132,9 +132,9 @@ namespace FileCabinetApp.CommandHandlers
             }
             else
             {
-                if (!DateTime.TryParseExact(value, "yyyy-MMM-dd", null, DateTimeStyles.None, out DateTime date))
+                if (!DateTime.TryParseExact(value, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))
                 {
-                    Console.WriteLine("Date invalid format. yyyy-mmm-dd.");
+                    Console.WriteLine("Date invalid format. dd/MM/yyyy.");
                     return null;
                 }
 
