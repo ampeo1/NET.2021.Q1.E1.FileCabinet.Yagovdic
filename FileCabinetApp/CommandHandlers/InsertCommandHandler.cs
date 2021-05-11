@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers
 {
-    public class InsertCommandHandler : ServiceCommandHandlerBase
+    public class InsertCommandHandler : CRUDCommandHandlerBase
     {
         public InsertCommandHandler(IFileCabinetService service)
             : base(service)
@@ -22,50 +22,17 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            Dictionary<PropertyInfo, string> properties = ParseParameters(command.Parameters);
-            DataRecord dataRecord = new DataRecord();
-            char[] charsToTrim = new char[] { '\'', ' ' };
-            foreach (var property in properties.Keys)
+            if (command is null)
             {
-                object value;
-                if (property.PropertyType != typeof(DateTime))
-                {
-                    try
-                    {
-                        value = Convert.ChangeType(properties[property].Trim(charsToTrim), property.PropertyType, CultureInfo.InvariantCulture);
-                    }
-                    catch (FormatException)
-                    {
-                        Console.WriteLine("Incorrect format.");
-                        return;
-                    }
-                }
-                else
-                {
-                    string temp = properties[property].Trim(charsToTrim);
-                    if (!DateTime.TryParseExact(properties[property].Trim(charsToTrim), "dd/MM/yyyy", null, DateTimeStyles.None, out DateTime date))
-                    {
-                        Console.WriteLine("Date invalid format. dd/mm/yyyy.");
-                        return;
-                    }
-
-                    value = date;
-                }
-
-                property.SetValue(dataRecord, value);
+                throw new ArgumentNullException(nameof(command));
             }
 
-            this.service.CreateRecord(dataRecord);
-        }
-
-        private static Dictionary<PropertyInfo, string> ParseParameters(string parameters)
-        {
-            if (!parameters.Contains("values", StringComparison.InvariantCultureIgnoreCase))
+            if (!command.Parameters.Contains("values", StringComparison.InvariantCultureIgnoreCase))
             {
-                throw new ArgumentException("Invalid parameters. Doesn't contain 'values'.");
+                return;
             }
 
-            string[] splitParameters = parameters.Split("values", 2);
+            string[] splitParameters = command.Parameters.Split("values", 2);
             if (splitParameters.Length != 2)
             {
                 throw new ArgumentException("Invalid parameters.");
@@ -73,28 +40,34 @@ namespace FileCabinetApp.CommandHandlers
 
             int indexForNameProperties = 0;
             int indexForValueProperties = 1;
-            char separator = ',';
-            char[] charsToTrim = new char[] { '(', ')', ' ' };
-            string[] nameProperties = splitParameters[indexForNameProperties].Trim(charsToTrim).Split(separator);
-            string[] valueProperties = splitParameters[indexForValueProperties].Trim(charsToTrim).Split(separator);
-            if (nameProperties.Length != valueProperties.Length)
+            Dictionary<PropertyInfo, object> properties;
+            try
             {
-                throw new ArgumentException("Invalid parameters. The number of properties is not equal to the number of values.");
+                string[] nameProperties = SplitBrackets(splitParameters[indexForNameProperties]);
+                string[] valueProperties = SplitBrackets(splitParameters[indexForValueProperties]);
+                properties = ParseParameters(nameProperties, valueProperties);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
             }
 
-            Dictionary<PropertyInfo, string> properties = new Dictionary<PropertyInfo, string>();
-            for (int i = 0; i < nameProperties.Length; i++)
+            DataRecord dataRecord = new DataRecord();
+            foreach (var property in properties.Keys)
             {
-                PropertyInfo property = typeof(DataRecord).GetProperty(nameProperties[i].Trim(' '), BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-                if (property is null)
-                {
-                    throw new ArgumentException($"Invalid parameters. No property named {nameProperties[i]}");
-                }
-
-                properties.Add(property, valueProperties[i]);
+                object value = properties[property];
+                typeof(DataRecord).GetProperty(property.Name).SetValue(dataRecord, value);
             }
 
-            return properties;
+            try
+            {
+                this.service.CreateRecord(dataRecord);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

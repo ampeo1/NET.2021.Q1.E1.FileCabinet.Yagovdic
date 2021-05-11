@@ -63,7 +63,7 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public void EditRecord(DataRecord dataRecord, long position)
+        public void EditRecord(DataRecord dataRecord)
         {
             if (dataRecord is null)
             {
@@ -73,11 +73,11 @@ namespace FileCabinetApp
             }
 
             StringBuilder builder = new StringBuilder();
-            builder.Append($"Calling {nameof(this.EditRecord)} with {ConvertClassToString(dataRecord)}, {nameof(position)} = '{position}'");
+            builder.Append($"Calling {nameof(this.EditRecord)} with {ConvertClassToString(dataRecord)}");
 
             this.WriteLog(builder.ToString());
 
-            this.service.EditRecord(dataRecord, position);
+            this.service.EditRecord(dataRecord);
         }
 
         /// <inheritdoc/>
@@ -129,19 +129,19 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public long FindById(int id)
+        public FileCabinetRecord FindById(int id)
         {
             StringBuilder builder = new StringBuilder();
             builder.Append($"Calling {nameof(this.FindById)} with {nameof(id)} = '{id}'");
             this.WriteLog(builder.ToString());
 
-            var position = this.service.FindById(id);
+            var record = this.service.FindById(id);
 
             builder = new StringBuilder();
-            builder.Append($"{nameof(this.FindById)} returned '{position}'");
+            builder.Append($"{nameof(this.FindById)} returned '{ConvertClassToString(record)}'");
             this.WriteLog(builder.ToString());
 
-            return position;
+            return record;
         }
 
         /// <inheritdoc/>

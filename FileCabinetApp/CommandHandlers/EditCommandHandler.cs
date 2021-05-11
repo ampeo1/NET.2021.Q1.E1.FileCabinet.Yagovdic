@@ -39,19 +39,19 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            long position = this.service.FindById(id);
-            if (position == -1)
+            FileCabinetRecord record = this.service.FindById(id);
+            if (record is null)
             {
                 Console.WriteLine($"#{id} record is not found.");
                 return;
             }
 
             DataRecord dataRecord = DataRecord.CollectRecordData(this.service);
-            dataRecord.Id = id;
+            dataRecord.Id = record.Id;
 
             try
             {
-                this.service.EditRecord(dataRecord, position);
+                this.service.EditRecord(dataRecord);
                 Console.WriteLine($"Record #{id} is updated.");
             }
             catch (ArgumentException ex)

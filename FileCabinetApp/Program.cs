@@ -68,14 +68,7 @@ namespace FileCabinetApp
                 var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
                 var commandHendler = CreateCommandHandlers();
 
-                try
-                {
-                    commandHendler.Handle(new AppCommandRequest(command, parameters));
-                }
-                catch (ArgumentException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+                commandHendler.Handle(new AppCommandRequest(command, parameters));
             }
             while (isRunning);
         }
@@ -194,6 +187,7 @@ namespace FileCabinetApp
             var findHandler = new FindCommandHandler(fileCabinetService, recordPrinte);
             var statHandler = new StatCommandHandler(fileCabinetService);
             var insertHandler = new InsertCommandHandler(fileCabinetService);
+            var deleteHandler = new DeleteCommandHandler(fileCabinetService);
 
             helpHandler.SetNext(createHandler);
             createHandler.SetNext(editHandler);
@@ -205,6 +199,7 @@ namespace FileCabinetApp
             exportHandler.SetNext(findHandler);
             findHandler.SetNext(statHandler);
             statHandler.SetNext(insertHandler);
+            insertHandler.SetNext(deleteHandler);
 
             return helpHandler;
         }

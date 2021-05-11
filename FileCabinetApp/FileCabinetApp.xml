@@ -554,7 +554,7 @@
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.CreateRecord(FileCabinetApp.DataRecord)">
             <inheritdoc/>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditRecord(FileCabinetApp.DataRecord,System.Int64)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditRecord(FileCabinetApp.DataRecord)">
             <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.Remove(System.Int32)">
@@ -657,7 +657,7 @@
         <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetApp.DataRecord)">
             <inheritdoc/>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditRecord(FileCabinetApp.DataRecord,System.Int64)">
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditRecord(FileCabinetApp.DataRecord)">
             <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindById(System.Int32)">
@@ -945,14 +945,13 @@
             <exception cref="T:System.ArgumentException">Trows when data is invalid.</exception>
             <returns>Record id.</returns>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.EditRecord(FileCabinetApp.DataRecord,System.Int64)">
+        <member name="M:FileCabinetApp.IFileCabinetService.EditRecord(FileCabinetApp.DataRecord)">
             <summary>
             Changes record.
             </summary>
             <exception cref="T:System.ArgumentNullException">Trows when <paramref name="dataRecord"/> is null.</exception>
             <exception cref="T:System.ArgumentException">Trows when data is invalid.</exception>
             <param name="dataRecord">Record data.</param>
-            <param name="position">Position where you want to insert the record.</param>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.FindById(System.Int32)">
             <summary>
@@ -1095,7 +1094,7 @@
         <member name="M:FileCabinetApp.ServiceLogger.CreateRecord(FileCabinetApp.DataRecord)">
             <inheritdoc/>
         </member>
-        <member name="M:FileCabinetApp.ServiceLogger.EditRecord(FileCabinetApp.DataRecord,System.Int64)">
+        <member name="M:FileCabinetApp.ServiceLogger.EditRecord(FileCabinetApp.DataRecord)">
             <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.ServiceLogger.FindByBirthDay(System.DateTime)">
@@ -1149,7 +1148,7 @@
         <member name="M:FileCabinetApp.ServiceMeter.Remove(System.Int32)">
             <inheritdoc/>
         </member>
-        <member name="M:FileCabinetApp.ServiceMeter.EditRecord(FileCabinetApp.DataRecord,System.Int64)">
+        <member name="M:FileCabinetApp.ServiceMeter.EditRecord(FileCabinetApp.DataRecord)">
             <inheritdoc/>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.FindById(System.Int32)">
