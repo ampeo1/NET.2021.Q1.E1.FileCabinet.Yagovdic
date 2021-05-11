@@ -178,8 +178,6 @@ namespace FileCabinetApp
             var recordPrinte = new DefaultRecordPrinter();
             var helpHandler = new HelpCommandHandler();
             var createHandler = new CreateCommandHandler(fileCabinetService);
-            var editHandler = new EditCommandHandler(fileCabinetService);
-            var removeHandler = new RemoveCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var listHandler = new ListCommandHandler(fileCabinetService, recordPrinte);
             var exitHandler = new ExitCommandHandler(ChangeStatus);
@@ -191,9 +189,7 @@ namespace FileCabinetApp
             var updateHandler = new UpdateCommandHandler(fileCabinetService);
 
             helpHandler.SetNext(createHandler);
-            createHandler.SetNext(editHandler);
-            editHandler.SetNext(removeHandler);
-            removeHandler.SetNext(purgeHandler);
+            createHandler.SetNext(purgeHandler);
             purgeHandler.SetNext(listHandler);
             listHandler.SetNext(exitHandler);
             exitHandler.SetNext(exportHandler);

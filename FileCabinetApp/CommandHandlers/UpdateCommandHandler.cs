@@ -37,8 +37,8 @@ namespace FileCabinetApp.CommandHandlers
                 Console.WriteLine("Invalid format. Doesn't contain where.");
             }
 
-            Dictionary<PropertyInfo, object> newRecordProperty = null;
-            IEnumerable<FileCabinetRecord> records = null;
+            IEnumerable<FileCabinetRecord> records;
+            Dictionary<PropertyInfo, object> newRecordProperty;
             try
             {
                 string separator = ",";
@@ -81,12 +81,14 @@ namespace FileCabinetApp.CommandHandlers
 
         private static DataRecord ConvertFileCabinetRecordToDataRecord(FileCabinetRecord record)
         {
-            DataRecord dataRecord = new DataRecord();
-            dataRecord.FirstName = record.FirstName;
-            dataRecord.LastName = record.LastName;
-            dataRecord.DateOfBirth = record.DateOfBirth;
-            dataRecord.Access = record.Access;
-            dataRecord.Salary = dataRecord.Salary;
+            DataRecord dataRecord = new DataRecord
+            {
+                FirstName = record.FirstName,
+                LastName = record.LastName,
+                DateOfBirth = record.DateOfBirth,
+                Access = record.Access,
+                Salary = record.Salary,
+            };
 
             return dataRecord;
         }

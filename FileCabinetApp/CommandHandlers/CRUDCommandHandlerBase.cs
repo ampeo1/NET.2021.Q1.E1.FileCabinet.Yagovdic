@@ -8,36 +8,9 @@ namespace FileCabinetApp.CommandHandlers
 {
     public abstract class CRUDCommandHandlerBase : ServiceCommandHandlerBase
     {
-        public CRUDCommandHandlerBase(IFileCabinetService service)
+        protected CRUDCommandHandlerBase(IFileCabinetService service)
             : base(service)
         {
-        }
-
-        protected IEnumerable<FileCabinetRecord> FindRecords(Dictionary<PropertyInfo, object> properties)
-        {
-            if (properties is null)
-            {
-                throw new ArgumentNullException(nameof(properties));
-            }
-
-            foreach (var record in this.service.GetRecords())
-            {
-                bool result = true;
-                foreach (var property in properties.Keys)
-                {
-                    object valueProperty = property.GetValue(record);
-                    if (!valueProperty.Equals(properties[property]))
-                    {
-                        result = false;
-                        break;
-                    }
-                }
-
-                if (result)
-                {
-                    yield return record;
-                }
-            }
         }
 
         protected static Dictionary<PropertyInfo, object> ParseParameters(string[] nameProperties, string[] valueProperties)
@@ -139,6 +112,33 @@ namespace FileCabinetApp.CommandHandlers
                 }
 
                 return date;
+            }
+        }
+
+        protected IEnumerable<FileCabinetRecord> FindRecords(Dictionary<PropertyInfo, object> properties)
+        {
+            if (properties is null)
+            {
+                throw new ArgumentNullException(nameof(properties));
+            }
+
+            foreach (var record in this.service.GetRecords())
+            {
+                bool result = true;
+                foreach (var property in properties.Keys)
+                {
+                    object valueProperty = property.GetValue(record);
+                    if (!valueProperty.Equals(properties[property]))
+                    {
+                        result = false;
+                        break;
+                    }
+                }
+
+                if (result)
+                {
+                    yield return record;
+                }
             }
         }
     }

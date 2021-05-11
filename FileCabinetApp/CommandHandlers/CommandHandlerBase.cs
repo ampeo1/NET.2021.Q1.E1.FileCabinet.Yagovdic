@@ -53,7 +53,7 @@ namespace FileCabinetApp.CommandHandlers
 
             if (this.nextHandler is null)
             {
-                Console.WriteLine($"There is no '{command}' command.");
+                Console.WriteLine($"There is no '{command.Command}' command.");
                 Console.WriteLine();
             }
             else
