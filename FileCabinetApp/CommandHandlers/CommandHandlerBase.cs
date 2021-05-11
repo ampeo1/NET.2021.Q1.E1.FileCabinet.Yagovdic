@@ -53,8 +53,7 @@ namespace FileCabinetApp.CommandHandlers
 
             if (this.nextHandler is null)
             {
-                Console.WriteLine($"There is no '{command.Command}' command.");
-                Console.WriteLine();
+                PrintSimilarCommand(command.Command);
             }
             else
             {
@@ -62,6 +61,48 @@ namespace FileCabinetApp.CommandHandlers
             }
 
             return true;
+        }
+
+        private static void PrintSimilarCommand(string command)
+        {
+            Console.WriteLine($"There is no '{command}' command.");
+            Console.WriteLine();
+            List<string[]> similarCommands = new List<string[]>(Array.FindAll(HelpCommandHandler.HelpMessages, i =>
+            {
+                int commandHelpIndex = 0;
+                if (i[commandHelpIndex].Contains(command, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return true;
+                }
+
+                int firstIndex = 0, lastIndex = i[commandHelpIndex].Length - 1;
+                if (i[commandHelpIndex][firstIndex].Equals(command[firstIndex]) || i[commandHelpIndex][lastIndex].Equals(command[command.Length - 1]))
+                {
+                    return true;
+                }
+
+                return false;
+            }));
+
+            if (similarCommands.Count == 0)
+            {
+                return;
+            }
+
+            if (similarCommands.Count == 1)
+            {
+                Console.Write("The most similar command is\n");
+            }
+            else
+            {
+                Console.Write("The most similar commands are\n");
+            }
+
+            int commandHelpIndex = 0, commandDescriptionIndex = 2;
+            foreach (var similarCommand in similarCommands)
+            {
+                Console.Write($"{similarCommand[commandHelpIndex]} - {similarCommand[commandDescriptionIndex]} \n");
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class HelpCommandHandler : CommandHandlerBase
     {
-        private readonly string[][] helpMessages = new string[][]
+        public static readonly string[][] HelpMessages = new string[][]
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "stat", "prints the statistics of records", "The 'stat' command prints the statistics of records." },
@@ -43,10 +43,10 @@ namespace FileCabinetApp.CommandHandlers
 
             if (!string.IsNullOrEmpty(command.Parameters))
             {
-                var index = Array.FindIndex(this.helpMessages, 0, this.helpMessages.Length, i => string.Equals(i[commandHelpIndex], command.Parameters, StringComparison.InvariantCultureIgnoreCase));
+                var index = Array.FindIndex(HelpMessages, 0, HelpMessages.Length, i => string.Equals(i[commandHelpIndex], command.Parameters, StringComparison.InvariantCultureIgnoreCase));
                 if (index >= 0)
                 {
-                    Console.WriteLine(this.helpMessages[index][explanationHelpIndex]);
+                    Console.WriteLine(HelpMessages[index][explanationHelpIndex]);
                 }
                 else
                 {
@@ -57,7 +57,7 @@ namespace FileCabinetApp.CommandHandlers
             {
                 Console.WriteLine("Available commands:");
 
-                foreach (var helpMessage in this.helpMessages)
+                foreach (var helpMessage in HelpMessages)
                 {
                     Console.WriteLine("\t{0}\t- {1}", helpMessage[commandHelpIndex], helpMessage[descriptionHelpIndex]);
                 }
