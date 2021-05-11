@@ -58,7 +58,12 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(dataRecord));
             }
 
-            dataRecord.Id = ++this.id;
+            while (this.dictionaryForId.ContainsKey(this.id))
+            {
+                this.id++;
+            }
+
+            dataRecord.Id = this.id;
             FileCabinetRecord record = this.Create(dataRecord);
 
             byte[] data = ConvertRecordToBytes(record);
@@ -70,21 +75,16 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public void EditRecord(DataRecord dataRecord, long position)
+        public void EditRecord(DataRecord dataRecord)
         {
             if (dataRecord is null)
             {
                 throw new ArgumentNullException(nameof(dataRecord));
             }
 
-            if (position < 0 || position > this.fileStream.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(position));
-            }
-
             FileCabinetRecord record = this.Create(dataRecord);
 
-            this.fileStream.Position = position;
+            this.fileStream.Position = this.FindPosition(dataRecord.Id);
             this.RemoveRecordFromDictionaries(record, this.fileStream.Position);
             this.AddRecordToDictionaries(record, this.fileStream.Position);
 
@@ -95,10 +95,10 @@ namespace FileCabinetApp
         /// <inheritdoc/>
         public bool Remove(int id)
         {
-            if (this.FindById(id) != -1)
+            FileCabinetRecord record = this.FindById(id);
+            if (record != null)
             {
-                long position = this.fileStream.Position;
-                FileCabinetRecord record = this.ReadRecord();
+                long position = this.FindPosition(id);
                 this.RemoveRecordFromDictionaries(record, position);
 
                 this.fileStream.Position = position;
@@ -151,7 +151,7 @@ namespace FileCabinetApp
         /// <inheritdoc/>
         public IEnumerable<FileCabinetRecord> FindByBirthDay(DateTime dateOfBirth)
         {
-            List<long> positions = this.FindRecordsByDictionary(this.dateOfBirthDictionary, dateOfBirth);
+            List<long> positions = FindRecordsByDictionary(this.dateOfBirthDictionary, dateOfBirth);
             foreach (var position in positions)
             {
                 this.fileStream.Position = position;
@@ -162,7 +162,7 @@ namespace FileCabinetApp
         /// <inheritdoc/>
         public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            List<long> positions = this.FindRecordsByDictionary(this.firstNameDictionary, firstName);
+            List<long> positions = FindRecordsByDictionary(this.firstNameDictionary, firstName);
             foreach (var position in positions)
             {
                 this.fileStream.Position = position;
@@ -173,7 +173,7 @@ namespace FileCabinetApp
         /// <inheritdoc/>
         public IEnumerable<FileCabinetRecord> FindByLastname(string lastName)
         {
-            List<long> positions = this.FindRecordsByDictionary(this.lastNameDictionary, lastName);
+            List<long> positions = FindRecordsByDictionary(this.lastNameDictionary, lastName);
             foreach (var position in positions)
             {
                 this.fileStream.Position = position;
@@ -250,11 +250,10 @@ namespace FileCabinetApp
 
             foreach (var item in snapshot.Records)
             {
-                long position = this.FindById(item.Id);
-                if (position != this.fileStream.Length)
+                FileCabinetRecord oldRecord = this.FindById(item.Id);
+                long position = this.FindPosition(item.Id);
+                if (oldRecord != null)
                 {
-                    this.fileStream.Position = position;
-                    FileCabinetRecord oldRecord = this.ReadRecord();
                     this.RemoveRecordFromDictionaries(oldRecord, position);
                 }
 
@@ -266,9 +265,16 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public long FindById(int id)
+        public FileCabinetRecord FindById(int id)
         {
-            return this.dictionaryForId.ContainsKey(id) ? this.dictionaryForId[id] : this.fileStream.Length;
+            FileCabinetRecord record = null;
+            if (this.dictionaryForId.ContainsKey(id))
+            {
+                this.fileStream.Position = this.dictionaryForId[id];
+                record = this.ReadRecord();
+            }
+
+            return record;
         }
 
         /// <summary>
@@ -353,7 +359,7 @@ namespace FileCabinetApp
             return data.ToArray();
         }
 
-        private List<long> FindRecordsByDictionary<T>(Dictionary<T, List<long>> dictionary, T key)
+        private static List<long> FindRecordsByDictionary<T>(Dictionary<T, List<long>> dictionary, T key)
         {
             List<long> positions = new List<long>();
             if (dictionary.ContainsKey(key))
@@ -362,6 +368,11 @@ namespace FileCabinetApp
             }
 
             return positions;
+        }
+
+        private long FindPosition(int id)
+        {
+            return this.dictionaryForId.ContainsKey(id) ? this.dictionaryForId[id] : this.fileStream.Length;
         }
 
         /// <summary>

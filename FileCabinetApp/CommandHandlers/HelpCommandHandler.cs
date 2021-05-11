@@ -9,13 +9,16 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class HelpCommandHandler : CommandHandlerBase
     {
-        private readonly string[][] helpMessages = new string[][]
+        /// <summary>
+        /// List of command information.
+        /// </summary>
+        public static readonly string[][] HelpMessages = new string[][]
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "stat", "prints the statistics of records", "The 'stat' command prints the statistics of records." },
             new string[] { "create", "creates new record", "The 'create' command creates new record" },
-            new string[] { "edit", "change record", "The 'edit' command changes record" },
-            new string[] { "remove", "removes record", "The 'record' command removes record" },
+            new string[] { "update", "change record", "The 'update' command changes record" },
+            new string[] { "delete", "removes record", "The 'delete' command deletes record" },
             new string[] { "purge", "defragments a file", "The 'purge' command defragments a file" },
             new string[] { "list", "lists records", "The 'lists' command lists records" },
             new string[] { "find", "finds records", "The 'find' command finds records" },
@@ -32,6 +35,11 @@ namespace FileCabinetApp.CommandHandlers
         /// <param name="command">Parameters command.</param>
         public override void Handle(AppCommandRequest command)
         {
+            if (command is null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
             if (this.GoToNextCommand(command))
             {
                 return;
@@ -43,10 +51,10 @@ namespace FileCabinetApp.CommandHandlers
 
             if (!string.IsNullOrEmpty(command.Parameters))
             {
-                var index = Array.FindIndex(this.helpMessages, 0, this.helpMessages.Length, i => string.Equals(i[commandHelpIndex], command.Parameters, StringComparison.InvariantCultureIgnoreCase));
+                var index = Array.FindIndex(HelpMessages, 0, HelpMessages.Length, i => string.Equals(i[commandHelpIndex], command.Parameters, StringComparison.InvariantCultureIgnoreCase));
                 if (index >= 0)
                 {
-                    Console.WriteLine(this.helpMessages[index][explanationHelpIndex]);
+                    Console.WriteLine(HelpMessages[index][explanationHelpIndex]);
                 }
                 else
                 {
@@ -57,7 +65,7 @@ namespace FileCabinetApp.CommandHandlers
             {
                 Console.WriteLine("Available commands:");
 
-                foreach (var helpMessage in this.helpMessages)
+                foreach (var helpMessage in HelpMessages)
                 {
                     Console.WriteLine("\t{0}\t- {1}", helpMessage[commandHelpIndex], helpMessage[descriptionHelpIndex]);
                 }

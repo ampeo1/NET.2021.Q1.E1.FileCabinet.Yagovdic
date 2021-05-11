@@ -42,24 +42,24 @@ namespace FileCabinetApp
         }
 
         /// <inheritdoc/>
-        public void EditRecord(DataRecord dataRecord, long position)
+        public void EditRecord(DataRecord dataRecord)
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
-            this.service.EditRecord(dataRecord, position);
+            this.service.EditRecord(dataRecord);
             stopWatch.Stop();
             Console.WriteLine($"Edit record method execution duration is {stopWatch.ElapsedTicks} ticks.");
         }
 
         /// <inheritdoc/>
-        public long FindById(int id)
+        public FileCabinetRecord FindById(int id)
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
-            long result = this.service.FindById(id);
+            var record = this.service.FindById(id);
             stopWatch.Stop();
             Console.WriteLine($"Find id method execution duration is {stopWatch.ElapsedTicks} ticks.");
-            return result;
+            return record;
         }
 
         /// <inheritdoc/>

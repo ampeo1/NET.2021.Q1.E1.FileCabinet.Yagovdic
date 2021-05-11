@@ -67,6 +67,7 @@ namespace FileCabinetApp
                 const int parametersIndex = 1;
                 var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
                 var commandHendler = CreateCommandHandlers();
+
                 commandHendler.Handle(new AppCommandRequest(command, parameters));
             }
             while (isRunning);
@@ -177,24 +178,26 @@ namespace FileCabinetApp
             var recordPrinte = new DefaultRecordPrinter();
             var helpHandler = new HelpCommandHandler();
             var createHandler = new CreateCommandHandler(fileCabinetService);
-            var editHandler = new EditCommandHandler(fileCabinetService);
-            var removeHandler = new RemoveCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var listHandler = new ListCommandHandler(fileCabinetService, recordPrinte);
             var exitHandler = new ExitCommandHandler(ChangeStatus);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var findHandler = new FindCommandHandler(fileCabinetService, recordPrinte);
             var statHandler = new StatCommandHandler(fileCabinetService);
+            var insertHandler = new InsertCommandHandler(fileCabinetService);
+            var deleteHandler = new DeleteCommandHandler(fileCabinetService);
+            var updateHandler = new UpdateCommandHandler(fileCabinetService);
 
             helpHandler.SetNext(createHandler);
-            createHandler.SetNext(editHandler);
-            editHandler.SetNext(removeHandler);
-            removeHandler.SetNext(purgeHandler);
+            createHandler.SetNext(purgeHandler);
             purgeHandler.SetNext(listHandler);
             listHandler.SetNext(exitHandler);
             exitHandler.SetNext(exportHandler);
             exportHandler.SetNext(findHandler);
             findHandler.SetNext(statHandler);
+            statHandler.SetNext(insertHandler);
+            insertHandler.SetNext(deleteHandler);
+            deleteHandler.SetNext(updateHandler);
 
             return helpHandler;
         }
