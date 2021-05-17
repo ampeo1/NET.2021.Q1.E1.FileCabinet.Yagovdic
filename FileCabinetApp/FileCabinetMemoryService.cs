@@ -45,6 +45,8 @@ namespace FileCabinetApp
             FileCabinetRecord record = this.Create(dataRecord);
             this.AddRecordToDictionaries(record);
             this.records.Add(record);
+            this.selectResult.Clear();
+            this.selectParams.Clear();
 
             return record.Id;
         }
@@ -111,6 +113,8 @@ namespace FileCabinetApp
             this.RemoveRecordFromDictionaries(this.records[index]);
             this.AddRecordToDictionaries(record);
             this.records[index] = record;
+            this.selectResult.Clear();
+            this.selectParams.Clear();
         }
 
         /// <inheritdoc/>
@@ -231,6 +235,8 @@ namespace FileCabinetApp
             }
 
             this.records.Remove(record);
+            this.selectResult.Clear();
+            this.selectParams.Clear();
             return true;
         }
 
@@ -331,6 +337,44 @@ namespace FileCabinetApp
             RemoveRecordFromDictiornary(this.dateOfBirthDictionary, record.DateOfBirth, record);
         }
 
+        private int GetMemoization(PropertyInfo[][] properties, FileCabinetRecord[] records)
+        {
+            bool finalResult = false;
+            for (int k = 0; k < this.selectParams.Count; k++)
+            {
+                finalResult = false;
+                if (this.selectParams[k].Length == records.Length)
+                {
+                    for (int i = 0; i < this.selectParams[k].Length; i++)
+                    {
+                        bool result = false;
+                        for (int j = 0; j < records.Length; j++)
+                        {
+                            if (RecordEqualsByProperties(this.selectParams[k][i], records[j], properties[j]))
+                            {
+                                result = true;
+                            }
+                        }
+
+                        if (!result)
+                        {
+                            finalResult = false;
+                            break;
+                        }
+
+                        finalResult = true;
+                    }
+                }
+
+                if (finalResult)
+                {
+                    return k;
+                }
+            }
+
+            return -1;
+        }
+
         private static bool RecordEqualsByProperties(FileCabinetRecord record1, FileCabinetRecord record2, PropertyInfo[] properties)
         {
             if (properties is null)
@@ -370,44 +414,6 @@ namespace FileCabinetApp
             }
 
             return result;
-        }
-
-        private int GetMemoization(PropertyInfo[][] properties, FileCabinetRecord[] records)
-        {
-            bool finalResult = false;
-            for (int k = 0; k < this.selectParams.Count; k++)
-            {
-                finalResult = false;
-                if (this.selectParams[k].Length == records.Length)
-                {
-                    for (int i = 0; i < this.selectParams[k].Length; i++)
-                    {
-                        bool result = false;
-                        for (int j = 0; j < records.Length; j++)
-                        {
-                            if (RecordEqualsByProperties(this.selectParams[k][i], records[j], properties[j]))
-                            {
-                                result = true;
-                            }
-                        }
-
-                        if (!result)
-                        {
-                            finalResult = false;
-                            break;
-                        }
-
-                        finalResult = true;
-                    }
-                }
-
-                if (finalResult)
-                {
-                    return k;
-                }
-            }
-
-            return -1;
         }
     }
 }
