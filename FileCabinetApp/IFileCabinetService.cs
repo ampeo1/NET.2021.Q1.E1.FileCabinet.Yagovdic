@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using FileCabinetApp.Validators;
@@ -35,6 +36,14 @@ namespace FileCabinetApp
         /// <param name="id">Identifier of the searched record.</param>
         /// <returns>if record finds that return position of record else return -1.</returns>
         public FileCabinetRecord FindById(int id);
+
+        /// <summary>
+        /// Select records.
+        /// </summary>
+        /// <param name="properties">Properties to search.</param>
+        /// <param name="record">Record to search.</param>
+        /// <returns>Record Iterator.</returns>
+        public IEnumerable<FileCabinetRecord> SelectRecords(PropertyInfo[][] properties, FileCabinetRecord[] record);
 
         /// <summary>
         /// Finds record by first name.

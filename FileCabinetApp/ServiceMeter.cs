@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using System.Text;
 
 namespace FileCabinetApp
@@ -172,6 +173,17 @@ namespace FileCabinetApp
             Console.WriteLine($"Make snapshot method execution duration is {stopWatch.ElapsedTicks} ticks.");
 
             return snapshot;
+        }
+
+        public IEnumerable<FileCabinetRecord> SelectRecords(PropertyInfo[][] properties, FileCabinetRecord[] record)
+        {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+            var records = this.service.SelectRecords(properties, record);
+            stopWatch.Stop();
+            Console.WriteLine($"Select records method execution duration is {stopWatch.ElapsedTicks} ticks.");
+
+            return records;
         }
     }
 }

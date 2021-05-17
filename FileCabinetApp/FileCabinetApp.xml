@@ -85,6 +85,55 @@
             </summary>
             <param name="command">Parameters command.</param>
         </member>
+        <member name="T:FileCabinetApp.CommandHandlers.CRUDCommandHandlerBase">
+            <summary>
+            Base class for CRUD classes.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CRUDCommandHandlerBase.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.CRUDCommandHandlerBase"/> class.
+            </summary>
+            <param name="service">IFileCabinetService.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CRUDCommandHandlerBase.ParseParameters(System.String[],System.String[])">
+            <summary>
+            Adds a property to the dictionary and binds a value to it.
+            </summary>
+            <param name="nameProperties">Property names.</param>
+            <param name="valueProperties">Property values.</param>
+            <returns>Dictionary with property info and value this property.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CRUDCommandHandlerBase.SplitBrackets(System.String)">
+            <summary>
+            Separates parameters in parentheses.
+            </summary>
+            <param name="parameters">Parameters.</param>
+            <returns>Split parameters.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CRUDCommandHandlerBase.SplitParameters(System.String,System.String)">
+            <summary>
+            Separates parameters that are in the form "property = value".
+            </summary>
+            <param name="parameters">Parameters.</param>
+            <param name="separator">Separator.</param>
+            <returns>(Properties, Values).</returns>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CRUDCommandHandlerBase.ParseValue(System.String,System.Type)">
+            <summary>
+            Parse string.
+            </summary>
+            <param name="value">The string to be parsed.</param>
+            <param name="type">The type to parse into.</param>
+            <returns>Parsed object.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CRUDCommandHandlerBase.FindRecords(System.Collections.Generic.Dictionary{System.Reflection.PropertyInfo,System.Object})">
+            <summary>
+            Finds records by properties.
+            </summary>
+            <param name="properties">Properties.</param>
+            <returns>Found records.</returns>
+        </member>
         <member name="T:FileCabinetApp.CommandHandlers.DefaultRecordPrinter">
             <summary>
             Class which prints records in default format.
@@ -93,6 +142,31 @@
         <member name="M:FileCabinetApp.CommandHandlers.DefaultRecordPrinter.Print(System.Collections.Generic.IEnumerable{FileCabinetApp.FileCabinetRecord})">
             <inheritdoc/>
             <exception cref="T:System.ArgumentNullException">Throws when <paramref name="records"/> is null.</exception>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.DeleteCommandHandler">
+            <summary>
+            Delete command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.DeleteCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.DeleteCommandHandler"/> class.
+            </summary>
+            <param name="service">IFileCabinetService.</param>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.DeleteCommandHandler.NameCommand">
+            <summary>
+            Gets name command.
+            </summary>
+            <value>
+            Name command.
+            </value>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.DeleteCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Executes the command.
+            </summary>
+            <param name="command">Command info.</param>
         </member>
         <member name="T:FileCabinetApp.CommandHandlers.ExitCommandHandler">
             <summary>
@@ -244,6 +318,11 @@
             Help command.
             </summary>
         </member>
+        <member name="F:FileCabinetApp.CommandHandlers.HelpCommandHandler.HelpMessages">
+            <summary>
+            List of command information.
+            </summary>
+        </member>
         <member name="P:FileCabinetApp.CommandHandlers.HelpCommandHandler.NameCommand">
             <inheritdoc/>
         </member>
@@ -269,6 +348,31 @@
             Try to execute command.
             </summary>
             <param name="command">Information about command.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.InsertCommandHandler">
+            <summary>
+            Insert command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.InsertCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.InsertCommandHandler"/> class.
+            </summary>
+            <param name="service">IFileCabinetService.</param>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.InsertCommandHandler.NameCommand">
+            <summary>
+            Gets name command.
+            </summary>
+            <value>
+            Name command.
+            </value>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.InsertCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Executes the command.
+            </summary>
+            <param name="command">Command info.</param>
         </member>
         <member name="T:FileCabinetApp.CommandHandlers.IRecordPrinter">
             <summary>
@@ -322,6 +426,27 @@
             </summary>
             <param name="command">Parameters of command.</param>
         </member>
+        <member name="P:FileCabinetApp.CommandHandlers.SelectCommandHandler.NameCommand">
+            <summary>
+            Gets name command.
+            </summary>
+            <value>
+            Name command.
+            </value>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.SelectCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,System.Action{System.String})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.SelectCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">File cabinet service.</param>
+            <param name="recordPrinter">Record printer.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.SelectCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Command handler.
+            </summary>
+            <param name="appCommandRequest">Request.</param>
+        </member>
         <member name="T:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase">
             <summary>
             Base class for commands.
@@ -357,6 +482,31 @@
             Prints statistics.
             </summary>
             <param name="command">Parameters command.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.UpdateCommandHandler">
+            <summary>
+            Update command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.UpdateCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.UpdateCommandHandler"/> class.
+            </summary>
+            <param name="service">IFileCabinetService.</param>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.UpdateCommandHandler.NameCommand">
+            <summary>
+            Gets name command.
+            </summary>
+            <value>
+            Name command.
+            </value>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.UpdateCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Executes the command.
+            </summary>
+            <param name="command">Command info.</param>
         </member>
         <member name="T:FileCabinetApp.Converter">
             <summary>
@@ -517,6 +667,14 @@
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditRecord(FileCabinetApp.DataRecord)">
             <inheritdoc/>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.SelectRecords(System.Reflection.PropertyInfo[][],FileCabinetApp.FileCabinetRecord[])">
+            <summary>
+            Select records.
+            </summary>
+            <param name="properties">Properties to search.</param>
+            <param name="record">Record to search.</param>
+            <returns>Record Iterator.</returns>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.Remove(System.Int32)">
             <inheritdoc/>
         </member>
@@ -616,6 +774,14 @@
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetApp.DataRecord)">
             <inheritdoc/>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.SelectRecords(System.Reflection.PropertyInfo[][],FileCabinetApp.FileCabinetRecord[])">
+            <summary>
+            Select records.
+            </summary>
+            <param name="properties">Properties to search.</param>
+            <param name="record">Record to search.</param>
+            <returns>Record Iterator.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.EditRecord(FileCabinetApp.DataRecord)">
             <inheritdoc/>
@@ -920,6 +1086,14 @@
             <param name="id">Identifier of the searched record.</param>
             <returns>if record finds that return position of record else return -1.</returns>
         </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.SelectRecords(System.Reflection.PropertyInfo[][],FileCabinetApp.FileCabinetRecord[])">
+            <summary>
+            Select records.
+            </summary>
+            <param name="properties">Properties to search.</param>
+            <param name="record">Record to search.</param>
+            <returns>Record Iterator.</returns>
+        </member>
         <member name="M:FileCabinetApp.IFileCabinetService.FindByFirstName(System.String)">
             <summary>
             Finds record by first name.
@@ -1143,6 +1317,25 @@
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.MakeSnapshot">
             <inheritdoc/>
+        </member>
+        <member name="T:FileCabinetApp.TableOfRecords`1">
+            <summary>
+            Prints records to the table.
+            </summary>
+            <typeparam name="T">Type.</typeparam>
+        </member>
+        <member name="M:FileCabinetApp.TableOfRecords`1.#ctor(System.Collections.Generic.IEnumerable{`0},System.Reflection.PropertyInfo[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.TableOfRecords`1"/> class.
+            </summary>
+            <param name="items">Сollection to print.</param>
+            <param name="properties">Property to print.</param>
+        </member>
+        <member name="M:FileCabinetApp.TableOfRecords`1.PrintTable(System.Action{System.String})">
+            <summary>
+            Print Table.
+            </summary>
+            <param name="action">Method for print.</param>
         </member>
         <member name="T:FileCabinetApp.Validators.AccessValidator">
             <summary>
