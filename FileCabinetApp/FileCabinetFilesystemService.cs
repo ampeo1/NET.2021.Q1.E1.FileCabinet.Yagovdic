@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using FileCabinetApp.Validators;
 
@@ -90,6 +91,62 @@ namespace FileCabinetApp
 
             byte[] data = ConvertRecordToBytes(record);
             this.fileStream.Write(data, 0, data.Length);
+        }
+
+        /// <summary>
+        /// Select records.
+        /// </summary>
+        /// <param name="properties">Properties to search.</param>
+        /// <param name="record">Record to search.</param>
+        /// <returns>Record Iterator.</returns>
+        public IEnumerable<FileCabinetRecord> SelectRecords(PropertyInfo[][] properties, FileCabinetRecord[] record)
+        {
+            if (properties is null)
+            {
+                throw new ArgumentNullException(nameof(properties));
+            }
+
+            if (record is null)
+            {
+                throw new ArgumentNullException(nameof(record));
+            }
+
+            this.fileStream.Position = 0;
+            bool result;
+            while (this.fileStream.Position < this.fileStream.Length)
+            {
+                result = true;
+                var tempRecord = this.ReadRecord();
+                if (tempRecord is null)
+                {
+                    continue;
+                }
+
+                if (properties.Length == 0)
+                {
+                    yield return tempRecord;
+                    continue;
+                }
+
+                for (int i = 0; i < properties.Length; i++)
+                {
+                    result = true;
+                    foreach (var property in properties[i])
+                    {
+                        if (!property.GetValue(record[i]).Equals(property.GetValue(tempRecord)))
+                        {
+                            result = false;
+                            break;
+                        }
+                    }
+
+                    if (result)
+                    {
+                        yield return tempRecord;
+                        break;
+                    }
+                }
+            }
         }
 
         /// <inheritdoc/>

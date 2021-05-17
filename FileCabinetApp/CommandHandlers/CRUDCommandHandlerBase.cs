@@ -91,26 +91,38 @@ namespace FileCabinetApp.CommandHandlers
             }
 
             string[] splitParameters = parameters.Split(separator, StringSplitOptions.RemoveEmptyEntries);
-
-            char trimForName = ' ';
-            char[] trimForValue = new char[] { ' ', '\'' };
             List<string> nameProperties = new List<string>();
             List<string> valueProperties = new List<string>();
             for (int i = 0; i < splitParameters.Length; i++)
             {
-                string[] splitParameter = splitParameters[i].Split('=', 2);
-                if (splitParameter.Length != 2)
-                {
-                    throw new ArgumentException("Invalid format. The number of properties is not equal to the number of values.");
-                }
-
-                int indexNameProperty = 0;
-                int indexValueProperty = 1;
-                nameProperties.Add(splitParameter[indexNameProperty].Trim(trimForName));
-                valueProperties.Add(splitParameter[indexValueProperty].Trim(trimForValue));
+                string nameProperty, valueProperty;
+                (nameProperty, valueProperty) = SplitParameter(splitParameters[i]);
+                nameProperties.Add(nameProperty);
+                valueProperties.Add(valueProperty);
             }
 
             return (nameProperties.ToArray(), valueProperties.ToArray());
+        }
+
+        protected static (string nameProperty, string valueProperty) SplitParameter(string parameter)
+        {
+            if (string.IsNullOrEmpty(parameter))
+            {
+                throw new ArgumentNullException(nameof(parameter));
+            }
+
+            char trimForName = ' ';
+            char[] trimForValue = new char[] { ' ', '\'' };
+            string[] splitParameter = parameter.Split('=', 2);
+            if (splitParameter.Length != 2)
+            {
+                throw new ArgumentException("Invalid format. The number of properties is not equal to the number of values.");
+            }
+
+            int indexNameProperty = 0;
+            int indexValueProperty = 1;
+
+            return (splitParameter[indexNameProperty].Trim(trimForName), splitParameter[indexValueProperty].Trim(trimForValue));
         }
 
         /// <summary>

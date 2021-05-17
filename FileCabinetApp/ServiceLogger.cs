@@ -332,5 +332,27 @@ namespace FileCabinetApp
                 fileStream.Write(data, 0, data.Length);
             }
         }
+
+        public IEnumerable<FileCabinetRecord> SelectRecords(PropertyInfo[][] properties, FileCabinetRecord[] record)
+        {
+            string log = $"Calling {nameof(this.SelectRecords)}";
+            this.WriteLog(log);
+
+            var records = this.service.SelectRecords(properties, record);
+
+            StringBuilder builder = new StringBuilder();
+            builder.Append($"{nameof(this.GetRecords)} returned [ ");
+            int i = 0;
+            foreach (var item in records)
+            {
+                builder.Append($"{i}. {ConvertClassToString(item)}");
+                i++;
+            }
+
+            builder.Append(" ]");
+            this.WriteLog(builder.ToString());
+
+            return records;
+        }
     }
 }

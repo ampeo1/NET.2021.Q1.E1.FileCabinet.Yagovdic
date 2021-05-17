@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using FileCabinetApp.Validators;
 
@@ -13,6 +14,8 @@ namespace FileCabinetApp
     public class FileCabinetMemoryService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> records = new List<FileCabinetRecord>();
+        private readonly List<FileCabinetRecord[]> selectParams = new List<FileCabinetRecord[]>();
+        private readonly List<IEnumerable<FileCabinetRecord>> selectResult = new List<IEnumerable<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.InvariantCultureIgnoreCase);
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
@@ -44,6 +47,54 @@ namespace FileCabinetApp
             this.records.Add(record);
 
             return record.Id;
+        }
+
+        /// <summary>
+        /// Select records.
+        /// </summary>
+        /// <param name="properties">Properties to search.</param>
+        /// <param name="record">Record to search.</param>
+        /// <returns>Record Iterator.</returns>
+        public IEnumerable<FileCabinetRecord> SelectRecords(PropertyInfo[][] properties, FileCabinetRecord[] record)
+        {
+            if (properties is null)
+            {
+                throw new ArgumentNullException(nameof(properties));
+            }
+
+            if (record is null)
+            {
+                throw new ArgumentNullException(nameof(record));
+            }
+
+            if (properties.Length == 0)
+            {
+                return this.records;
+            }
+
+            var records = new List<FileCabinetRecord>();
+            var memoisation = this.GetMemoization(properties, record);
+
+            if (memoisation != -1)
+            {
+                return this.selectResult[memoisation];
+            }
+
+            for (int i = 0; i < this.records.Count; i++)
+            {
+                for (int j = 0; j < properties.Length; j++)
+                {
+                    if (RecordEqualsByProperties(this.records[i], record[j], properties[j]))
+                    {
+                        records.Add(this.records[i]);
+                        break;
+                    }
+                }
+            }
+
+            this.selectParams.Add(record);
+            this.selectResult.Add(records.ToArray());
+            return records.ToArray();
         }
 
         /// <inheritdoc/>
@@ -278,6 +329,85 @@ namespace FileCabinetApp
             RemoveRecordFromDictiornary(this.firstNameDictionary, record.FirstName, record);
             RemoveRecordFromDictiornary(this.lastNameDictionary, record.LastName, record);
             RemoveRecordFromDictiornary(this.dateOfBirthDictionary, record.DateOfBirth, record);
+        }
+
+        private static bool RecordEqualsByProperties(FileCabinetRecord record1, FileCabinetRecord record2, PropertyInfo[] properties)
+        {
+            if (properties is null)
+            {
+                throw new ArgumentNullException(nameof(properties));
+            }
+
+            if (record1 is null || record2 is null)
+            {
+                return false;
+            }
+
+            bool result = true;
+            foreach (var property in properties)
+            {
+                var value1 = property.GetValue(record1);
+                var value2 = property.GetValue(record2);
+                if (value1 is null && value2 is null)
+                {
+                    continue;
+                }
+                else if (value1 is null && !(value2 is null))
+                {
+                    result = false;
+                    break;
+                }
+                else if (!(value1 is null) && value2 is null)
+                {
+                    result = false;
+                    break;
+                }
+                else if (!property.GetValue(record1).Equals(property.GetValue(record2)))
+                {
+                    result = false;
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+        private int GetMemoization(PropertyInfo[][] properties, FileCabinetRecord[] records)
+        {
+            bool finalResult = false;
+            for (int k = 0; k < this.selectParams.Count; k++)
+            {
+                finalResult = false;
+                if (this.selectParams[k].Length == records.Length)
+                {
+                    for (int i = 0; i < this.selectParams[k].Length; i++)
+                    {
+                        bool result = false;
+                        for (int j = 0; j < records.Length; j++)
+                        {
+                            if (RecordEqualsByProperties(this.selectParams[k][i], records[j], properties[j]))
+                            {
+                                result = true;
+                            }
+                        }
+
+                        if (!result)
+                        {
+                            finalResult = false;
+                            break;
+                        }
+
+                        finalResult = true;
+                    }
+                }
+
+                if (finalResult)
+                {
+                    return k;
+                }
+            }
+
+            return -1;
         }
     }
 }
